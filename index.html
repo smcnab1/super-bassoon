@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Module Timetable Generator</title>
+  <title>MScSimEd | Timetable Generator</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
   <!-- Navbar -->
   <nav class="main-navbar">
-    <div class="navbar-title">📅 Timetable Generator</div>
+    <div class="navbar-title">🤖 MScSimEd</div>
     <div class="navbar-links">
       <a href="index.html">Generator</a>
       <a href="settings.html">Settings</a>
@@ -19,37 +19,37 @@
 
   <!-- Preset Buttons -->
   <div class="preset-container">
-    <button class="preset-btn" onclick="loadPreset('moduleA')">
+    <button class="preset-btn" onclick="loadPreset('ED70011X')">
       <strong>Foundations of Simulation Education</strong>
       <span class="module-code">ED70011X</span>
       <span class="year-tag year-1">Year 1</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('moduleB')">
+    <button class="preset-btn" onclick="loadPreset('ED70012X')" disabled>
       <strong>Simulation Delivery & Leadership</strong>
       <span class="module-code">ED70012X</span>
       <span class="year-tag year-1">Year 1</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('moduleC')">
+    <button class="preset-btn" onclick="loadPreset('ED70013X')" disabled>
       <strong>Digital Technologies in Education</strong>
       <span class="module-code">ED70013X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('moduleD')">
+    <button class="preset-btn" onclick="loadPreset('ED70014X')" disabled>
       <strong>Current Issues & Policies in Simulation Education</strong>
       <span class="module-code">ED70014X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('moduleE')">
+    <button class="preset-btn" onclick="loadPreset('ED70015X')" disabled>
       <strong>Simulation in Innovative Practice</strong>
       <span class="module-code">ED70015X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('moduleF')">
+    <button class="preset-btn" onclick="loadPreset('ED70016X')" disabled>
       <strong>Quality Improvement & Demonstrative Simulation</strong>
       <span class="module-code">ED70016X</span>
       <span class="year-tag year-3">Year 3</span>
@@ -61,103 +61,98 @@
     <button class="preset-btn reset-btn" id="resetBtn" onclick="confirmReset()" disabled>🔄 Reset</button>
   </div>
 
+  <div id="moduleDetails" class="module-details">
+    <h2 id="modName">Module Name</h2>
+    <p><strong>Code:</strong> <span id="modCode">Not Defined</span></p>
+    <p><strong>Year:</strong> <span id="modYear">Not Defined</span></p>
+    <p><strong>Leader:</strong> <span id="modLeader">Not Defined</span></p>
+    <p><strong>Start Date:</strong> <span id="modStart">Not Defined</span></p>
+    <div id="modTutors"><strong>Tutors:</strong><ul></ul></div>
+  </div>
+
+
   <!-- Timetable Form -->
   <form id="timetableForm"></form>
     
   <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
-  <div class="preview-controls">
+  <div class="sticky-footer">
     <button id="previewBtn" onclick="previewTimetable()" disabled>🔍 Preview Timetable</button>
     <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled>🧾 Open Full Preview in New Tab</button>
     <button id="copyBtn" onclick="copyFullHTML()" disabled>📋 Copy HTML to Clipboard</button>
   </div>
-
+  
   <!-- iFrame Preview -->
   <iframe id="previewFrame"></iframe>
 
   <!-- JavaScript -->
   <script>
+    let sharedPresets = {};
 
-    // - Preset Data
-    const presets = {
-      moduleA: [
-        { week: 1, topic: "Introduction to Simulation", type: "teaching" },
-        { week: 2, topic: "Principles of Scenario Design", type: "teaching" },
-        { week: 3, topic: "Teamwork & Communication", type: "teaching" },
-        { week: 4, topic: "Reading Week", type: "reading" },
-        { week: 5, topic: "Assessment Preparation", type: "teaching" },
-        { week: 6, topic: "Formative Assessment", type: "assessment" },
-        { week: 7, topic: "Feedback & Reflection", type: "teaching" },
-        { week: 8, topic: "Easter Break", type: "break" }
-      ],
-
-      moduleB: [
-        { week: 1, topic: "Simulation Leadership Models", type: "teaching" },
-        { week: 2, topic: "Managing Sim Delivery", type: "teaching" },
-        { week: 3, topic: "Facilitator Skills", type: "teaching" },
-        { week: 4, topic: "Reading Week", type: "reading" },
-        { week: 5, topic: "Running Multi-Patient Sims", type: "teaching" },
-        { week: 6, topic: "Summative Presentation", type: "assessment" },
-        { week: 7, topic: "Peer Feedback Workshop", type: "teaching" },
-        { week: 8, topic: "Summer Break", type: "break" }
-      ],
-
-      moduleC: [
-        { week: 1, topic: "Contemporary Policy Landscape", type: "teaching" },
-        { week: 2, topic: "NHS Policy Impact on Sim", type: "teaching" },
-        { week: 3, topic: "Critical Reflection in Policy", type: "break" },
-        { week: 4, topic: "Reading Week", type: "reading" },
-        { week: 5, topic: "Debate on Policy Issues", type: "teaching" },
-        { week: 6, topic: "Policy Critique Submission", type: "assessment" },
-        { week: 7, topic: "Post-Assessment Feedback", type: "teaching" },
-        { week: 8, topic: "Spring Break", type: "break" }
-      ],
-
-      moduleD: [
-        { week: 1, topic: "Digital Pedagogy Foundations", type: "teaching" },
-        { week: 2, topic: "VR & AR in Simulation", type: "teaching" },
-        { week: 3, topic: "Learning Analytics", type: "assessment" },
-        { week: 4, topic: "Reading Week", type: "reading" },
-        { week: 5, topic: "ePortfolio Integration", type: "teaching" },
-        { week: 6, topic: "Technology Evaluation Report", type: "assessment" },
-        { week: 7, topic: "Showcasing Innovations", type: "teaching" },
-        { week: 8, topic: "Winter Break", type: "break" }
-      ],
-
-      moduleE: [
-        { week: 1, topic: "Innovative Practice Introduction", type: "teaching" },
-        { week: 2, topic: "Gamification in Simulation", type: "teaching" },
-        { week: 3, topic: "Cross-Disciplinary Design", type: "teaching" },
-        { week: 4, topic: "Reading Week", type: "reading" },
-        { week: 5, topic: "Prototype Workshop", type: "teaching" },
-        { week: 6, topic: "Innovation Pitch", type: "assessment" },
-        { week: 7, topic: "Feedback Integration", type: "teaching" },
-        { week: 8, topic: "Holiday Break", type: "break" }
-      ],
-
-      moduleF: [
-        { week: 1, topic: "Quality Improvement Principles", type: "teaching" },
-        { week: 2, topic: "Measurement for Improvement", type: "teaching" },
-        { week: 3, topic: "Sim-Based QI Projects", type: "teaching" },
-        { week: 4, topic: "Reading Week", type: "reading" },
-        { week: 5, topic: "Action Plan Development", type: "teaching" },
-        { week: 6, topic: "QI Proposal Presentation", type: "assessment" },
-        { week: 7, topic: "Peer Review & Refinement", type: "teaching" },
-        { week: 8, topic: "End of Module Break", type: "break" }
-      ]
-    };
+    fetch('presets.json')
+      .then(res => res.json())
+      .then(data => {
+        sharedPresets = data;
+        populatePresetButtons();
+      });
 
     // - loadPreset
     function loadPreset(presetKey) {
       const container = document.getElementById("timetableForm");
       container.innerHTML = "";
-      presets[presetKey].forEach((entry) => {
+
+      const presetData = sharedPresets[presetKey];
+
+      if (!presetData) {
+        showToast(`❌ No preset found for "${presetKey}"`, "error");
+        return;
+      }
+
+      // Update module details (if present)
+      document.getElementById("moduleDetails").style.display = "block";
+      document.getElementById("modName").textContent = presetData.moduleName || 'Module';
+      document.getElementById("modCode").textContent = presetData.moduleCode || 'Not Defined';
+      document.getElementById("modYear").textContent = presetData.year || 'Not Defined';
+      document.getElementById("modLeader").textContent = presetData.moduleLeader || 'Not Defined';
+      let startDate = presetData.moduleStart;
+      if (startDate) {
+        const parsed = new Date(startDate);
+        if (!isNaN(parsed)) {
+          startDate = parsed.toLocaleDateString('en-GB');
+        }
+      }
+      document.getElementById("modStart").textContent = startDate || 'Not Defined';
+
+
+      // Update tutors
+      const tutorList = document.querySelector("#modTutors ul");
+      tutorList.innerHTML = "";
+      if (Array.isArray(presetData.moduleTutors)) {
+        presetData.moduleTutors.forEach(tutor => {
+          const li = document.createElement("li");
+          li.textContent = `${tutor.name} (${tutor.campus})`;
+          tutorList.appendChild(li);
+        });
+      }
+
+      // Add weeks
+      (presetData.weeks || []).forEach(entry => {
         addWeek(entry.week, entry.topic, entry.type);
+        const lastBlock = document.querySelector('.week-block:last-of-type');
+        if (lastBlock) {
+          lastBlock.querySelector('[name="date"]').value = entry.date || '';
+          lastBlock.querySelector('[name="location"]').value = entry.location || '';
+          lastBlock.querySelector('[name="highlight"]').value = entry.highlight ? 'yes' : 'no';
+          updateHeader(lastBlock.id);
+        }
       });
 
+      // Enable buttons
       document.getElementById("previewBtn").disabled = false;
       document.getElementById("openTabBtn").disabled = false;
       document.getElementById("copyBtn").disabled = false;
       document.getElementById("resetBtn").disabled = false;
+
+      showToast(`✅ ${presetKey} loaded`, "success");
     }
 
     // - resetWeeks
@@ -266,6 +261,7 @@
     function generateFullHTML() {
       const form = document.getElementById('timetableForm');
       const blocks = form.querySelectorAll('.week-block');
+      document.getElementById("previewFrame").style.display = "block";
       let content = '';
       showToast("🧩 Generating preview…", "info");
 
@@ -705,9 +701,23 @@
       document.getElementById("copyBtn").disabled = true;
       document.getElementById("resetBtn").disabled = true;
 
+      // Hide module details
+      document.getElementById("moduleDetails").style.display = "none";
+      document.getElementById("previewFrame").style.display = "none";
+
+      // Clear values
+      document.getElementById("modName").textContent = "Module Name";
+      document.getElementById("modCode").textContent = "Not Defined";
+      document.getElementById("modYear").textContent = "Not Defined";
+      document.getElementById("modLeader").textContent = "Not Defined";
+      document.getElementById("modStart").textContent = "Not Defined";
+      document.querySelector("#modTutors ul").innerHTML = "";
+
+
       const iframe = document.getElementById("previewFrame");
       if (iframe) iframe.srcdoc = "";
     }
+
   </script>
 
   <!-- Modal for Reset Confirmation -->
