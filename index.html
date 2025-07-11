@@ -1,216 +1,729 @@
-<head><title>project-template-repo</title>
-	
-	<!-- Primary Meta Tags -->
-            <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="title" content="project-template-repo">
-<meta name="description" content="Your starting point for streamlined project setups. Jumpstart your development with this versatile template. 🚀📁">
-<!-- Open Graph / Facebook -->
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://smcnab1.github.io/project-template-repo">
-<meta property="og:title" content="Your starting point for streamlined project setups. Jumpstart your development with this versatile template. 🚀📁">
-<meta property="og:description" content="Your starting point for streamlined project setups. Jumpstart your development with this versatile template. 🚀📁">
-<meta property="og:image" content="https://og-image.vercel.app/project-template-repo.png?theme=light&md=0&fontSize=100px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-color-logo.svg">
-<!-- Twitter -->
-<meta property="twitter:card" content="summary_large_image">
-<meta property="twitter:url" content="https://smcnab1.github.io/project-template-repo">
-<meta property="twitter:title" content="project-template-repo">
-<meta property="twitter:description" content="Your starting point for streamlined project setups. Jumpstart your development with this versatile template. 🚀📁">
-<meta property="twitter:image" content="https://og-image.vercel.app/project-template-repo.png?theme=light&md=0&fontSize=100px&images=https%3A%2F%2Fassets.vercel.com%2Fimage%2Fupload%2Ffront%2Fassets%2Fdesign%2Fhyper-color-logo.svg">
-	   
-	 
-<script src="https://cdn.jsdelivr.net/npm/prismjs@1.28.0/prism.min.js"></script>   
-     </head>
-<!--Body Content -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Timetable Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
 <body>
-<github-md>
-<!-- TOP ROW OF BADGES -->
+  <!-- Navbar -->
+  <nav class="main-navbar">
+    <div class="navbar-title">📅 Timetable Generator</div>
+    <div class="navbar-links">
+      <a href="index.html">Generator</a>
+      <a href="settings.html">Settings</a>
+    </div>
+  </nav>
 
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![Kofi][kofi-badge]][kofi-url]
+  <!-- Preset Buttons -->
+  <div class="preset-container">
+    <button class="preset-btn" onclick="loadPreset('moduleA')">
+      <strong>Foundations of Simulation Education</strong>
+      <span class="module-code">ED70011X</span>
+      <span class="year-tag year-1">Year 1</span>
+    </button>
 
-<a name="readme-top"></a>
+    <button class="preset-btn" onclick="loadPreset('moduleB')">
+      <strong>Simulation Delivery & Leadership</strong>
+      <span class="module-code">ED70012X</span>
+      <span class="year-tag year-1">Year 1</span>
+    </button>
 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/smcnab1/project-template-repo">
-    <img src="images/avatar.png" alt="Logo" width="80" height="80">
-  </a>
+    <button class="preset-btn" onclick="loadPreset('moduleC')">
+      <strong>Digital Technologies in Education</strong>
+      <span class="module-code">ED70013X</span>
+      <span class="year-tag year-2">Year 2</span>
+    </button>
 
-<h3 align="center">Project Template Repo</h3>
+    <button class="preset-btn" onclick="loadPreset('moduleD')">
+      <strong>Current Issues & Policies in Simulation Education</strong>
+      <span class="module-code">ED70014X</span>
+      <span class="year-tag year-2">Year 2</span>
+    </button>
 
-  <p align="center">
-    Jumpstart your development with this versatile template. 🚀📁
-    <br />
-    <a href="https://github.com/smcnab1/project-template-repo"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/smcnab1/project-template-repo">View Demo</a>
-    ·
-    <a href="https://github.com/smcnab1/project-template-repo/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/smcnab1/project-template-repo/issues">Request Feature</a>
-  </p>
-</div>
+    <button class="preset-btn" onclick="loadPreset('moduleE')">
+      <strong>Simulation in Innovative Practice</strong>
+      <span class="module-code">ED70015X</span>
+      <span class="year-tag year-2">Year 2</span>
+    </button>
 
-<details>
-  <summary>View Contents</summary>
-
-_Last Updated DATE_
-<!-- toc -->
-
-- [About The Project](#about-the-project)
-  - [Features](#features)
-  - [Built with](#built-with)
-- [Getting started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Install](#install)
-  - [Usage](#usage)
-- [Back Matter](#back-matter)
-  - [Roadmap](#roadmap)
-  - [Contributing](#contributing)
-  - [License](#license)
-
-<!-- tocstop -->
-  
-</details>
-
-<!-- ABOUT THE PROJECT -->
-## About The Project
-<div align="center">
-  <a href="https://github.com/smcnab1/project-template-repo">
-    <img src="images/screenshot.png" alt="Logo" width="100%" height="auto">
-  </a>
+    <button class="preset-btn" onclick="loadPreset('moduleF')">
+      <strong>Quality Improvement & Demonstrative Simulation</strong>
+      <span class="module-code">ED70016X</span>
+      <span class="year-tag year-3">Year 3</span>
+    </button>
   </div>
+
+  <!-- Reset Button -->
+  <div class="reset-container">
+    <button class="preset-btn reset-btn" id="resetBtn" onclick="confirmReset()" disabled>🔄 Reset</button>
+  </div>
+
+  <!-- Timetable Form -->
+  <form id="timetableForm"></form>
+    
+  <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
+  <div class="preview-controls">
+    <button id="previewBtn" onclick="previewTimetable()" disabled>🔍 Preview Timetable</button>
+    <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled>🧾 Open Full Preview in New Tab</button>
+    <button id="copyBtn" onclick="copyFullHTML()" disabled>📋 Copy HTML to Clipboard</button>
+  </div>
+
+  <!-- iFrame Preview -->
+  <iframe id="previewFrame"></iframe>
+
+  <!-- JavaScript -->
+  <script>
+
+    // - Preset Data
+    const presets = {
+      moduleA: [
+        { week: 1, topic: "Introduction to Simulation", type: "teaching" },
+        { week: 2, topic: "Principles of Scenario Design", type: "teaching" },
+        { week: 3, topic: "Teamwork & Communication", type: "teaching" },
+        { week: 4, topic: "Reading Week", type: "reading" },
+        { week: 5, topic: "Assessment Preparation", type: "teaching" },
+        { week: 6, topic: "Formative Assessment", type: "assessment" },
+        { week: 7, topic: "Feedback & Reflection", type: "teaching" },
+        { week: 8, topic: "Easter Break", type: "break" }
+      ],
+
+      moduleB: [
+        { week: 1, topic: "Simulation Leadership Models", type: "teaching" },
+        { week: 2, topic: "Managing Sim Delivery", type: "teaching" },
+        { week: 3, topic: "Facilitator Skills", type: "teaching" },
+        { week: 4, topic: "Reading Week", type: "reading" },
+        { week: 5, topic: "Running Multi-Patient Sims", type: "teaching" },
+        { week: 6, topic: "Summative Presentation", type: "assessment" },
+        { week: 7, topic: "Peer Feedback Workshop", type: "teaching" },
+        { week: 8, topic: "Summer Break", type: "break" }
+      ],
+
+      moduleC: [
+        { week: 1, topic: "Contemporary Policy Landscape", type: "teaching" },
+        { week: 2, topic: "NHS Policy Impact on Sim", type: "teaching" },
+        { week: 3, topic: "Critical Reflection in Policy", type: "break" },
+        { week: 4, topic: "Reading Week", type: "reading" },
+        { week: 5, topic: "Debate on Policy Issues", type: "teaching" },
+        { week: 6, topic: "Policy Critique Submission", type: "assessment" },
+        { week: 7, topic: "Post-Assessment Feedback", type: "teaching" },
+        { week: 8, topic: "Spring Break", type: "break" }
+      ],
+
+      moduleD: [
+        { week: 1, topic: "Digital Pedagogy Foundations", type: "teaching" },
+        { week: 2, topic: "VR & AR in Simulation", type: "teaching" },
+        { week: 3, topic: "Learning Analytics", type: "assessment" },
+        { week: 4, topic: "Reading Week", type: "reading" },
+        { week: 5, topic: "ePortfolio Integration", type: "teaching" },
+        { week: 6, topic: "Technology Evaluation Report", type: "assessment" },
+        { week: 7, topic: "Showcasing Innovations", type: "teaching" },
+        { week: 8, topic: "Winter Break", type: "break" }
+      ],
+
+      moduleE: [
+        { week: 1, topic: "Innovative Practice Introduction", type: "teaching" },
+        { week: 2, topic: "Gamification in Simulation", type: "teaching" },
+        { week: 3, topic: "Cross-Disciplinary Design", type: "teaching" },
+        { week: 4, topic: "Reading Week", type: "reading" },
+        { week: 5, topic: "Prototype Workshop", type: "teaching" },
+        { week: 6, topic: "Innovation Pitch", type: "assessment" },
+        { week: 7, topic: "Feedback Integration", type: "teaching" },
+        { week: 8, topic: "Holiday Break", type: "break" }
+      ],
+
+      moduleF: [
+        { week: 1, topic: "Quality Improvement Principles", type: "teaching" },
+        { week: 2, topic: "Measurement for Improvement", type: "teaching" },
+        { week: 3, topic: "Sim-Based QI Projects", type: "teaching" },
+        { week: 4, topic: "Reading Week", type: "reading" },
+        { week: 5, topic: "Action Plan Development", type: "teaching" },
+        { week: 6, topic: "QI Proposal Presentation", type: "assessment" },
+        { week: 7, topic: "Peer Review & Refinement", type: "teaching" },
+        { week: 8, topic: "End of Module Break", type: "break" }
+      ]
+    };
+
+    // - loadPreset
+    function loadPreset(presetKey) {
+      const container = document.getElementById("timetableForm");
+      container.innerHTML = "";
+      presets[presetKey].forEach((entry) => {
+        addWeek(entry.week, entry.topic, entry.type);
+      });
+
+      document.getElementById("previewBtn").disabled = false;
+      document.getElementById("openTabBtn").disabled = false;
+      document.getElementById("copyBtn").disabled = false;
+      document.getElementById("resetBtn").disabled = false;
+    }
+
+    // - resetWeeks
+    function resetWeeks() {
+      document.getElementById("timetableForm").innerHTML = "";
+      weekIdCounter = 0;
+    }
+
+    // - addWeek
+    function addWeek(weekNumber = null, topicValue = "", weekType = "teaching") {
+      const container = document.getElementById("timetableForm");
+      const weekCount = container.children.length;
+      const nextWeek = weekNumber || weekCount + 1;
+      const id = `week-${weekNumber}`;
+
+      const block = document.createElement("div");
+      block.className = "week-block";
+      block.id = id;
+      const headerId = `header-${id}`;
+
+      block.innerHTML = `
+        <div class="week-header" id="${headerId}">
+          <span class="week-title">Week ${nextWeek}: ${topicValue}</span>
+          <span class="week-summary">Click to edit</span>
+        </div>
+        <div class="week-content">
+          <div class="form-row">
+            <div>
+              <label>Week Number</label>
+              <input type="number" name="week" value="${nextWeek}" required oninput="updateHeader('${id}')" disabled>
+            </div>
+            <div>
+              <label>Week Type</label>
+              <select name="type" onchange="updateHeader('${id}')" disabled>
+                <option value="teaching" ${weekType === "teaching" ? "selected" : ""}>Teaching Week</option>
+                <option value="reading" ${weekType === "reading" ? "selected" : ""}>Reading Week</option>
+                <option value="break" ${weekType === "break" ? "selected" : ""}>Break</option>
+                <option value="assessment" ${weekType === "assessment" ? "selected" : ""}>Assessment Week</option>
+              </select>
+            </div>
+            <div>
+              <label>Highlight Week?</label>
+              <select name="highlight" onchange="updateHeader('${id}')">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select>
+              </div>
+          </div>
+          <div class="form-row">
+            <div>
+              <label>Date</label>
+              <input type="date" name="date" required oninput="updateHeader('${id}')">
+            </div>
+            <div>
+              <label>Location</label>
+              <input type="text" name="location" required oninput="updateHeader('${id}')">
+            </div>
+          </div>
+          <label>Topic</label>
+          <input type="text" name="topic" value="${topicValue}" required oninput="updateHeader('${id}')">
+        </div>
+      `;
+      block.querySelector('.week-header').addEventListener('click', () => block.classList.toggle('open'));
+      container.appendChild(block);
+
+      updateHeader(id); 
+    }
+
+    // - updateHeader
+    function updateHeader(id) {
+      const block = document.getElementById(id);
+      const week = block.querySelector('[name=week]').value;
+      const topic = block.querySelector('[name=topic]').value;
+      const date = block.querySelector('[name=date]').value;
+      const location = block.querySelector('[name=location]').value;
+      const weekType = block.querySelector('[name=type]').value;
+      const highlight = block.querySelector('[name=highlight]')?.value === 'yes';
+
+      const formattedDate = date ? new Date(date).toLocaleDateString('en-GB') : 'No date';
+      const finalLocation = location || 'No location';
+
+      block.querySelector(".week-title").textContent = `Week ${week}: ${topic} [${formattedDate} - ${finalLocation}]${highlight ? ' ⭐' : ''}`;
+
+      const header = block.querySelector(".week-header");
+      header.className = 'week-header';
+      if (weekType) header.classList.add(weekType);
+      if (highlight) header.style.border = '2px solid #28a745';
+      else header.style.border = 'none';
+    }
   
-This repository can be used as a template to load your new repository with ease. Including the following features to save your time in generating new repositories.
+    // - copyFullHTML
+    function copyFullHTML() {
+      const fullHTML = generateFullHTML();
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+      const temp = document.createElement('textarea');
+      temp.value = fullHTML;
+      document.body.appendChild(temp);
+      temp.select();
+      document.execCommand('copy');
+      document.body.removeChild(temp);
 
-### Features
+      showToast("📋 HTML copied to clipboard", "success");
+    }
 
-- Auto-Update Documentation Links with current repo name
-- Update Email Addresses: CODE_OF_CONDUCT, SECURITY.
-- Download files & folders from another GitHub Repo
-- Generate Markdown styled index file with SEO details
-- Generate Table of Contents into README
-- Several files already created for you as a template
+    // - generateFullHTML
+    function generateFullHTML() {
+      const form = document.getElementById('timetableForm');
+      const blocks = form.querySelectorAll('.week-block');
+      let content = '';
+      showToast("🧩 Generating preview…", "info");
 
-### Built with
+      blocks.forEach(block => {
+        const week = block.querySelector('[name=week]').value;
+        const type = block.querySelector('[name=type]').value;
+        const dateInput = block.querySelector('[name=date]').value;
+        const date = dateInput ? new Date(dateInput).toLocaleDateString('en-GB') : 'No date';
+        const location = block.querySelector('[name=location]').value || 'No location';
+        const topic = block.querySelector('[name=topic]').value || 'No topic';
+        const highlight = block.querySelector('[name=highlight]')?.value === 'yes';
+        const weekTypeLabel = type === 'assessment' ? 'Assessment Week' : type.charAt(0).toUpperCase() + type.slice(1) + " Week";
 
-- Markdown
-- Python
-- GitHub Actions
-- Shell
+            content += `
+            <div class="week-card${highlight ? ' highlight' : ''}">
+              <div class="week-title">Week ${week}</div>
+              <div class="week-type ${type}">${weekTypeLabel}</div>
+              <div class="session-date"><span class="tooltip"><i class="fa fa-calendar"></i><span class="tooltiptext">Session Date</span></span>${date}</div>
+              <div class="session-location"><span class="tooltip"><i class="fa fa-map-marker"></i><span class="tooltiptext">Session Location</span></span>${location}</div>
+              <div class="session-topic"><span class="tooltip"><i class="fa fa-book"></i><span class="tooltiptext">Session Topic</span></span>${topic}</div>
+            </div>`;
+          });
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+          return `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+              <title>Module Timetable</title>
+              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                <style>
+                    body {
+                    margin: 0;
+                    padding: 0;
+                    background: #f5f7fa;
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    }
 
-## Getting started
+                    .head {
+                    background: linear-gradient(135deg, #004080, #0073e6);
+                    color: #fff;
+                    text-align: center;
+                    padding: 20px 16px;
+                    margin: 20px auto 30px;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                    }
 
-### Prerequisites
+                    .head h1 {
+                    font-size: 2rem;
+                    margin: 0;
+                    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+                    letter-spacing: 1px;
+                    }
 
-Accessible using browser or GitHub mobile application.
+                    .timetable-container {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                    gap: 20px;
+                    padding: 20px;
+                    max-width: 1300px;
+                    margin: 0 auto 60px;
+                    }
 
-### Install
+                    .week-card {
+                    background: #fff;
+                    border-radius: 12px;
+                    padding: 16px;
+                    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+                    transition: transform 0.3s ease, box-shadow 0.3s ease;
+                    text-align: left;
+                    position: relative;
+                    }
 
-1. Click on [use template](https://github.com/new?template_name=project-template-repo&template_owner=smcnab1) to generate new repository from template.
+                    .week-card:hover {
+                    transform: translateY(-5px);
+                    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+                    }
 
-2. Enter repository name and Description.
+                    .week-title {
+                    font-size: 1.2rem;
+                    font-weight: bold;
+                    margin-bottom: 6px;
+                    }
 
-3. Generate new repository.
+                    .week-type {
+                    font-size: 0.9rem;
+                    padding: 4px 10px;
+                    border-radius: 8px;
+                    display: inline-block;
+                    margin-bottom: 12px;
+                    }
 
-4. Navigate to **Settings > Actions > General** and set ***Workflow Permissions*** to _Read and write permissions_
+                    .teaching { background-color: #004080; color: #fff; }
+                    .reading { background-color: #f0ad4e; color: #fff; }
+                    .break { background-color: #bd61d9; color: #fff; }
+                    .assessment { background-color: #d9534f; color: #fff; }
 
-### Usage
+                    .highlight {
+                    border: 2px solid #28a745;
+                    background-color: #e6ffe6;
+                    }
+                    .assessment-badge {
+                    position: absolute;
+                    top: 12px;
+                    right: 12px;
+                    background-color: #dc3545;
+                    color: white;
+                    font-size: 0.75rem;
+                    padding: 4px 10px;
+                    border-radius: 6px;
+                    font-weight: bold;
+                    letter-spacing: 0.5px;
+                    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                    }
 
-- Repository Link Updater
-    - WIP
+                    .session-date {
+                    font-weight: 500;
+                    color: #333;
+                    margin-bottom: 4px;
+                    }
 
-- License Date Updater
-    - WIP
+                    .session-location {
+                    font-size: 0.95rem;
+                    color: #555;
+                    margin-bottom: 6px;
+                    }
 
-- Code of Conduct Email Updater
-    - WIP
+                    .session-topic {
+                    font-size: 0.95rem;
+                    color: #333;
+                    }
 
-- Security Policy Email Updater
-    - WIP
+                    .session-date i,
+                    .session-topic i {
+                    margin-right: 6px;
+                    color: #0073e6;
+                    }
+                    .session-location i {
+                    margin-right: 9px;
+                    margin-left: 3px;
+                    color: #0073e6;
+                    }
+                    
+                    .tooltip {
+                    position: relative;
+                    display: inline-block;
+                    cursor: help;
+                    }
+                    
+                    .tooltip .tooltiptext {
+                    visibility: hidden;
+                    width: max-content;
+                    background-color: #333;
+                    color: #fff;
+                    text-align: center;
+                    border-radius: 6px;
+                    padding: 4px 8px;
+                    position: absolute;
+                    z-index: 10;
+                    bottom: 125%;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    opacity: 0;
+                    transition: opacity 0.3s ease;
+                    font-size: 0.75rem;
+                    white-space: nowrap;
+                    }
+                    
+                    .tooltip:hover .tooltiptext {
+                    visibility: visible;
+                    opacity: 1;
+                    }
 
-- Table of Contents Generator
-    - WIP
+                </style>
+            </head>
+            <body>
+                <div class="head">
+                    <h1>Module Timetable</h1>
+                </div>
 
-- Index File Generator
-    - WIP
+                <div class="timetable-container">
+                  <!-- Use this structure for each week -->
+                ${content}
+                </div>
+            </html>
+            `.trim();
+    }
 
-- Combinations
-    - WIP
+    // - previewTimetable
+    function previewTimetable() {
+      const iframe = document.getElementById('previewFrame');
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      
+      doc.open();
+      doc.write(generateFullHTML());
+      doc.close();
+    }
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+    // - showToast
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById("toast");
 
-## Back Matter
+      toast.className = '';
+      toast.classList.add('show', `toast-${type}`);
+      toast.textContent = message;
 
-<!-- ROADMAP -->
-### Roadmap
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.style.display = "none";
+          toast.className = '';
+        }, 500);
+      }, 3000);
 
-- [ ] Finalise Documentation.
-- [ ] Remove need for config file, all set within Actions.
-- [ ] Combination Selection instead of individual options.
+      toast.style.display = "block";
+    }
 
-See the [open issues](https://github.com/smcnab1/project-template-repo/issues) for a full list of proposed features (and known issues).
+    // - openPreviewInNewTab
+    function openPreviewInNewTab() {
+      const form = document.getElementById('timetableForm');
+      const blocks = form.querySelectorAll('.week-block');
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+      let content = '';
+      blocks.forEach(block => {
+        const week = block.querySelector('[name=week]').value;
+        const type = block.querySelector('[name=type]').value;
+        const dateInput = block.querySelector('[name=date]').value;
+        const date = dateInput ? new Date(dateInput).toLocaleDateString('en-GB') : 'No date';
+        const location = block.querySelector('[name=location]').value || 'No location';
+        const topic = block.querySelector('[name=topic]').value || 'No topic';
+        const highlight = block.querySelector('[name=highlight]').value === 'yes';
 
-<!-- CONTRIBUTING -->
+        const weekTypeLabel = type === 'assessment' ? 'Assessment Week' : type.charAt(0).toUpperCase() + type.slice(1) + " Week";
+                content += `
+                <div class="week-card${highlight ? ' highlight' : ''}">
+                  <div class="week-title">Week ${week}</div>
+                  <div class="week-type ${type}">${weekTypeLabel}</div>
+                  <div class="session-date"><span class="tooltip"><i class="fa fa-calendar"></i><span class="tooltiptext">Session Date</span></span>${date}</div>
+                  <div class="session-location"><span class="tooltip"><i class="fa fa-map-marker"></i><span class="tooltiptext">Session Location</span></span>${location}</div>
+                  <div class="session-topic"><span class="tooltip"><i class="fa fa-book"></i><span class="tooltiptext">Session Topic</span></span>${topic}</div>
+                </div>`;
+              });
 
-<a name="contributing"></a>
+              const fullHTML = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                  <meta charset="UTF-8" />
+                  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+                  <title>Module Timetable</title>
+                  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+                    <style>
+                        body {
+                        margin: 0;
+                        padding: 0;
+                        background: #f5f7fa;
+                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                        }
 
-### Contributing
+                        .head {
+                        background: linear-gradient(135deg, #004080, #0073e6);
+                        color: #fff;
+                        text-align: center;
+                        padding: 20px 16px;
+                        margin: 20px auto 30px;
+                        border-radius: 12px;
+                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                        }
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+                        .head h1 {
+                        font-size: 2rem;
+                        margin: 0;
+                        text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+                        letter-spacing: 1px;
+                        }
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement" or "feature-request".
-Don't forget to give the project a star! Thanks again!
+                        .timetable-container {
+                        display: grid;
+                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+                        gap: 20px;
+                        padding: 20px;
+                        max-width: 1300px;
+                        margin: 0 auto 60px;
+                        }
 
-1. Fork the Project.
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+                        .week-card {
+                        background: #fff;
+                        border-radius: 12px;
+                        padding: 16px;
+                        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+                        transition: transform 0.3s ease, box-shadow 0.3s ease;
+                        text-align: left;
+                        position: relative;
+                        }
 
-### License
+                        .week-card:hover {
+                        transform: translateY(-5px);
+                        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+                        }
 
-This project is licensed under the [MIT License](LICENSE.md).
+                        .week-title {
+                        font-size: 1.2rem;
+                        font-weight: bold;
+                        margin-bottom: 6px;
+                        }
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+                        .week-type {
+                        font-size: 0.9rem;
+                        padding: 4px 10px;
+                        border-radius: 8px;
+                        display: inline-block;
+                        margin-bottom: 12px;
+                        }
 
-<!-- MARKDOWN LINKS & IMAGES -->
+                        .teaching { background-color: #004080; color: #fff; }
+                        .reading { background-color: #f0ad4e; color: #fff; }
+                        .break { background-color: #bd61d9; color: #fff; }
+                        .assessment { background-color: #d9534f; color: #fff; }
 
-[contributors-shield]: https://img.shields.io/github/contributors/smcnab1/project-template-repo.svg?style=for-the-badge
-[contributors-url]: https://github.com/smcnab1/project-template-repo/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/smcnab1/project-template-repo.svg?style=for-the-badge
-[forks-url]: https://github.com/smcnab1/project-template-repo/network/members
-[stars-shield]: https://img.shields.io/github/stars/smcnab1/project-template-repo.svg?style=for-the-badge
-[stars-url]: https://github.com/smcnab1/project-template-repo/stargazers
-[issues-shield]: https://img.shields.io/github/issues/smcnab1/project-template-repo.svg?style=for-the-badge
-[issues-url]: https://github.com/smcnab1/project-template-repo/issues
-[license-shield]: https://img.shields.io/github/license/smcnab1/project-template-repo.svg?style=for-the-badge
-[license-url]: https://github.com/smcnab1/project-template-repo/blob/master/LICENSE.md
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://www.linkedin.com/in/sammcnab/
-[product-screenshot]: images/screenshot.png
-[email-badge]: https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white
-[email-url]: mailto:sam@sammcnab.co.uk
-[git-badge]: https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white
-[git-url]: https://github.com/smcnab1
-[kofi-badge]: https://ko-fi.com/img/githubbutton_sm.svg
-[kofi-url]: https://ko-fi.com/sammcnab1
+                        .highlight {
+                        border: 2px solid #28a745;
+                        background-color: #e6ffe6;
+                        }
+                        .assessment-badge {
+                        position: absolute;
+                        top: 12px;
+                        right: 12px;
+                        background-color: #dc3545;
+                        color: white;
+                        font-size: 0.75rem;
+                        padding: 4px 10px;
+                        border-radius: 6px;
+                        font-weight: bold;
+                        letter-spacing: 0.5px;
+                        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+                        }
 
-    </github-md>
-	</body>
-	 <script src="https://cdn.jsdelivr.net/gh/MarketingPipeline/Markdown-Tag/markdown-tag-GitHub.js"></script> 
-	
+                        .session-date {
+                        font-weight: 500;
+                        color: #333;
+                        margin-bottom: 4px;
+                        }
+
+                        .session-location {
+                        font-size: 0.95rem;
+                        color: #555;
+                        margin-bottom: 6px;
+                        }
+
+                        .session-topic {
+                        font-size: 0.95rem;
+                        color: #333;
+                        }
+
+                        .session-date i,
+                        .session-topic i {
+                        margin-right: 6px;
+                        color: #0073e6;
+                        }
+                        .session-location i {
+                        margin-right: 9px;
+                        margin-left: 3px;
+                        color: #0073e6;
+                        }
+                        
+                        .tooltip {
+                        position: relative;
+                        display: inline-block;
+                        cursor: help;
+                        }
+                        
+                        .tooltip .tooltiptext {
+                        visibility: hidden;
+                        width: max-content;
+                        background-color: #333;
+                        color: #fff;
+                        text-align: center;
+                        border-radius: 6px;
+                        padding: 4px 8px;
+                        position: absolute;
+                        z-index: 10;
+                        bottom: 125%;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        opacity: 0;
+                        transition: opacity 0.3s ease;
+                        font-size: 0.75rem;
+                        white-space: nowrap;
+                        }
+                        
+                        .tooltip:hover .tooltiptext {
+                        visibility: visible;
+                        opacity: 1;
+                        }
+
+                    </style>
+                </head>
+                <body>
+                    <div class="head">
+                        <h1>Module Timetable</h1>
+                    </div>
+
+                    <div class="timetable-container">
+                      <!-- Use this structure for each week -->
+                    ${content}
+                    </div>
+                </html>
+                `.trim();
+
+      const blob = new Blob([fullHTML], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      window.open(url, '_blank');
+
+      showToast("🧾 Opening preview in new tab...", "info");
+    }
+
+    // - confirmReset
+    function confirmReset() {
+      document.getElementById('resetModal').style.display = 'flex';
+    }
+
+    // - closeModal
+    function closeModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+
+    // - performReset
+    function performReset() {
+      resetWeeks();
+      closeModal();
+      showToast("🔄 Timetable changes reset.", "success");
+
+      document.getElementById("previewBtn").disabled = true;
+      document.getElementById("openTabBtn").disabled = true;
+      document.getElementById("copyBtn").disabled = true;
+      document.getElementById("resetBtn").disabled = true;
+
+      const iframe = document.getElementById("previewFrame");
+      if (iframe) iframe.srcdoc = "";
+    }
+  </script>
+
+  <!-- Modal for Reset Confirmation -->
+  <div id="resetModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Are you sure?</h3>
+      <p>This will remove all current weeks from the timetable.</p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
+
+</body>
+</html>
