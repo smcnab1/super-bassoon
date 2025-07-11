@@ -1,0 +1,31 @@
+{
+  "ED70011X": {
+    "moduleName": "Foundations of Simulation Education",
+    "moduleCode": "ED70011X",
+    "year": "1",
+    "moduleLeader": "Anita Sudhagar",
+    "moduleStart": "",
+    "moduleTutors": [
+      { "name": "Anita Sudhagar", "campus": "London" },
+      { "name": "Sam Knipe", "campus": "Reading" }
+    ],
+    "weeks": [
+      {
+        "week": 1,
+        "type": "teaching",
+        "highlight": true,
+        "date": "2025-09-23",
+        "location": "UWL Reading",
+        "topic": "Welcome & Introduction"
+      },
+      {
+        "week": 2,
+        "type": "reading",
+        "highlight": false,
+        "date": "2025-09-30",
+        "location": "Online",
+        "topic": "Self-Directed Study"
+      }
+    ]
+  }
+}

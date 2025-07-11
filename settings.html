@@ -1,28 +1,242 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Preset Settings</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #eef2f5;
-    }
-    h1 { color: #003366; }
-    a { text-decoration: none; color: #003366; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Timetable Generator</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-  <nav style="background: #003366; padding: 10px 20px; display: flex; justify-content: space-between; align-items: center; color: white;">
-    <div style="font-weight: bold; font-size: 1.2rem;">⚙️ Preset Settings</div>
-    <div>
-      <a href="index.html" style="color: white; text-decoration: none;">Back to Generator</a>
+  <!-- Navbar -->
+  <nav class="main-navbar">
+    <div class="navbar-title">🤖 MScSimEd</div>
+    <div class="navbar-links">
+      <a href="index.html">Generator</a>
+      <a href="settings.html">Settings</a>
     </div>
   </nav>
 
-  <h1>Preset Editor (Coming Soon)</h1>
-  <p>Here, you'll be able to add, remove, or customise your module presets.</p>
+  <div class="container">
+    <h1>New Module Preset</h1>
+
+    <form id="moduleDetailsInput">
+      <div class="form-row">
+        <div><label>Module Name*</label><input type="text" name="moduleName" required></div>
+        <div><label>Module Code*</label><input type="text" name="moduleCode" required></div>
+        <div><label>Year*</label><select name="year" required>
+          <option value="">Select</option>
+          <option value="1">Year 1</option>
+          <option value="2">Year 2</option>
+          <option value="3">Year 3</option>
+        </select></div>
+        <div><label for="moduleStartDate">Module Start Date *</label><input type="date" id="moduleStartDate" name="moduleStartDate" required></div>
+      </div>
+      <div class="form-row">
+        <div><label>Module Leader*</label><input type="text" name="moduleLeader" required></div>
+      <div id="tutorContainer">
+        <label>Module Tutors</label>
+        <div class="form-row compact-tutor tutor-row">
+          <input type="text" name="tutorName" placeholder="Tutor Name" required />
+          <select name="tutorCampus" required>
+            <option value="">Select</option>
+            <option value="London">London</option>
+            <option value="Reading">Reading</option>
+          </select>
+          <button type="button" onclick="removeTutor(this)">❌</button>
+        </div>
+      </div>
+
+      <button type="button" onclick="addTutor()" class="small-btn">➕ Add Tutor</button>
+      </div>
+    </form>
+
+    <h2>Weekly Breakdown</h2>
+    <table id="weekTable">
+      <thead>
+        <tr>
+          <th>Week #*</th>
+          <th>Type*</th>
+          <th>Highlight</th>
+          <th>Date</th>
+          <th>Location</th>
+          <th>Topic*</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody id="weekBody">
+        <tr class="week-row">
+          <td><input type="number" name="weekNumber" required></td>
+          <td><select name="weekType" required>
+            <option value="">Select</option>
+            <option value="teaching">Teaching</option>
+            <option value="reading">Reading</option>
+            <option value="assessment">Assessment</option>
+            <option value="break">Break</option>
+          </select></td>
+          <td><select name="highlight">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+          </select></td>
+          <td><input type="date" name="date"></td>
+          <td><input type="text" name="location"></td>
+          <td><input type="text" name="topic" required></td>
+          <td><button type="button" onclick="removeWeekRow(this)">❌</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <button type="button" onclick="addRow()">➕ Add Week</button>
+  </div>
+  <div class="sticky-footer">
+    <button onclick="copyPresetJSON()">📋 Copy Preset JSON</button>
+    <button onclick="downloadPresetJSON()">💾 Download Preset JSON</button>
+  </div>
+
+  <script>
+    function getPresetData() {
+      const moduleName = document.querySelector('[name="moduleName"]').value;
+      const moduleCode = document.querySelector('[name="moduleCode"]').value;
+      const year = document.querySelector('[name="year"]').value;
+      const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
+      const moduleStart = document.querySelector('[name="moduleStartDate"]').value;
+
+      const tutorElements = document.querySelectorAll('.tutor-row');
+      const moduleTutors = Array.from(tutorElements).map(row => ({
+        name: row.querySelector('[name="tutorName"]').value,
+        campus: row.querySelector('[name="tutorCampus"]').value
+      }));
+
+      const weekElements = document.querySelectorAll('.week-row');
+      const weeks = Array.from(weekElements).map(row => ({
+        week: parseInt(row.querySelector('[name="weekNumber"]').value, 10),
+        type: row.querySelector('[name="weekType"]').value,
+        highlight: row.querySelector('[name="highlight"]').value === 'yes',
+        date: row.querySelector('[name="date"]').value,
+        location: row.querySelector('[name="location"]').value,
+        topic: row.querySelector('[name="topic"]').value
+      }));
+
+      return {
+        moduleName,
+        moduleCode,
+        year,
+        moduleLeader,
+        moduleStart,
+        moduleTutors,
+        weeks
+      };
+    }
+
+    function copyPresetJSON() {
+      const json = JSON.stringify(getPresetData(), null, 2);
+      navigator.clipboard.writeText(json).then(() => {
+        showToast("✅ Preset JSON copied to clipboard!", "success");
+      }).catch(() => {
+        showToast("⚠️ Failed to copy JSON", "error");
+      });
+    }
+
+    function downloadPresetJSON() {
+      const json = JSON.stringify(getPresetData(), null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${getPresetData().moduleCode || "preset"}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+      
+
+    function addTutor(name = '', campus = '') {
+      const container = document.getElementById('tutorContainer');
+      const row = document.createElement('div');
+      row.className = 'form-row compact-tutor tutor-row';
+
+      row.innerHTML = `
+        <input type="text" name="tutorName" placeholder="Tutor Name" value="${name}" required />
+        <select name="tutorCampus" required>
+          <option value="">Select</option>
+          <option value="London" ${campus === 'London' ? 'selected' : ''}>London</option>
+          <option value="Reading" ${campus === 'Reading' ? 'selected' : ''}>Reading</option>
+        </select>
+        <button type="button" onclick="removeTutor(this)">❌</button>
+      `;
+
+      container.appendChild(row);
+    }
+
+    function removeTutor(button) {
+      const container = document.getElementById('tutorContainer');
+      const rows = container.querySelectorAll('.form-row');
+      if (rows.length > 1) {
+        button.parentElement.remove();
+      } else {
+        showToast("At least one tutor is required", "error");
+      }
+    }
+
+
+    function addRow() {
+      const tbody = document.getElementById("weekBody");
+      const tr = document.createElement("tr");
+      tr.className = 'week-row';
+      tr.innerHTML = `
+        <td><input type="number" name="weekNumber" required></td>
+        <td><select name="weekType" required>
+            <option value="">Select</option>
+            <option value="teaching">Teaching</option>
+            <option value="reading">Reading</option>
+            <option value="assessment">Assessment</option>
+            <option value="break">Break</option>
+        </select></td>
+        <td><select name="highlight">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select></td>
+        <td><input type="date" name="date"></td>
+        <td><input type="text" name="location"></td>
+        <td><input type="text" name="topic" required></td>
+        <td><button type="button" onclick="removeRow(this)">❌</button></td>
+      `;
+      tbody.appendChild(tr);
+    }
+
+    function removeWeekRow(button) {
+      const weekRows = document.querySelectorAll('.week-row');
+      if (weekRows.length > 1) {
+        button.closest('.week-row').remove();
+      } else {
+        showToast("At least one week is required", "error");
+      }
+    }
+
+    function removeRow(btn) {
+      const row = btn.parentElement.parentElement;
+      row.remove();
+    }
+
+    // - showToast
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById("toast");
+
+      toast.className = '';
+      toast.classList.add('show', `toast-${type}`);
+      toast.textContent = message;
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.style.display = "none";
+          toast.className = '';
+        }, 500);
+      }, 3000);
+
+      toast.style.display = "block";
+    }
+
+  </script>
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
 </body>
 </html>
