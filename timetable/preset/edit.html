@@ -1,0 +1,1740 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Module Preset</title>
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    /* CSS Variables for consistent theming */
+    :root {
+      --error-color: #dc3545;
+      --error-color-hover: #c82333;
+      --success-color: #28a745;
+      --success-color-hover: #218838;
+      --hover-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --error-color: #e74c3c;
+      --error-color-hover: #c0392b;
+      --success-color: #27ae60;
+      --success-color-hover: #229954;
+      --hover-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modern responsive design for edit form */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .container h1 {
+      margin-bottom: 32px;
+      color: var(--text-primary);
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* Form layout improvements */
+    .form-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+    }
+
+    .form-section h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    /* Improved form row layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-row label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .form-row input,
+    .form-row select {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .form-row input:focus,
+    .form-row select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+
+    /* Required field styling */
+    .form-row label.required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] .form-row label.required::after {
+      color: #e74c3c;
+    }
+
+    /* Table header required styling */
+    #weekTable th .required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] #weekTable th .required::after {
+      color: #e74c3c;
+    }
+
+    /* Tutor section improvements */
+    .compact-tutor {
+      grid-template-columns: 1fr 1fr 40px;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .compact-tutor > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .compact-tutor input,
+    .compact-tutor select {
+      margin-bottom: 0;
+    }
+
+    .compact-tutor button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      min-width: auto;
+      margin: 0;
+    }
+
+    .button-placeholder {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      margin: 0 auto;
+    }
+
+    /* Better button styling */
+    .remove-btn {
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 8px 8px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: bold;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn:hover {
+      background: #660000;
+      transform: scale(1.05);
+    }
+
+    [data-theme="dark"] .remove-btn {
+      background: #a52a2a;
+    }
+
+    [data-theme="dark"] .remove-btn:hover {
+      background: #8b0000;
+    }
+
+    /* Table improvements */
+    #weekTable {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+      margin-bottom: 16px;
+    }
+
+    #weekTable th {
+      background: var(--navbar-bg);
+      color: white;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    #weekTable td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    #weekTable tr:last-child td {
+      border-bottom: none;
+    }
+
+    #weekTable input,
+    #weekTable select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    #weekTable input:focus,
+    #weekTable select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    /* Action buttons in table */
+    .action-buttons {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .action-buttons button {
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      min-width: auto;
+      margin: 0;
+      background: var(--button-secondary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .action-buttons button:hover {
+      background: var(--button-secondary-hover);
+    }
+
+    .action-buttons button[onclick*="removeRow"],
+    .action-buttons button[onclick*="removeWeekRow"] {
+      background: #8b0000 !important;
+      font-weight: bold !important;
+    }
+
+    .action-buttons button[onclick*="removeRow"]:hover,
+    .action-buttons button[onclick*="removeWeekRow"]:hover {
+      background: #660000 !important;
+    }
+
+    [data-theme="dark"] .action-buttons button[onclick*="removeRow"],
+    [data-theme="dark"] .action-buttons button[onclick*="removeWeekRow"] {
+      background: #a52a2a !important;
+    }
+
+    [data-theme="dark"] .action-buttons button[onclick*="removeRow"]:hover,
+    [data-theme="dark"] .action-buttons button[onclick*="removeWeekRow"]:hover {
+      background: #8b0000 !important;
+    }
+
+    /* Up and down arrow button styling */
+    .action-buttons button[onclick*="moveWeekUp"],
+    .action-buttons button[onclick*="moveWeekDown"] {
+      background: var(--button-primary) !important;
+      font-weight: bold !important;
+    }
+
+    .action-buttons button[onclick*="moveWeekUp"]:hover,
+    .action-buttons button[onclick*="moveWeekDown"]:hover {
+      background: var(--button-primary-hover) !important;
+    }
+
+    /* Week number styling */
+    .week-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    /* Add buttons */
+    .add-button {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+    }
+
+    .add-button:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .add-weeks-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .add-multiple-weeks {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+    }
+
+    .weeks-input {
+      width: 60px;
+      height: 44px;
+      line-height: 44px;
+      padding: 0 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      text-align: center;
+      box-sizing: border-box;
+      vertical-align: middle;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .add-multiple-button {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 0 24px;
+      height: 44px;
+      line-height: 44px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin: 0;
+    }
+
+    /* Sticky footer improvements */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--navbar-bg);
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      box-shadow: 0 -2px 10px var(--shadow-color);
+      z-index: 100;
+    }
+
+    .sticky-footer button {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 140px;
+    }
+
+    .sticky-footer button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .sticky-footer button:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    /* Import section styling */
+    .import-section {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 2px dashed var(--border-color);
+    }
+
+    .import-section h2 {
+      margin-top: 0;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .import-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .import-method {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .import-method h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+    }
+
+    .json-textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-label {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--button-primary);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .file-input-label:hover {
+      background: var(--button-primary-hover);
+    }
+
+    .import-btn {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .import-btn:hover {
+      background: var(--button-primary-hover);
+    }
+
+    .import-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .clear-btn {
+      background: var(--button-secondary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-left: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .clear-btn:hover {
+      background: var(--button-secondary-hover);
+    }
+
+    .reset-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      background: #c82333;
+    }
+
+    .status-message {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Custom toggle switch for exportForPresetsJson */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+      vertical-align: middle;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .3s;
+      border-radius: 26px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    input:checked + .slider {
+      background-color: #0073e6;
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .switch-label {
+      margin-left: 12px;
+      font-size: 1em;
+      color: var(--text-primary);
+      cursor: pointer;
+      user-select: none;
+    }
+    .sticky-footer {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Advanced Settings Section */
+    .advanced-settings {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .advanced-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .advanced-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .advanced-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .advanced-toggle-icon {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .advanced-content {
+      padding: 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .advanced-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .advanced-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+    }
+
+    .advanced-option .switch-label {
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .advanced-description {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 4px;
+      margin-left: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .import-methods {
+        grid-template-columns: 1fr;
+      }
+      
+      .add-weeks-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      
+      .add-multiple-weeks {
+        justify-content: center;
+      }
+    }
+    /* Add Weeks Row Alignment */
+    .add-weeks-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .add-weeks-left {
+      display: flex;
+      align-items: center;
+    }
+    .add-weeks-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .add-button,
+    .add-multiple-button,
+    .weeks-input {
+      height: 44px;
+      line-height: 44px;
+      font-size: 1rem;
+      margin: 0;
+      vertical-align: middle;
+    }
+    .add-button {
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .add-multiple-button {
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .weeks-input {
+      width: 60px;
+      padding: 0 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      text-align: center;
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
+
+  <!-- Navbar -->
+  <nav class="main-navbar">
+    <div class="navbar-title">
+      <a href="../../../index.html" style="text-decoration: none; color: inherit;">
+        <div class="title-main">🤖 MScSimEd</div>
+      </a>
+      <span class="title-separator">|</span>
+      <div class="title-subtitle">📋 TimetableGen</div>
+    </div>
+    <div class="navbar-links">
+      <div class="dropdown">
+        <button class="dropdown-btn">📅 Timetable</button>
+        <div class="dropdown-content">
+          <a href="../generate.html">🎯 Generate</a>
+          <a href="new.html">📄 New Preset</a>
+          <a href="edit.html">✏️ Edit Preset</a>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Edit Module Preset</h1>
+
+    <!-- JSON Import Section -->
+    <div class="import-section">
+      <h2 onclick="toggleImportSection()" style="cursor: pointer; user-select: none;">
+        📥 Import JSON Preset <span id="importToggleIcon">▲</span>
+      </h2>
+      <div id="importContent">
+        <p>Paste a JSON snippet or upload a JSON file to load an existing preset for editing.</p>
+        
+        <div class="import-methods">
+          <div class="import-method">
+            <h3>📋 Paste JSON</h3>
+            <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON preset here..." oninput="updateTextButtons()"></textarea>
+            <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>Import from Text</button>
+            <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>Clear</button>
+          </div>
+          
+          <div class="import-method">
+            <h3>📁 Upload File</h3>
+            <div class="file-input-wrapper">
+              <input type="file" id="jsonFileInput" class="file-input" accept=".json" onchange="handleFileSelect(event)">
+              <label for="jsonFileInput" class="file-input-label">Choose JSON File</label>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Select a .json file to import</p>
+            <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>Import from File</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="editForm" style="display: none;">
+      <div class="form-section">
+        <h2>Module Details</h2>
+        <form id="moduleDetailsInput">
+          <div class="form-row">
+            <div><label class="required">Module Name</label><input type="text" name="moduleName" required placeholder="Enter module name"></div>
+          </div>
+          <div class="form-row">
+            <div><label class="required">Module Code</label><input type="text" name="moduleCode" required placeholder="e.g., ED70011X"></div>
+            <div><label class="required">Year</label><select name="year" required>
+              <option value="">Select Year</option>
+              <option value="1">Year 1</option>
+              <option value="2">Year 2</option>
+              <option value="3">Year 3</option>
+            </select></div>
+          </div>
+                  <div class="form-row">
+          <div><label class="required">Module Leader</label><input type="text" name="moduleLeader" required placeholder="Enter module leader name"></div>
+        </div>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h2>Module Tutors (Optional)</h2>
+        <div id="tutorContainer">
+          <div class="form-row compact-tutor tutor-row">
+            <div><input type="text" name="tutorName" placeholder="Tutor Name" /></div>
+            <div><select name="tutorCampus">
+              <option value="">Select Campus</option>
+              <option value="London">London</option>
+              <option value="Reading">Reading</option>
+            </select></div>
+            <div class="button-placeholder"></div>
+          </div>
+        </div>
+        <button type="button" onclick="addTutor()" class="add-button">➕ Add Tutor</button>
+      </div>
+
+      <div class="form-section">
+        <h2>Weekly Breakdown</h2>
+        <table id="weekTable">
+          <thead>
+            <tr>
+              <th>Week #</th>
+              <th><span class="required">Type</span></th>
+              <th>Highlight</th>
+              <th><span class="required">Topic</span></th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="weekBody">
+            <tr class="week-row">
+              <td><span class="week-number">1</span></td>
+              <td><select name="weekType" required>
+                <option value="">Select Type</option>
+                <option value="teaching">Teaching</option>
+                <option value="reading">Reading</option>
+                <option value="assessment">Assessment</option>
+                <option value="break">Break</option>
+              </select></td>
+              <td><select name="highlight">
+                <option value="no">No</option>
+                <option value="yes">Yes</option>
+              </select></td>
+              <td><input type="text" name="topic" required placeholder="Enter topic"></td>
+              <td>
+                <div class="action-buttons">
+                  <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
+                  <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
+                  <button type="button" onclick="removeWeekRow(this)" title="Remove week">❌</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="add-weeks-row">
+          <div class="add-weeks-left">
+            <button type="button" onclick="addRow()" class="add-button">➕ Add Week</button>
+          </div>
+          <div class="add-weeks-right">
+            <input type="number" id="weeksToAdd" min="1" max="25" value="1" class="weeks-input">
+            <button type="button" onclick="addMultipleWeeks()" class="add-multiple-button">➕ Add Weeks</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sticky-footer">
+    <button onclick="copyPresetJSON()">📋 Copy Preset JSON</button>
+    <button onclick="downloadPresetJSON()">💾 Download Preset JSON</button>
+    <button onclick="confirmReset()" class="reset-btn">🔄 Reset</button>
+  </div>
+
+  <!-- Advanced Settings Section -->
+  <div class="advanced-settings">
+    <div class="advanced-header" onclick="toggleAdvancedSettings()">
+      <h3>⚙️ Advanced Settings</h3>
+      <span class="advanced-toggle-icon">▼</span>
+    </div>
+    <div class="advanced-content" id="advancedContent">
+      <div class="advanced-option">
+        <label class="switch" title="Export for presets.json">
+          <input type="checkbox" id="exportForPresetsJson" />
+          <span class="slider"></span>
+        </label>
+        <span class="switch-label" onclick="document.getElementById('exportForPresetsJson').click()">Export for presets.json</span>
+      </div>
+      <div class="advanced-description">
+        When enabled, exports the preset in the format required for direct inclusion in presets.json file.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedFile = null;
+
+    // Toggle import section
+    function toggleImportSection() {
+      const content = document.getElementById('importContent');
+      const icon = document.getElementById('importToggleIcon');
+      
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.textContent = '▲';
+      } else {
+        content.style.display = 'none';
+        icon.textContent = '▼';
+      }
+    }
+
+    // Show edit form after successful import
+    function showEditForm() {
+      document.getElementById('editForm').style.display = 'block';
+      // Close the import section
+      const content = document.getElementById('importContent');
+      const icon = document.getElementById('importToggleIcon');
+      content.style.display = 'none';
+      icon.textContent = '▼';
+      // Scroll to the form
+      document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Modal functions
+    function confirmReset() {
+      document.getElementById('resetModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+
+    // Reset form and return to import state
+    function performReset() {
+      // Clear all form fields
+      document.querySelector('[name="moduleName"]').value = '';
+      document.querySelector('[name="moduleCode"]').value = '';
+      document.querySelector('[name="year"]').value = '';
+      document.querySelector('[name="moduleLeader"]').value = '';
+
+
+      // Clear tutors (keep only one empty row)
+      clearTutors();
+
+      // Clear weeks (keep only one empty row)
+      clearWeeks();
+
+      // Clear JSON textarea
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+
+      // Clear file input
+      document.getElementById('jsonFileInput').value = '';
+      selectedFile = null;
+      document.getElementById('importFromFile').disabled = true;
+
+      // Hide the form
+      document.getElementById('editForm').style.display = 'none';
+
+      // Show and expand the import section
+      const content = document.getElementById('importContent');
+      const icon = document.getElementById('importToggleIcon');
+      content.style.display = 'block';
+      icon.textContent = '▲';
+
+      // Clear saved draft data
+      localStorage.removeItem('editPresetDraft');
+
+      // Close modal
+      closeModal();
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      showToast('🔄 Form reset successfully', 'success');
+    }
+
+    // Theme management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    // Initialize theme on page load
+    initTheme();
+
+    // Load saved data on page load
+    loadSavedData();
+
+    // Auto-save data when form fields change
+    setupAutoSave();
+
+    // Update week numbers on page load
+    updateWeekNumbers();
+
+    // JSON Import Functions
+    function importFromText() {
+      const textarea = document.getElementById('jsonTextarea');
+      const jsonText = textarea.value.trim();
+      
+      if (!jsonText) {
+        showToast('Please enter JSON text to import', 'error');
+        return;
+      }
+
+      try {
+        const presetData = JSON.parse(jsonText);
+        loadPresetData(presetData);
+        showToast('✅ JSON preset imported successfully!', 'success');
+      } catch (error) {
+        showToast('❌ Invalid JSON format: ' + error.message, 'error');
+      }
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        selectedFile = file;
+        document.getElementById('importFromFile').disabled = false;
+        showToast(`📁 File selected: ${file.name}`, 'success');
+      }
+    }
+
+    function importFromFile() {
+      if (!selectedFile) {
+        showToast('Please select a file first', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const presetData = JSON.parse(e.target.result);
+          loadPresetData(presetData);
+          showToast('✅ JSON file imported successfully!', 'success');
+        } catch (error) {
+          showToast('❌ Invalid JSON file: ' + error.message, 'error');
+        }
+      };
+      reader.readAsText(selectedFile);
+    }
+
+    function loadPresetData(presetData) {
+      // Load module details
+      document.querySelector('[name="moduleName"]').value = presetData.moduleName || '';
+      document.querySelector('[name="moduleCode"]').value = presetData.moduleCode || '';
+      document.querySelector('[name="year"]').value = presetData.year || '';
+      document.querySelector('[name="moduleLeader"]').value = presetData.moduleLeader || '';
+
+
+      // Load tutors
+      clearTutors();
+      if (presetData.moduleTutors && Array.isArray(presetData.moduleTutors) && presetData.moduleTutors.length > 0) {
+        presetData.moduleTutors.forEach(tutor => {
+          addTutor(tutor.name || '', tutor.campus || '');
+        });
+      }
+
+      // Load weeks
+      clearWeeks();
+      if (presetData.weeks && Array.isArray(presetData.weeks) && presetData.weeks.length > 0) {
+        presetData.weeks.forEach(week => {
+          addWeekRow(week);
+        });
+      }
+
+      // Clear any existing saved draft data since we're loading new data
+      localStorage.removeItem('editPresetDraft');
+      
+      // Show the edit form after successful import
+      showEditForm();
+      
+      // Update week numbers and validate data after loading
+      updateWeekNumbers();
+      validateTableData();
+    }
+
+    function clearTutors() {
+      const container = document.getElementById('tutorContainer');
+      const rows = container.querySelectorAll('.tutor-row');
+      rows.forEach(row => row.remove());
+    }
+
+    function clearWeeks() {
+      const tbody = document.getElementById('weekBody');
+      tbody.innerHTML = '';
+    }
+
+    function addWeekRow(weekData) {
+      const tbody = document.getElementById('weekBody');
+      const tr = document.createElement('tr');
+      tr.className = 'week-row';
+      tr.innerHTML = `
+        <td><span class="week-number">${weekData.week || ''}</span></td>
+        <td><select name="weekType" required>
+            <option value="">Select Type</option>
+            <option value="teaching" ${weekData.type === 'teaching' ? 'selected' : ''}>Teaching</option>
+            <option value="reading" ${weekData.type === 'reading' ? 'selected' : ''}>Reading</option>
+            <option value="assessment" ${weekData.type === 'assessment' ? 'selected' : ''}>Assessment</option>
+            <option value="break" ${weekData.type === 'break' ? 'selected' : ''}>Break</option>
+        </select></td>
+        <td><select name="highlight">
+            <option value="no" ${!weekData.highlight ? 'selected' : ''}>No</option>
+            <option value="yes" ${weekData.highlight ? 'selected' : ''}>Yes</option>
+        </select></td>
+        <td><input type="text" name="topic" value="${weekData.topic || ''}" required placeholder="Enter topic"></td>
+        <td>
+          <div class="action-buttons">
+            <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
+            <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
+            <button type="button" onclick="removeWeekRow(this)" title="Remove week">❌</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+
+      // Add event listeners to new inputs for auto-save and highlight
+      const newInputs = tr.querySelectorAll('input, select');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+        if (input.name === 'weekType' || input.name === 'highlight') {
+          input.addEventListener('change', function() {
+            updateRowHighlight(this.closest('.week-row'));
+          });
+        }
+      });
+      // Update row highlighting for the loaded row
+      updateRowHighlight(tr);
+    }
+
+    function updateTextButtons() {
+      const textarea = document.getElementById('jsonTextarea');
+      const importBtn = document.getElementById('importFromText');
+      const clearBtn = document.getElementById('clearTextBtn');
+      
+      const hasContent = textarea.value.trim().length > 0;
+      
+      importBtn.disabled = !hasContent;
+      clearBtn.disabled = !hasContent;
+    }
+
+    function clearTextarea() {
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+      showToast('Text area cleared', 'success');
+    }
+
+
+
+    function getPresetData() {
+      const moduleName = document.querySelector('[name="moduleName"]').value;
+      const moduleCode = document.querySelector('[name="moduleCode"]').value;
+      const year = document.querySelector('[name="year"]').value;
+      const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
+
+      const tutorElements = document.querySelectorAll('.tutor-row');
+      const moduleTutors = Array.from(tutorElements).map(row => ({
+        name: row.querySelector('[name="tutorName"]').value,
+        campus: row.querySelector('[name="tutorCampus"]').value
+      })).filter(tutor => tutor.name && tutor.campus); // Only include tutors with both name and campus
+
+      const weekElements = document.querySelectorAll('.week-row');
+      const weeks = Array.from(weekElements).map((row, index) => ({
+        week: parseInt(row.querySelector('.week-number').textContent, 10),
+        type: row.querySelector('[name="weekType"]').value,
+        highlight: row.querySelector('[name="highlight"]').value === 'yes',
+        date: '',
+        location: 'Location TBC',
+        topic: row.querySelector('[name="topic"]').value
+      })).filter(week => week.week && week.type && week.topic); // Only include weeks with required fields
+
+      return {
+        moduleName,
+        moduleCode,
+        year,
+        moduleLeader,
+        moduleTutors,
+        weeks
+      };
+    }
+
+    function copyPresetJSON() {
+      const errors = validateTableData ? validateTableData() : [];
+      if (errors && errors.length > 0) {
+        showToast(`❌ Please fix the following errors:\n${errors.join('\n')}`, "error");
+        return;
+      }
+      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
+      const data = getPresetData();
+      let json;
+      if (exportForPresets) {
+        if (!data.moduleCode) {
+          showToast("❌ Module Code is required for presets.json export", "error");
+          return;
+        }
+        json = JSON.stringify({ [data.moduleCode]: data }, null, 2);
+      } else {
+        json = JSON.stringify(data, null, 2);
+      }
+      navigator.clipboard.writeText(json).then(() => {
+        showToast("✅ Preset JSON copied to clipboard!", "success");
+      }).catch(() => {
+        showToast("⚠️ Failed to copy JSON", "error");
+      });
+    }
+
+    function downloadPresetJSON() {
+      const errors = validateTableData ? validateTableData() : [];
+      if (errors && errors.length > 0) {
+        showToast(`❌ Please fix the following errors:\n${errors.join('\n')}`, "error");
+        return;
+      }
+      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
+      const data = getPresetData();
+      let json;
+      if (exportForPresets) {
+        if (!data.moduleCode) {
+          showToast("❌ Module Code is required for presets.json export", "error");
+          return;
+        }
+        json = JSON.stringify({ [data.moduleCode]: data }, null, 2);
+      } else {
+        json = JSON.stringify(data, null, 2);
+      }
+      const blob = new Blob([json], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${data.moduleCode || "preset"}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+      
+    function addTutor(name = '', campus = '') {
+      const container = document.getElementById('tutorContainer');
+      const row = document.createElement('div');
+      row.className = 'form-row compact-tutor tutor-row';
+
+      row.innerHTML = `
+        <div><input type="text" name="tutorName" placeholder="Tutor Name" value="${name}" /></div>
+        <div><select name="tutorCampus">
+          <option value="">Select Campus</option>
+          <option value="London" ${campus === 'London' ? 'selected' : ''}>London</option>
+          <option value="Reading" ${campus === 'Reading' ? 'selected' : ''}>Reading</option>
+        </select></div>
+        <div><button type="button" onclick="removeTutor(this)" class="remove-btn">❌</button></div>
+      `;
+
+      container.appendChild(row);
+      
+      // Add event listeners to new inputs for auto-save
+      const newInputs = row.querySelectorAll('input, select');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+    }
+
+    function removeTutor(button) {
+      const container = document.getElementById('tutorContainer');
+      const rows = container.querySelectorAll('.tutor-row');
+      if (rows.length > 1) {
+        button.closest('.tutor-row').remove();
+      } else {
+        showToast("At least one tutor row is required", "error");
+      }
+    }
+
+
+
+    function addRow() {
+      const tbody = document.getElementById("weekBody");
+      const tr = document.createElement("tr");
+      tr.className = 'week-row';
+      const weekNumber = tbody.rows.length + 1;
+      tr.innerHTML = `
+        <td><span class="week-number">${weekNumber}</span></td>
+        <td><select name="weekType" required>
+            <option value="">Select Type</option>
+            <option value="teaching" selected>Teaching</option>
+            <option value="reading">Reading</option>
+            <option value="assessment">Assessment</option>
+            <option value="break">Break</option>
+        </select></td>
+        <td><select name="highlight">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select></td>
+        <td><input type="text" name="topic" required placeholder="Enter topic"></td>
+        <td>
+          <div class="action-buttons">
+            <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
+            <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
+            <button type="button" onclick="removeWeekRow(this)" title="Remove week">❌</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input, select');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+        
+        // Add highlighting update for type selects
+        if (input.name === 'weekType') {
+          input.addEventListener('change', function() {
+            updateRowHighlight(this.closest('.week-row'));
+          });
+        }
+        // Add highlighting update for highlight selects
+        if (input.name === 'highlight') {
+          input.addEventListener('change', function() {
+            updateRowHighlight(this.closest('.week-row'));
+          });
+        }
+      });
+      // Update row highlighting for the new row
+      updateRowHighlight(tr);
+    }
+
+    function addMultipleWeeks() {
+      const weeksInput = document.getElementById('weeksToAdd');
+      const weeksToAdd = parseInt(weeksInput.value) || 1;
+      
+      // Validate input
+      if (weeksToAdd < 1 || weeksToAdd > 25) {
+        showToast('❌ Please enter a number between 1 and 25', 'error');
+        return;
+      }
+      
+      // Add the specified number of weeks
+      for (let i = 0; i < weeksToAdd; i++) {
+        addRow();
+      }
+      
+      // Reset input to 1
+      weeksInput.value = 1;
+      
+      // Show success message
+      if (weeksToAdd === 1) {
+        showToast('✅ 1 week added', 'success');
+      } else {
+        showToast(`✅ ${weeksToAdd} weeks added`, 'success');
+      }
+    }
+
+    function removeWeekRow(button) {
+      const weekRows = document.querySelectorAll('.week-row');
+      if (weekRows.length > 1) {
+        button.closest('.week-row').remove();
+      } else {
+        showToast("At least one week is required", "error");
+      }
+    }
+
+    function removeRow(btn) {
+      const row = btn.closest('.week-row');
+      if (row) {
+        const weekRows = document.querySelectorAll('.week-row');
+        if (weekRows.length > 1) {
+          row.remove();
+          updateWeekNumbers();
+        } else {
+          showToast("At least one week is required", "error");
+        }
+      }
+    }
+
+    function moveWeekUp(btn) {
+      const currentRow = btn.closest('.week-row');
+      const tbody = document.getElementById('weekBody');
+      const previousRow = currentRow.previousElementSibling;
+      
+      // Check if there's a previous row to swap with
+      if (previousRow && previousRow.classList.contains('week-row')) {
+        // Swap the rows
+        tbody.insertBefore(currentRow, previousRow);
+        updateWeekNumbers();
+      }
+    }
+
+    function moveWeekDown(btn) {
+      const currentRow = btn.closest('.week-row');
+      const tbody = document.getElementById('weekBody');
+      const nextRow = currentRow.nextElementSibling;
+      
+      // Check if there's a next row to swap with
+      if (nextRow && nextRow.classList.contains('week-row')) {
+        // Move the current row after the next row
+        tbody.insertBefore(currentRow, nextRow.nextElementSibling);
+        updateWeekNumbers();
+      }
+    }
+
+    function updateWeekNumbers() {
+      const weekRows = document.querySelectorAll('.week-row');
+      weekRows.forEach((row, index) => {
+        const weekNumberSpan = row.querySelector('.week-number');
+        if (weekNumberSpan) {
+          weekNumberSpan.textContent = (index + 1).toString();
+        }
+        
+        // Update button visibility
+        const upButton = row.querySelector('button[onclick="moveWeekUp(this)"]');
+        const downButton = row.querySelector('button[onclick="moveWeekDown(this)"]');
+        
+        if (upButton) {
+          upButton.style.visibility = index === 0 ? 'hidden' : 'visible';
+        }
+        if (downButton) {
+          downButton.style.visibility = index === weekRows.length - 1 ? 'hidden' : 'visible';
+        }
+        
+        // Update row highlighting based on type
+        updateRowHighlight(row);
+      });
+    }
+
+    function updateRowHighlight(row) {
+      const typeSelect = row.querySelector('select[name="weekType"]');
+      const type = typeSelect ? typeSelect.value : '';
+      const highlightSelect = row.querySelector('select[name="highlight"]');
+      const highlight = highlightSelect ? highlightSelect.value : 'no';
+
+      // Auto-set highlight to "yes" when assessment is selected
+      if (type === 'assessment' && highlight === 'no') {
+        highlightSelect.value = 'yes';
+      }
+
+      // Remove all existing highlight classes
+      row.classList.remove('row-teaching', 'row-reading', 'row-assessment', 'row-break', 'row-highlighted');
+
+      // Add appropriate highlight class based on type
+      if (type) {
+        row.classList.add(`row-${type}`);
+      }
+
+      // Add darker background if highlight is yes
+      if (highlightSelect.value === 'yes') {
+        row.classList.add('row-highlighted');
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById("toast");
+
+      toast.className = '';
+      toast.classList.add('show', `toast-${type}`);
+      toast.textContent = message;
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.style.display = "none";
+          toast.className = '';
+        }, 500);
+      }, 3000);
+
+      toast.style.display = "block";
+    }
+
+    // Persistence functions
+    function saveData() {
+      const data = {
+        moduleName: document.querySelector('[name="moduleName"]').value,
+        moduleCode: document.querySelector('[name="moduleCode"]').value,
+        year: document.querySelector('[name="year"]').value,
+        moduleLeader: document.querySelector('[name="moduleLeader"]').value,
+        tutors: getTutorsData(),
+        weeks: getWeeksData()
+      };
+      console.log('Saving data:', data);
+      localStorage.setItem('editPresetDraft', JSON.stringify(data));
+    }
+
+    function loadSavedData() {
+      const savedData = localStorage.getItem('editPresetDraft');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          console.log('Loading saved data:', data);
+          
+          // Check if there's any meaningful data before loading
+          const hasAnyData = data.moduleName || data.moduleCode || data.moduleLeader || 
+                            (data.tutors && data.tutors.length > 0) || 
+                            (data.weeks && data.weeks.length > 0);
+          
+          console.log('Has any data:', hasAnyData);
+          
+          if (hasAnyData) {
+            // Load module details
+            if (data.moduleName) document.querySelector('[name="moduleName"]').value = data.moduleName;
+            if (data.moduleCode) document.querySelector('[name="moduleCode"]').value = data.moduleCode;
+            if (data.year) document.querySelector('[name="year"]').value = data.year;
+            if (data.moduleLeader) document.querySelector('[name="moduleLeader"]').value = data.moduleLeader;
+
+
+            // Load tutors
+            if (data.tutors && data.tutors.length > 0) {
+              loadTutorsData(data.tutors);
+            }
+
+            // Load weeks
+            if (data.weeks && data.weeks.length > 0) {
+              loadWeeksData(data.weeks);
+            }
+
+            // Show the form
+            showEditForm();
+            showToast("📝 Draft restored from previous session", "info");
+          } else {
+            // Clear empty saved data
+            localStorage.removeItem('editPresetDraft');
+          }
+        } catch (error) {
+          console.error('Error loading saved data:', error);
+          // Clear corrupted data
+          localStorage.removeItem('editPresetDraft');
+        }
+      }
+    }
+
+    function getTutorsData() {
+      const tutorElements = document.querySelectorAll('.tutor-row');
+      return Array.from(tutorElements).map(row => ({
+        name: row.querySelector('[name="tutorName"]').value,
+        campus: row.querySelector('[name="tutorCampus"]').value
+      }));
+    }
+
+    function getWeeksData() {
+      const weekElements = document.querySelectorAll('.week-row');
+      return Array.from(weekElements).map((row, index) => ({
+        week: (index + 1).toString(),
+        type: row.querySelector('[name="weekType"]').value,
+        highlight: row.querySelector('[name="highlight"]').value,
+        date: '',
+        location: 'Location TBC',
+        topic: row.querySelector('[name="topic"]').value
+      }));
+    }
+
+    function setupAutoSave() {
+      // Auto-save on input changes
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+
+      // Auto-save when tutors or weeks are added/removed
+      const observer = new MutationObserver(saveData);
+      observer.observe(document.getElementById('tutorContainer'), { childList: true, subtree: true });
+      observer.observe(document.getElementById('weekBody'), { childList: true, subtree: true });
+    }
+
+    function loadTutorsData(tutors) {
+      const container = document.getElementById('tutorContainer');
+      // Remove all existing tutor rows
+      const existingRows = container.querySelectorAll('.tutor-row');
+      existingRows.forEach(row => row.remove());
+      
+      // Add tutor rows with saved data
+      if (tutors && tutors.length > 0) {
+        tutors.forEach(tutor => {
+          addTutor(tutor.name, tutor.campus);
+        });
+      } else {
+        // If no tutors, add one empty row
+        addTutor();
+      }
+    }
+
+    function loadWeeksData(weeks) {
+      const tbody = document.getElementById('weekBody');
+      tbody.innerHTML = '';
+      if (weeks && weeks.length > 0) {
+        weeks.forEach(week => {
+          addWeekRow(week);
+        });
+      }
+      updateWeekNumbers();
+    }
+
+    // Hide sticky footer by default
+    window.addEventListener('DOMContentLoaded', function() {
+      validateTableData();
+    });
+
+    function validateTableData() {
+      const weekRows = document.querySelectorAll('.week-row');
+      let valid = true;
+      weekRows.forEach(row => {
+        const weekType = row.querySelector('[name="weekType"]').value;
+        const topic = row.querySelector('[name="topic"]').value.trim();
+        if (!weekType || !topic) {
+          valid = false;
+        }
+      });
+      // Always show the sticky footer
+      document.querySelector('.sticky-footer').style.display = 'flex';
+      // Disable/enable buttons based on validity
+      const copyBtn = document.querySelector('button[onclick="copyPresetJSON()"]');
+      const downloadBtn = document.querySelector('button[onclick="downloadPresetJSON()"]');
+      if (copyBtn) {
+        if (!valid) copyBtn.setAttribute('disabled', 'disabled');
+        else copyBtn.removeAttribute('disabled');
+      }
+      if (downloadBtn) {
+        if (!valid) downloadBtn.setAttribute('disabled', 'disabled');
+        else downloadBtn.removeAttribute('disabled');
+      }
+      // Never disable the reset button
+      const resetBtn = document.querySelector('button[onclick="confirmReset()"]');
+      if (resetBtn) resetBtn.removeAttribute('disabled');
+      return valid ? [] : ["Please fill in all required fields in the weekly breakdown."];
+    }
+
+    // Patch addRow to call validation
+    const originalAddRow = addRow;
+    addRow = function() {
+      originalAddRow.apply(this, arguments);
+      validateTableData();
+    };
+
+    // Patch removeWeekRow to call validation
+    const originalRemoveWeekRow = removeWeekRow;
+    removeWeekRow = function() {
+      originalRemoveWeekRow.apply(this, arguments);
+      validateTableData();
+    };
+
+    // Patch updateButtonStates to call validation (if it exists)
+    if (typeof updateButtonStates === 'function') {
+      const originalUpdateButtonStates = updateButtonStates;
+      updateButtonStates = function() {
+        originalUpdateButtonStates.apply(this, arguments);
+        validateTableData();
+      };
+    }
+
+    // Add event listeners to table inputs for validation
+    function addTableValidationListeners() {
+      document.getElementById('weekBody').addEventListener('input', validateTableData);
+      document.getElementById('weekBody').addEventListener('change', validateTableData);
+    }
+    addTableValidationListeners();
+
+    // Toggle advanced settings section
+    function toggleAdvancedSettings() {
+      const content = document.getElementById('advancedContent');
+      const toggleIcon = document.querySelector('.advanced-toggle-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    }
+
+    // Initialize advanced settings as collapsed
+    document.addEventListener('DOMContentLoaded', function() {
+      const content = document.getElementById('advancedContent');
+      const toggleIcon = document.querySelector('.advanced-toggle-icon');
+      if (content && toggleIcon) {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    });
+  </script>
+  <!-- Modal for Reset Confirmation -->
+  <div id="resetModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Are you sure?</h3>
+      <p>This will clear all form data, hide the form, and return to the import screen. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

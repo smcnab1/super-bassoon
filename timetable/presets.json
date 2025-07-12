@@ -4,7 +4,7 @@
     "moduleCode": "ED70011X",
     "year": "1",
     "moduleLeader": "Anita Sudhagar",
-    "moduleStart": "",
+    "firstTeachingDate": "2025-09-23",
     "moduleTutors": [
       { "name": "Anita Sudhagar", "campus": "London" },
       { "name": "Sam Knipe", "campus": "Reading" }
@@ -27,5 +27,213 @@
         "topic": "Self-Directed Study"
       }
     ]
-  }
+  },
+"ED70012X": {
+  "moduleName": "Simulation Delivery & Leadership",
+  "moduleCode": "ED70012X",
+  "year": "1",
+  "moduleLeader": "asd",
+  "moduleTutors": [
+    {
+      "name": "asd",
+      "campus": "London"
+    }
+  ],
+  "weeks": [
+    {
+      "week": 1,
+      "type": "reading",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "asdasd"
+    },
+    {
+      "week": 2,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "asd"
+    },
+    {
+      "week": 3,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "asd"
+    }
+  ]
+},
+"ED70013X": {
+  "moduleName": "Digital Technologies in Education",
+  "moduleCode": "ED70013X",
+  "year": "2",
+  "moduleLeader": "Sam McNab",
+  "moduleTutors": [
+    {
+      "name": "Sam McNab",
+      "campus": "London"
+    },
+    {
+      "name": "Antony Newman",
+      "campus": "Reading"
+    }
+  ],
+  "weeks": [
+    {
+      "week": 1,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Introduction to Digital Tech in Sim Ed"
+    },
+    {
+      "week": 2,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Simulation Platforms & Tools"
+    },
+    {
+      "week": 3,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Design Thinking & Scenario Building"
+    },
+    {
+      "week": 4,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "User Experience, Access & Inclusion"
+    },
+    {
+      "week": 5,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Debriefing in Digital Contexts"
+    },
+    {
+      "week": 6,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Gamification & Interactivity"
+    },
+    {
+      "week": 7,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Ethics, Privacy & Professionalism"
+    },
+    {
+      "week": 8,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Peer Review & Feedback"
+    },
+    {
+      "week": 9,
+      "type": "reading",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Independent Study"
+    },
+    {
+      "week": 10,
+      "type": "reading",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Project Preparation"
+    },
+    {
+      "week": 11,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Feedback Lab"
+    },
+    {
+      "week": 12,
+      "type": "assessment",
+      "highlight": true,
+      "date": "",
+      "location": "",
+      "topic": "A1: Immersive Event Assessment"
+    },
+    {
+      "week": 13,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "The Psychology of Debriefing"
+    },
+    {
+      "week": 14,
+      "type": "break",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "University Closed for Winter Break"
+    },
+    {
+      "week": 15,
+      "type": "break",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "University Closed for Winter Break"
+    },
+    {
+      "week": 16,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Debriefing Masterclass"
+    },
+    {
+      "week": 17,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "OSCE Simulation & Peer Practice"
+    },
+    {
+      "week": 18,
+      "type": "teaching",
+      "highlight": false,
+      "date": "",
+      "location": "",
+      "topic": "Reflective Simulation Leadership"
+    },
+    {
+      "week": 19,
+      "type": "assessment",
+      "highlight": true,
+      "date": "",
+      "location": "",
+      "topic": "A2: Debriefing OSCE"
+    }
+  ]
+}
 }
