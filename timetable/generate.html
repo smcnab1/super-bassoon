@@ -6,6 +6,276 @@
   <title>MScSimEd | Timetable Generator</title>
   <link rel="stylesheet" href="../../styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    .first-teaching-date-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .section-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .section-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+    }
+
+    .toggle-icon {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .section-content {
+      padding: 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .first-teaching-date-section .form-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 15px;
+      align-items: end;
+    }
+
+    .first-teaching-date-section label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .first-teaching-date-section input[type="date"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .first-teaching-date-section input[type="date"]:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    .calculate-dates-btn {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .calculate-dates-btn:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .display-field {
+      background: var(--input-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 10px;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      min-height: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    @media (max-width: 768px) {
+      .first-teaching-date-section .form-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      
+      .calculate-dates-btn {
+        width: 100%;
+      }
+    }
+
+    /* JSON Import Section Styles */
+    .json-import-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .import-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border-bottom-color: var(--button-primary);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 0 20px 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .json-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+
+    .json-textarea:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    .text-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .import-btn, .clear-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .import-btn {
+      background: var(--button-primary);
+      color: white;
+    }
+
+    .import-btn:hover:not(:disabled) {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .import-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .clear-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .clear-btn:hover:not(:disabled) {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+
+    .clear-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .file-upload-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .file-select-btn {
+      padding: 10px 16px;
+      background: var(--button-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .file-select-btn:hover {
+      background: var(--button-secondary-hover);
+      transform: translateY(-1px);
+    }
+
+    .selected-file {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+  </style>
 </head>
 <body>
   <!-- Navbar -->
@@ -23,6 +293,7 @@
         <div class="dropdown-content">
           <a href="generate.html">🎯 Generate</a>
           <a href="preset/new.html">📄 New Preset</a>
+          <a href="preset/edit.html">✏️ Edit Preset</a>
         </div>
       </div>
       <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
@@ -43,7 +314,7 @@
       <span class="year-tag year-1">Year 1</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('ED70013X')" disabled>
+    <button class="preset-btn" onclick="loadPreset('ED70013X')">
       <strong>Digital Technologies in Education</strong>
       <span class="module-code">ED70013X</span>
       <span class="year-tag year-2">Year 2</span>
@@ -68,26 +339,73 @@
     </button>
   </div>
 
-
+  <!-- JSON Import Section -->
+  <div class="json-import-section">
+    <div class="section-header" onclick="toggleJsonImport()">
+      <h3>📄 Import Custom JSON</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-content" id="jsonImportContent">
+      <div class="import-tabs">
+        <button class="tab-btn active" onclick="switchTab('paste')">📋 Paste JSON</button>
+        <button class="tab-btn" onclick="switchTab('file')">📁 Upload File</button>
+      </div>
+      
+      <div id="pasteTab" class="tab-content active">
+        <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON preset here..." oninput="updateTextButtons()"></textarea>
+        <div class="text-buttons">
+          <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>📥 Import JSON</button>
+          <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>🗑️ Clear</button>
+        </div>
+      </div>
+      
+      <div id="fileTab" class="tab-content">
+        <div class="file-upload-area">
+          <input type="file" id="jsonFileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
+          <button class="file-select-btn" onclick="document.getElementById('jsonFileInput').click()">📁 Choose JSON File</button>
+          <span id="selectedFileName" class="selected-file">No file selected</span>
+        </div>
+        <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>📥 Import File</button>
+      </div>
+    </div>
+  </div>
 
   <div id="moduleDetails" class="module-details">
     <h2 id="modName">Module Name</h2>
     <p><strong>Code:</strong> <span id="modCode">Not Defined</span></p>
     <p><strong>Year:</strong> <span id="modYear">Not Defined</span></p>
     <p><strong>Leader:</strong> <span id="modLeader">Not Defined</span></p>
-    <p><strong>Start Date:</strong> <span id="modStart">Not Defined</span></p>
     <div id="modTutors"><strong>Tutors:</strong><ul></ul></div>
   </div>
 
+  <!-- First Teaching Date Section -->
+  <div id="firstTeachingDateSection" class="first-teaching-date-section" style="display: none;">
+    <div class="section-header" onclick="toggleFirstTeachingDate()">
+      <h3>📅 First Teaching Date</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-content" id="firstTeachingDateContent">
+      <div class="form-row">
+        <div>
+          <label for="firstTeachingDate">Select the first teaching date:</label>
+          <input type="date" id="firstTeachingDate" name="firstTeachingDate">
+        </div>
+        <div>
+          <button type="button" onclick="calculateWeekDates()" class="calculate-dates-btn">📅 Calculate All Week Dates</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Timetable Form -->
   <form id="timetableForm"></form>
     
-  <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
+  <!-- Preview Controls: Preview, Open Tab, Copy HTML, Export PDF -->
   <div class="sticky-footer">
     <button id="previewBtn" onclick="previewTimetable()" disabled>🔍 Preview</button>
     <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled>🧾 New Tab</button>
     <button id="copyBtn" onclick="copyFullHTML()" disabled>📋 Copy</button>
+    <button id="pdfBtn" onclick="exportToPDF()" disabled>📄 PDF</button>
     <button class="reset-btn" id="resetBtn" onclick="confirmReset()" disabled>🔄 Reset</button>
   </div>
   
@@ -124,6 +442,248 @@
     // Initialize theme on page load
     initTheme();
 
+    // Toggle first teaching date section
+    function toggleFirstTeachingDate() {
+      const content = document.getElementById('firstTeachingDateContent');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        toggleIcon.style.transform = 'rotate(0deg)';
+        localStorage.setItem('firstTeachingDateCollapsed', 'false');
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+        localStorage.setItem('firstTeachingDateCollapsed', 'true');
+      }
+    }
+
+    // Initialize first teaching date section state
+    function initFirstTeachingDateState() {
+      const content = document.getElementById('firstTeachingDateContent');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      
+      if (content && toggleIcon) {
+        const isCollapsed = localStorage.getItem('firstTeachingDateCollapsed');
+        
+        // Default to collapsed on first load (when no state is saved)
+        if (isCollapsed === null || isCollapsed === 'true') {
+          content.classList.add('collapsed');
+          toggleIcon.textContent = '▶';
+          toggleIcon.style.transform = 'rotate(-90deg)';
+        } else {
+          content.classList.remove('collapsed');
+          toggleIcon.textContent = '▼';
+          toggleIcon.style.transform = 'rotate(0deg)';
+        }
+      }
+    }
+
+    // JSON Import Functions
+    let selectedFile = null;
+
+    function toggleJsonImport() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    }
+
+    function openJsonImport() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
+      
+      content.classList.remove('collapsed');
+      toggleIcon.textContent = '▼';
+      toggleIcon.style.transform = 'rotate(0deg)';
+    }
+
+    function closeJsonImport() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
+      
+      content.classList.add('collapsed');
+      toggleIcon.textContent = '▶';
+      toggleIcon.style.transform = 'rotate(-90deg)';
+    }
+
+    function switchTab(tabName) {
+      // Update tab buttons
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Update tab content
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(tabName + 'Tab').classList.add('active');
+    }
+
+    function updateTextButtons() {
+      const textarea = document.getElementById('jsonTextarea');
+      const importBtn = document.getElementById('importFromText');
+      const clearBtn = document.getElementById('clearTextBtn');
+      
+      const hasContent = textarea.value.trim().length > 0;
+      
+      importBtn.disabled = !hasContent;
+      clearBtn.disabled = !hasContent;
+      
+      // Save JSON content to localStorage
+      if (hasContent) {
+        localStorage.setItem('manualJsonContent', textarea.value);
+      } else {
+        localStorage.removeItem('manualJsonContent');
+      }
+    }
+
+    function clearTextarea() {
+      document.getElementById('jsonTextarea').value = '';
+      localStorage.removeItem('manualJsonContent');
+      updateTextButtons();
+      showToast('Text area cleared', 'success');
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        selectedFile = file;
+        document.getElementById('importFromFile').disabled = false;
+        document.getElementById('selectedFileName').textContent = file.name;
+        showToast(`📁 File selected: ${file.name}`, 'success');
+      }
+    }
+
+    function importFromText() {
+      const textarea = document.getElementById('jsonTextarea');
+      const jsonText = textarea.value.trim();
+      
+      if (!jsonText) {
+        showToast('Please enter JSON text to import', 'error');
+        return;
+      }
+
+      try {
+        const presetData = JSON.parse(jsonText);
+        loadCustomPreset(presetData);
+        // Save the imported JSON as manual content so it persists on refresh
+        localStorage.setItem('manualJsonContent', jsonText);
+        // Close JSON import section after successful import
+        closeJsonImport();
+        showToast('✅ JSON preset imported successfully!', 'success');
+      } catch (error) {
+        showToast('❌ Invalid JSON format: ' + error.message, 'error');
+      }
+    }
+
+    function importFromFile() {
+      if (!selectedFile) {
+        showToast('Please select a file first', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const presetData = JSON.parse(e.target.result);
+          loadCustomPreset(presetData);
+          // Save the imported JSON as manual content so it persists on refresh
+          localStorage.setItem('manualJsonContent', e.target.result);
+          // Close JSON import section after successful import
+          closeJsonImport();
+          showToast('✅ JSON file imported successfully!', 'success');
+        } catch (error) {
+          showToast('❌ Invalid JSON file: ' + error.message, 'error');
+        }
+      };
+      reader.readAsText(selectedFile);
+    }
+
+    function loadCustomPreset(presetData) {
+      // Handle both direct object and key-value pair formats
+      let data = presetData;
+      if (typeof presetData === 'object' && Object.keys(presetData).length === 1) {
+        // If it's a key-value pair like {"ED70013X": {...}}, extract the value
+        const key = Object.keys(presetData)[0];
+        data = presetData[key];
+      }
+
+      // Close JSON import section when loading custom preset
+      closeJsonImport();
+
+      // Load module details
+      document.getElementById("moduleDetails").style.display = "block";
+      document.getElementById("modName").textContent = data.moduleName || 'Module';
+      document.getElementById("modCode").textContent = data.moduleCode || 'Not Defined';
+      document.getElementById("modYear").textContent = data.year || 'Not Defined';
+      document.getElementById("modLeader").textContent = data.moduleLeader || 'Not Defined';
+
+      // Show first teaching date section
+      const firstTeachingDateSection = document.getElementById("firstTeachingDateSection");
+      const firstTeachingDateContent = document.getElementById("firstTeachingDateContent");
+      const toggleIcon = document.querySelector('.toggle-icon');
+      
+      firstTeachingDateSection.style.display = "block";
+      firstTeachingDateContent.classList.remove('collapsed');
+      if (toggleIcon) {
+        toggleIcon.textContent = '▼';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      }
+
+      // Update tutors
+      const tutorList = document.querySelector("#modTutors ul");
+      tutorList.innerHTML = "";
+      if (Array.isArray(data.moduleTutors)) {
+        data.moduleTutors.forEach(tutor => {
+          const li = document.createElement("li");
+          li.textContent = `${tutor.name} (${tutor.campus})`;
+          tutorList.appendChild(li);
+        });
+      }
+
+      // Clear existing weeks and add new ones
+      const container = document.getElementById("timetableForm");
+      container.innerHTML = "";
+
+      // Add weeks
+      (data.weeks || []).forEach(entry => {
+        addWeek(entry.week, entry.topic, entry.type);
+        const lastBlock = document.querySelector('.week-block:last-of-type');
+        if (lastBlock) {
+          lastBlock.querySelector('[name="date"]').value = entry.date || '';
+          lastBlock.querySelector('[name="location"]').value = entry.location || '';
+          lastBlock.querySelector('[name="highlight"]').value = entry.highlight ? 'yes' : 'no';
+          updateHeader(lastBlock.id);
+        }
+      });
+
+      // Enable buttons
+      document.getElementById("previewBtn").disabled = false;
+      document.getElementById("openTabBtn").disabled = false;
+      document.getElementById("copyBtn").disabled = false;
+      document.getElementById("pdfBtn").disabled = false;
+      document.getElementById("resetBtn").disabled = false;
+    }
+
+    // Initialize JSON import section as collapsed
+    document.addEventListener('DOMContentLoaded', function() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
+      if (content && toggleIcon) {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    });
+
     fetch('presets.json')
       .then(res => res.json())
       .then(data => {
@@ -144,9 +704,17 @@
         return;
       }
 
-      // Save current preset to localStorage
+      // Save current preset to localStorage and clear manual JSON content
       localStorage.setItem('currentPreset', presetKey);
+      localStorage.removeItem('manualJsonContent');
       console.log('Saved preset to localStorage:', presetKey);
+
+      // Clear JSON textarea since we're loading a preset
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+
+      // Close JSON import section when loading a preset
+      closeJsonImport();
 
       // Update module details (if present)
       document.getElementById("moduleDetails").style.display = "block";
@@ -154,14 +722,11 @@
       document.getElementById("modCode").textContent = presetData.moduleCode || 'Not Defined';
       document.getElementById("modYear").textContent = presetData.year || 'Not Defined';
       document.getElementById("modLeader").textContent = presetData.moduleLeader || 'Not Defined';
-      let startDate = presetData.moduleStart;
-      if (startDate) {
-        const parsed = new Date(startDate);
-        if (!isNaN(parsed)) {
-          startDate = parsed.toLocaleDateString('en-GB');
-        }
-      }
-      document.getElementById("modStart").textContent = startDate || 'Not Defined';
+
+      // Show first teaching date section and restore its state
+      const firstTeachingDateSection = document.getElementById("firstTeachingDateSection");
+      firstTeachingDateSection.style.display = "block";
+      initFirstTeachingDateState();
 
       // Update tutors
       const tutorList = document.querySelector("#modTutors ul");
@@ -190,6 +755,7 @@
       document.getElementById("previewBtn").disabled = false;
       document.getElementById("openTabBtn").disabled = false;
       document.getElementById("copyBtn").disabled = false;
+      document.getElementById("pdfBtn").disabled = false;
       document.getElementById("resetBtn").disabled = false;
 
       showToast(`✅ ${presetKey} loaded`, "success");
@@ -222,16 +788,13 @@
           <div class="form-row">
             <div>
               <label>Week Number</label>
-              <input type="number" name="week" value="${nextWeek}" required oninput="updateHeader('${id}')" disabled>
+              <div class="display-field">${nextWeek}</div>
+              <input type="hidden" name="week" value="${nextWeek}">
             </div>
             <div>
               <label>Week Type</label>
-              <select name="type" onchange="updateHeader('${id}')" disabled>
-                <option value="teaching" ${weekType === "teaching" ? "selected" : ""}>Teaching Week</option>
-                <option value="reading" ${weekType === "reading" ? "selected" : ""}>Reading Week</option>
-                <option value="break" ${weekType === "break" ? "selected" : ""}>Break</option>
-                <option value="assessment" ${weekType === "assessment" ? "selected" : ""}>Assessment Week</option>
-              </select>
+              <div class="display-field">${weekType === "teaching" ? "Teaching Week" : weekType === "reading" ? "Reading Week" : weekType === "break" ? "Break" : weekType === "assessment" ? "Assessment Week" : "Teaching Week"}</div>
+              <input type="hidden" name="type" value="${weekType}">
             </div>
             <div>
               <label>Highlight Week?</label>
@@ -239,7 +802,7 @@
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
               </select>
-              </div>
+            </div>
           </div>
           <div class="form-row">
             <div>
@@ -279,7 +842,7 @@
       const header = block.querySelector(".week-header");
       header.className = 'week-header';
       if (weekType) header.classList.add(weekType);
-      if (highlight) header.style.border = '2px solid #28a745';
+      if (highlight) header.style.border = '2px solid #4CAF50';
       else header.style.border = 'none';
     }
   
@@ -303,7 +866,7 @@
       const blocks = form.querySelectorAll('.week-block');
       document.getElementById("previewFrame").style.display = "block";
       let content = '';
-      showToast("�� Generating preview…", "info");
+      showToast("🔄 Generating preview…", "info");
 
       blocks.forEach(block => {
         const week = block.querySelector('[name=week]').value;
@@ -402,8 +965,9 @@
                     .assessment { background-color: #d9534f; color: #fff; }
 
                     .highlight {
-                    border: 2px solid #28a745;
+                    border: 2px solid #4CAF50;
                     background-color: #e6ffe6;
+                    box-sizing: border-box;
                     }
                     .assessment-badge {
                     position: absolute;
@@ -624,8 +1188,9 @@
                         .assessment { background-color: #d9534f; color: #fff; }
 
                         .highlight {
-                        border: 2px solid #28a745;
+                        border: 2px solid #4CAF50;
                         background-color: #e6ffe6;
+                        box-sizing: border-box;
                         }
                         .assessment-badge {
                         position: absolute;
@@ -732,6 +1297,27 @@
 
     // - restoreLastPreset
     function restoreLastPreset() {
+      const manualJsonContent = localStorage.getItem('manualJsonContent');
+      
+      // If there's manual JSON content, restore it and load the data
+      if (manualJsonContent && manualJsonContent.trim().length > 0) {
+        const textarea = document.getElementById('jsonTextarea');
+        textarea.value = manualJsonContent;
+        updateTextButtons();
+        console.log('Restored manual JSON content from localStorage');
+        
+        // Automatically load the JSON data into the form
+        try {
+          const presetData = JSON.parse(manualJsonContent);
+          loadCustomPreset(presetData);
+          console.log('Automatically loaded JSON data on page refresh');
+        } catch (error) {
+          console.error('Failed to parse restored JSON:', error);
+        }
+        return;
+      }
+      
+      // Otherwise, try to restore the last preset
       const lastPreset = localStorage.getItem('currentPreset');
       console.log('Restoring preset:', lastPreset);
       if (lastPreset && sharedPresets[lastPreset]) {
@@ -739,7 +1325,178 @@
         loadPreset(lastPreset);
       } else {
         console.log('No preset to restore or preset not found');
+        // Open JSON import section when no data is available
+        openJsonImport();
       }
+    }
+
+    // - exportToPDF
+    function exportToPDF() {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF('landscape');
+      
+      // Get module details
+      const moduleName = document.getElementById('modName').textContent;
+      const moduleCode = document.getElementById('modCode').textContent;
+      const moduleYear = document.getElementById('modYear').textContent;
+      const moduleLeader = document.getElementById('modLeader').textContent;
+      
+      // Get tutors
+      const tutorElements = document.querySelectorAll('#modTutors ul li');
+      const tutors = Array.from(tutorElements).map(li => li.textContent).join(', ');
+      
+      // Get weeks data
+      const weekBlocks = document.querySelectorAll('.week-block');
+      const weeks = Array.from(weekBlocks).map(block => {
+        const week = block.querySelector('[name="week"]').value;
+        const topic = block.querySelector('[name="topic"]').value;
+        const type = block.querySelector('[name="type"]').value;
+        const date = block.querySelector('[name="date"]').value;
+        const location = block.querySelector('[name="location"]').value;
+        const highlight = block.querySelector('[name="highlight"]').value === 'yes';
+        
+        return {
+          week,
+          topic,
+          type,
+          date: date ? new Date(date).toLocaleDateString('en-GB') : 'No date',
+          location: location || 'No location',
+          highlight
+        };
+      });
+      
+      // Set up PDF dimensions for landscape
+      const pageWidth = doc.internal.pageSize.width;
+      const pageHeight = doc.internal.pageSize.height;
+      const margin = 15;
+      const tableStartY = 60;
+      
+      // Title
+      doc.setFontSize(16);
+      doc.setFont(undefined, 'bold');
+      doc.text('Module Timetable', pageWidth / 2, 20, { align: 'center' });
+      
+      // Module details header
+      doc.setFontSize(10);
+      doc.setFont(undefined, 'bold');
+      doc.text('Module Information:', margin, 35);
+      
+      // Module details
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(8);
+      doc.text(`Name: ${moduleName}`, margin, 42);
+      doc.text(`Code: ${moduleCode}`, margin, 48);
+      doc.text(`Year: ${moduleYear}`, margin, 54);
+      doc.text(`Leader: ${moduleLeader}`, margin + 80, 42);
+      doc.text(`Tutors: ${tutors}`, margin + 80, 48);
+      
+      // Table headers
+      const headers = ['Week', 'Topic', 'Type', 'Date', 'Location'];
+      const columnWidths = [20, 80, 30, 35, 50];
+      const startX = margin;
+      let currentX = startX;
+      
+      // Draw table headers
+      doc.setFontSize(9);
+      doc.setFont(undefined, 'bold');
+      headers.forEach((header, index) => {
+        doc.text(header, currentX, tableStartY);
+        currentX += columnWidths[index];
+      });
+      
+      // Draw header line
+      doc.line(startX, tableStartY + 2, startX + columnWidths.reduce((a, b) => a + b, 0), tableStartY + 2);
+      
+      // Table data
+      doc.setFont(undefined, 'normal');
+      doc.setFontSize(8);
+      let currentY = tableStartY + 10;
+      
+      weeks.forEach((week, index) => {
+        // Check if we need a new page
+        if (currentY > pageHeight - 30) {
+          doc.addPage('landscape');
+          currentY = 20;
+          
+          // Redraw headers on new page
+          doc.setFont(undefined, 'bold');
+          currentX = startX;
+          headers.forEach((header, headerIndex) => {
+            doc.text(header, currentX, currentY);
+            currentX += columnWidths[headerIndex];
+          });
+          doc.line(startX, currentY + 2, startX + columnWidths.reduce((a, b) => a + b, 0), currentY + 2);
+          currentY += 10;
+        }
+        
+        // Draw row background for highlighted weeks
+        if (week.highlight) {
+          doc.setFillColor(255, 255, 0); // Light yellow background
+          doc.rect(startX, currentY - 4, columnWidths.reduce((a, b) => a + b, 0), 6, 'F');
+        }
+        
+        // Draw row data
+        currentX = startX;
+        const rowData = [
+          week.week,
+          week.topic,
+          week.type.charAt(0).toUpperCase() + week.type.slice(1),
+          week.date,
+          week.location
+        ];
+        
+        rowData.forEach((cell, cellIndex) => {
+          // Truncate long text
+          let displayText = cell;
+          if (cellIndex === 1 && cell.length > 35) { // Topic column
+            displayText = cell.substring(0, 32) + '...';
+          } else if (cellIndex === 4 && cell.length > 20) { // Location column
+            displayText = cell.substring(0, 17) + '...';
+          }
+          
+          doc.text(displayText, currentX, currentY);
+          currentX += columnWidths[cellIndex];
+        });
+        
+        currentY += 6;
+      });
+      
+      // Save the PDF
+      const fileName = `${moduleCode || 'timetable'}_${new Date().toISOString().split('T')[0]}.pdf`;
+      doc.save(fileName);
+      
+      showToast('📄 PDF exported successfully!', 'success');
+    }
+
+    // - calculateWeekDates
+    function calculateWeekDates() {
+      const firstTeachingDate = document.getElementById('firstTeachingDate').value;
+      if (!firstTeachingDate) {
+        showToast('❌ Please select a first teaching date first', 'error');
+        return;
+      }
+
+      const weekBlocks = document.querySelectorAll('.week-block');
+      if (weekBlocks.length === 0) {
+        showToast('❌ No weeks found. Please load a preset first.', 'error');
+        return;
+      }
+
+      const startDate = new Date(firstTeachingDate);
+      
+      weekBlocks.forEach((block, index) => {
+        const weekDate = new Date(startDate);
+        weekDate.setDate(startDate.getDate() + (index * 7));
+        const dateString = weekDate.toISOString().split('T')[0];
+        
+        const dateInput = block.querySelector('[name="date"]');
+        if (dateInput) {
+          dateInput.value = dateString;
+          updateHeader(block.id);
+        }
+      });
+
+      showToast(`✅ Dates calculated for ${weekBlocks.length} weeks starting from ${new Date(firstTeachingDate).toLocaleDateString('en-GB')}`, 'success');
     }
 
     // - performReset
@@ -750,14 +1507,17 @@
 
       // Clear localStorage
       localStorage.removeItem('currentPreset');
+      localStorage.removeItem('manualJsonContent');
 
       document.getElementById("previewBtn").disabled = true;
       document.getElementById("openTabBtn").disabled = true;
       document.getElementById("copyBtn").disabled = true;
+      document.getElementById("pdfBtn").disabled = true;
       document.getElementById("resetBtn").disabled = true;
 
       // Hide module details
       document.getElementById("moduleDetails").style.display = "none";
+      document.getElementById("firstTeachingDateSection").style.display = "none";
       document.getElementById("previewFrame").style.display = "none";
 
       // Clear values
@@ -765,8 +1525,15 @@
       document.getElementById("modCode").textContent = "Not Defined";
       document.getElementById("modYear").textContent = "Not Defined";
       document.getElementById("modLeader").textContent = "Not Defined";
-      document.getElementById("modStart").textContent = "Not Defined";
       document.querySelector("#modTutors ul").innerHTML = "";
+      document.getElementById("firstTeachingDate").value = "";
+
+      // Clear JSON textarea
+      document.getElementById("jsonTextarea").value = "";
+      updateTextButtons();
+
+      // Open JSON import section after reset
+      openJsonImport();
 
       const iframe = document.getElementById("previewFrame");
       if (iframe) iframe.srcdoc = "";
