@@ -4,16 +4,28 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Module Timetable Generator</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="../../styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
   <!-- Navbar -->
   <nav class="main-navbar">
-    <div class="navbar-title">🤖 MScSimEd</div>
+    <div class="navbar-title">
+      <a href="../../../index.html" style="text-decoration: none; color: inherit;">
+        <div class="title-main">🤖 MScSimEd</div>
+      </a>
+      <span class="title-separator">|</span>
+      <div class="title-subtitle">📋 TimetableGen</div>
+    </div>
     <div class="navbar-links">
-      <a href="index.html">Generator</a>
-      <a href="settings.html">Settings</a>
+      <div class="dropdown">
+        <button class="dropdown-btn">📅 Timetable</button>
+        <div class="dropdown-content">
+          <a href="../generate.html">🎯 Generate</a>
+          <a href="new.html">📄 New Preset</a>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
     </div>
   </nav>
 
@@ -93,6 +105,32 @@
   </div>
 
   <script>
+    // Theme management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    // Initialize theme on page load
+    initTheme();
+
     function getPresetData() {
       const moduleName = document.querySelector('[name="moduleName"]').value;
       const moduleCode = document.querySelector('[name="moduleCode"]').value;
