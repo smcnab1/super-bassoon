@@ -1,0 +1,37 @@
+name: Generate Changelog from Closed Issues
+
+on:
+  issues:
+    types: [closed]
+
+jobs:
+  generate-changelog:
+    if: github.event.issue.state == 'closed'
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Git
+      run: |
+        git config --global user.name "github-actions[bot]"
+        git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+    - name: Extract issue details
+      id: extract
+      run: |
+        TITLE="${{ github.event.issue.title }}"
+        NUMBER=${{ github.event.issue.number }}
+        DATE=$(date +"%Y-%m-%d")
+        echo "entry=- $DATE: [#${NUMBER}] $TITLE" >> $GITHUB_OUTPUT
+
+    - name: Prepend to CHANGELOG.md
+      run: |
+        echo "${{ steps.extract.outputs.entry }}" | cat - CHANGELOG.md > temp && mv temp CHANGELOG.md
+
+    - name: Commit and push changes
+      run: |
+        git add CHANGELOG.md
+        git commit -m "docs(changelog): update for issue #${{ github.event.issue.number }}"
+        git push
