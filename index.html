@@ -3,737 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>MScSimEd | Timetable Generator</title>
+  <title>MScSimEd | Timetable Tools</title>
   <link rel="stylesheet" href="styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-  <!-- Navbar -->
   <nav class="main-navbar">
-    <div class="navbar-title">🤖 MScSimEd</div>
+    <div class="navbar-title">
+      <a href="index.html" style="text-decoration: none; color: inherit;">
+        <div class="title-main">🤖 MScSimEd</div>
+      </a>
+    </div>
     <div class="navbar-links">
-      <a href="index.html">Generator</a>
-      <a href="settings.html">Settings</a>
+      <div class="dropdown">
+        <button class="dropdown-btn">📅 Timetable</button>
+        <div class="dropdown-content">
+          <a href="timetable/generate.html">🎯 Generate</a>
+          <a href="timetable/preset/new.html">📄 New Preset</a>
+        </div>
+      </div>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
     </div>
   </nav>
-
-  <!-- Preset Buttons -->
-  <div class="preset-container">
-    <button class="preset-btn" onclick="loadPreset('ED70011X')">
-      <strong>Foundations of Simulation Education</strong>
-      <span class="module-code">ED70011X</span>
-      <span class="year-tag year-1">Year 1</span>
-    </button>
-
-    <button class="preset-btn" onclick="loadPreset('ED70012X')" disabled>
-      <strong>Simulation Delivery & Leadership</strong>
-      <span class="module-code">ED70012X</span>
-      <span class="year-tag year-1">Year 1</span>
-    </button>
-
-    <button class="preset-btn" onclick="loadPreset('ED70013X')" disabled>
-      <strong>Digital Technologies in Education</strong>
-      <span class="module-code">ED70013X</span>
-      <span class="year-tag year-2">Year 2</span>
-    </button>
-
-    <button class="preset-btn" onclick="loadPreset('ED70014X')" disabled>
-      <strong>Current Issues & Policies in Simulation Education</strong>
-      <span class="module-code">ED70014X</span>
-      <span class="year-tag year-2">Year 2</span>
-    </button>
-
-    <button class="preset-btn" onclick="loadPreset('ED70015X')" disabled>
-      <strong>Simulation in Innovative Practice</strong>
-      <span class="module-code">ED70015X</span>
-      <span class="year-tag year-2">Year 2</span>
-    </button>
-
-    <button class="preset-btn" onclick="loadPreset('ED70016X')" disabled>
-      <strong>Quality Improvement & Demonstrative Simulation</strong>
-      <span class="module-code">ED70016X</span>
-      <span class="year-tag year-3">Year 3</span>
-    </button>
-  </div>
-
-  <!-- Reset Button -->
-  <div class="reset-container">
-    <button class="preset-btn reset-btn" id="resetBtn" onclick="confirmReset()" disabled>🔄 Reset</button>
-  </div>
-
-  <div id="moduleDetails" class="module-details">
-    <h2 id="modName">Module Name</h2>
-    <p><strong>Code:</strong> <span id="modCode">Not Defined</span></p>
-    <p><strong>Year:</strong> <span id="modYear">Not Defined</span></p>
-    <p><strong>Leader:</strong> <span id="modLeader">Not Defined</span></p>
-    <p><strong>Start Date:</strong> <span id="modStart">Not Defined</span></p>
-    <div id="modTutors"><strong>Tutors:</strong><ul></ul></div>
-  </div>
-
-
-  <!-- Timetable Form -->
-  <form id="timetableForm"></form>
-    
-  <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
-  <div class="sticky-footer">
-    <button id="previewBtn" onclick="previewTimetable()" disabled>🔍 Preview Timetable</button>
-    <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled>🧾 Open Full Preview in New Tab</button>
-    <button id="copyBtn" onclick="copyFullHTML()" disabled>📋 Copy HTML to Clipboard</button>
-  </div>
-  
-  <!-- iFrame Preview -->
-  <iframe id="previewFrame"></iframe>
-
-  <!-- JavaScript -->
-  <script>
-    let sharedPresets = {};
-
-    fetch('presets.json')
-      .then(res => res.json())
-      .then(data => {
-        sharedPresets = data;
-        populatePresetButtons();
-      });
-
-    // - loadPreset
-    function loadPreset(presetKey) {
-      const container = document.getElementById("timetableForm");
-      container.innerHTML = "";
-
-      const presetData = sharedPresets[presetKey];
-
-      if (!presetData) {
-        showToast(`❌ No preset found for "${presetKey}"`, "error");
-        return;
-      }
-
-      // Update module details (if present)
-      document.getElementById("moduleDetails").style.display = "block";
-      document.getElementById("modName").textContent = presetData.moduleName || 'Module';
-      document.getElementById("modCode").textContent = presetData.moduleCode || 'Not Defined';
-      document.getElementById("modYear").textContent = presetData.year || 'Not Defined';
-      document.getElementById("modLeader").textContent = presetData.moduleLeader || 'Not Defined';
-      let startDate = presetData.moduleStart;
-      if (startDate) {
-        const parsed = new Date(startDate);
-        if (!isNaN(parsed)) {
-          startDate = parsed.toLocaleDateString('en-GB');
-        }
-      }
-      document.getElementById("modStart").textContent = startDate || 'Not Defined';
-
-
-      // Update tutors
-      const tutorList = document.querySelector("#modTutors ul");
-      tutorList.innerHTML = "";
-      if (Array.isArray(presetData.moduleTutors)) {
-        presetData.moduleTutors.forEach(tutor => {
-          const li = document.createElement("li");
-          li.textContent = `${tutor.name} (${tutor.campus})`;
-          tutorList.appendChild(li);
-        });
-      }
-
-      // Add weeks
-      (presetData.weeks || []).forEach(entry => {
-        addWeek(entry.week, entry.topic, entry.type);
-        const lastBlock = document.querySelector('.week-block:last-of-type');
-        if (lastBlock) {
-          lastBlock.querySelector('[name="date"]').value = entry.date || '';
-          lastBlock.querySelector('[name="location"]').value = entry.location || '';
-          lastBlock.querySelector('[name="highlight"]').value = entry.highlight ? 'yes' : 'no';
-          updateHeader(lastBlock.id);
-        }
-      });
-
-      // Enable buttons
-      document.getElementById("previewBtn").disabled = false;
-      document.getElementById("openTabBtn").disabled = false;
-      document.getElementById("copyBtn").disabled = false;
-      document.getElementById("resetBtn").disabled = false;
-
-      showToast(`✅ ${presetKey} loaded`, "success");
-    }
-
-    // - resetWeeks
-    function resetWeeks() {
-      document.getElementById("timetableForm").innerHTML = "";
-      weekIdCounter = 0;
-    }
-
-    // - addWeek
-    function addWeek(weekNumber = null, topicValue = "", weekType = "teaching") {
-      const container = document.getElementById("timetableForm");
-      const weekCount = container.children.length;
-      const nextWeek = weekNumber || weekCount + 1;
-      const id = `week-${weekNumber}`;
-
-      const block = document.createElement("div");
-      block.className = "week-block";
-      block.id = id;
-      const headerId = `header-${id}`;
-
-      block.innerHTML = `
-        <div class="week-header" id="${headerId}">
-          <span class="week-title">Week ${nextWeek}: ${topicValue}</span>
-          <span class="week-summary">Click to edit</span>
-        </div>
-        <div class="week-content">
-          <div class="form-row">
-            <div>
-              <label>Week Number</label>
-              <input type="number" name="week" value="${nextWeek}" required oninput="updateHeader('${id}')" disabled>
-            </div>
-            <div>
-              <label>Week Type</label>
-              <select name="type" onchange="updateHeader('${id}')" disabled>
-                <option value="teaching" ${weekType === "teaching" ? "selected" : ""}>Teaching Week</option>
-                <option value="reading" ${weekType === "reading" ? "selected" : ""}>Reading Week</option>
-                <option value="break" ${weekType === "break" ? "selected" : ""}>Break</option>
-                <option value="assessment" ${weekType === "assessment" ? "selected" : ""}>Assessment Week</option>
-              </select>
-            </div>
-            <div>
-              <label>Highlight Week?</label>
-              <select name="highlight" onchange="updateHeader('${id}')">
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
-              </select>
-              </div>
-          </div>
-          <div class="form-row">
-            <div>
-              <label>Date</label>
-              <input type="date" name="date" required oninput="updateHeader('${id}')">
-            </div>
-            <div>
-              <label>Location</label>
-              <input type="text" name="location" required oninput="updateHeader('${id}')">
-            </div>
-          </div>
-          <label>Topic</label>
-          <input type="text" name="topic" value="${topicValue}" required oninput="updateHeader('${id}')">
-        </div>
-      `;
-      block.querySelector('.week-header').addEventListener('click', () => block.classList.toggle('open'));
-      container.appendChild(block);
-
-      updateHeader(id); 
-    }
-
-    // - updateHeader
-    function updateHeader(id) {
-      const block = document.getElementById(id);
-      const week = block.querySelector('[name=week]').value;
-      const topic = block.querySelector('[name=topic]').value;
-      const date = block.querySelector('[name=date]').value;
-      const location = block.querySelector('[name=location]').value;
-      const weekType = block.querySelector('[name=type]').value;
-      const highlight = block.querySelector('[name=highlight]')?.value === 'yes';
-
-      const formattedDate = date ? new Date(date).toLocaleDateString('en-GB') : 'No date';
-      const finalLocation = location || 'No location';
-
-      block.querySelector(".week-title").textContent = `Week ${week}: ${topic} [${formattedDate} - ${finalLocation}]${highlight ? ' ⭐' : ''}`;
-
-      const header = block.querySelector(".week-header");
-      header.className = 'week-header';
-      if (weekType) header.classList.add(weekType);
-      if (highlight) header.style.border = '2px solid #28a745';
-      else header.style.border = 'none';
-    }
-  
-    // - copyFullHTML
-    function copyFullHTML() {
-      const fullHTML = generateFullHTML();
-
-      const temp = document.createElement('textarea');
-      temp.value = fullHTML;
-      document.body.appendChild(temp);
-      temp.select();
-      document.execCommand('copy');
-      document.body.removeChild(temp);
-
-      showToast("📋 HTML copied to clipboard", "success");
-    }
-
-    // - generateFullHTML
-    function generateFullHTML() {
-      const form = document.getElementById('timetableForm');
-      const blocks = form.querySelectorAll('.week-block');
-      document.getElementById("previewFrame").style.display = "block";
-      let content = '';
-      showToast("🧩 Generating preview…", "info");
-
-      blocks.forEach(block => {
-        const week = block.querySelector('[name=week]').value;
-        const type = block.querySelector('[name=type]').value;
-        const dateInput = block.querySelector('[name=date]').value;
-        const date = dateInput ? new Date(dateInput).toLocaleDateString('en-GB') : 'No date';
-        const location = block.querySelector('[name=location]').value || 'No location';
-        const topic = block.querySelector('[name=topic]').value || 'No topic';
-        const highlight = block.querySelector('[name=highlight]')?.value === 'yes';
-        const weekTypeLabel = type === 'assessment' ? 'Assessment Week' : type.charAt(0).toUpperCase() + type.slice(1) + " Week";
-
-            content += `
-            <div class="week-card${highlight ? ' highlight' : ''}">
-              <div class="week-title">Week ${week}</div>
-              <div class="week-type ${type}">${weekTypeLabel}</div>
-              <div class="session-date"><span class="tooltip"><i class="fa fa-calendar"></i><span class="tooltiptext">Session Date</span></span>${date}</div>
-              <div class="session-location"><span class="tooltip"><i class="fa fa-map-marker"></i><span class="tooltiptext">Session Location</span></span>${location}</div>
-              <div class="session-topic"><span class="tooltip"><i class="fa fa-book"></i><span class="tooltiptext">Session Topic</span></span>${topic}</div>
-            </div>`;
-          });
-
-          return `
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-              <title>Module Timetable</title>
-              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                <style>
-                    body {
-                    margin: 0;
-                    padding: 0;
-                    background: #f5f7fa;
-                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                    }
-
-                    .head {
-                    background: linear-gradient(135deg, #004080, #0073e6);
-                    color: #fff;
-                    text-align: center;
-                    padding: 20px 16px;
-                    margin: 20px auto 30px;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                    }
-
-                    .head h1 {
-                    font-size: 2rem;
-                    margin: 0;
-                    text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-                    letter-spacing: 1px;
-                    }
-
-                    .timetable-container {
-                    display: grid;
-                    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                    gap: 20px;
-                    padding: 20px;
-                    max-width: 1300px;
-                    margin: 0 auto 60px;
-                    }
-
-                    .week-card {
-                    background: #fff;
-                    border-radius: 12px;
-                    padding: 16px;
-                    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-                    transition: transform 0.3s ease, box-shadow 0.3s ease;
-                    text-align: left;
-                    position: relative;
-                    }
-
-                    .week-card:hover {
-                    transform: translateY(-5px);
-                    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-                    }
-
-                    .week-title {
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    margin-bottom: 6px;
-                    }
-
-                    .week-type {
-                    font-size: 0.9rem;
-                    padding: 4px 10px;
-                    border-radius: 8px;
-                    display: inline-block;
-                    margin-bottom: 12px;
-                    }
-
-                    .teaching { background-color: #004080; color: #fff; }
-                    .reading { background-color: #f0ad4e; color: #fff; }
-                    .break { background-color: #bd61d9; color: #fff; }
-                    .assessment { background-color: #d9534f; color: #fff; }
-
-                    .highlight {
-                    border: 2px solid #28a745;
-                    background-color: #e6ffe6;
-                    }
-                    .assessment-badge {
-                    position: absolute;
-                    top: 12px;
-                    right: 12px;
-                    background-color: #dc3545;
-                    color: white;
-                    font-size: 0.75rem;
-                    padding: 4px 10px;
-                    border-radius: 6px;
-                    font-weight: bold;
-                    letter-spacing: 0.5px;
-                    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-                    }
-
-                    .session-date {
-                    font-weight: 500;
-                    color: #333;
-                    margin-bottom: 4px;
-                    }
-
-                    .session-location {
-                    font-size: 0.95rem;
-                    color: #555;
-                    margin-bottom: 6px;
-                    }
-
-                    .session-topic {
-                    font-size: 0.95rem;
-                    color: #333;
-                    }
-
-                    .session-date i,
-                    .session-topic i {
-                    margin-right: 6px;
-                    color: #0073e6;
-                    }
-                    .session-location i {
-                    margin-right: 9px;
-                    margin-left: 3px;
-                    color: #0073e6;
-                    }
-                    
-                    .tooltip {
-                    position: relative;
-                    display: inline-block;
-                    cursor: help;
-                    }
-                    
-                    .tooltip .tooltiptext {
-                    visibility: hidden;
-                    width: max-content;
-                    background-color: #333;
-                    color: #fff;
-                    text-align: center;
-                    border-radius: 6px;
-                    padding: 4px 8px;
-                    position: absolute;
-                    z-index: 10;
-                    bottom: 125%;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    opacity: 0;
-                    transition: opacity 0.3s ease;
-                    font-size: 0.75rem;
-                    white-space: nowrap;
-                    }
-                    
-                    .tooltip:hover .tooltiptext {
-                    visibility: visible;
-                    opacity: 1;
-                    }
-
-                </style>
-            </head>
-            <body>
-                <div class="head">
-                    <h1>Module Timetable</h1>
-                </div>
-
-                <div class="timetable-container">
-                  <!-- Use this structure for each week -->
-                ${content}
-                </div>
-            </html>
-            `.trim();
-    }
-
-    // - previewTimetable
-    function previewTimetable() {
-      const iframe = document.getElementById('previewFrame');
-      const doc = iframe.contentDocument || iframe.contentWindow.document;
-      
-      doc.open();
-      doc.write(generateFullHTML());
-      doc.close();
-    }
-
-    // - showToast
-    function showToast(message, type = 'info') {
-      const toast = document.getElementById("toast");
-
-      toast.className = '';
-      toast.classList.add('show', `toast-${type}`);
-      toast.textContent = message;
-
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => {
-          toast.style.display = "none";
-          toast.className = '';
-        }, 500);
-      }, 3000);
-
-      toast.style.display = "block";
-    }
-
-    // - openPreviewInNewTab
-    function openPreviewInNewTab() {
-      const form = document.getElementById('timetableForm');
-      const blocks = form.querySelectorAll('.week-block');
-
-      let content = '';
-      blocks.forEach(block => {
-        const week = block.querySelector('[name=week]').value;
-        const type = block.querySelector('[name=type]').value;
-        const dateInput = block.querySelector('[name=date]').value;
-        const date = dateInput ? new Date(dateInput).toLocaleDateString('en-GB') : 'No date';
-        const location = block.querySelector('[name=location]').value || 'No location';
-        const topic = block.querySelector('[name=topic]').value || 'No topic';
-        const highlight = block.querySelector('[name=highlight]').value === 'yes';
-
-        const weekTypeLabel = type === 'assessment' ? 'Assessment Week' : type.charAt(0).toUpperCase() + type.slice(1) + " Week";
-                content += `
-                <div class="week-card${highlight ? ' highlight' : ''}">
-                  <div class="week-title">Week ${week}</div>
-                  <div class="week-type ${type}">${weekTypeLabel}</div>
-                  <div class="session-date"><span class="tooltip"><i class="fa fa-calendar"></i><span class="tooltiptext">Session Date</span></span>${date}</div>
-                  <div class="session-location"><span class="tooltip"><i class="fa fa-map-marker"></i><span class="tooltiptext">Session Location</span></span>${location}</div>
-                  <div class="session-topic"><span class="tooltip"><i class="fa fa-book"></i><span class="tooltiptext">Session Topic</span></span>${topic}</div>
-                </div>`;
-              });
-
-              const fullHTML = `
-                <!DOCTYPE html>
-                <html lang="en">
-                <head>
-                  <meta charset="UTF-8" />
-                  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-                  <title>Module Timetable</title>
-                  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-                    <style>
-                        body {
-                        margin: 0;
-                        padding: 0;
-                        background: #f5f7fa;
-                        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-                        }
-
-                        .head {
-                        background: linear-gradient(135deg, #004080, #0073e6);
-                        color: #fff;
-                        text-align: center;
-                        padding: 20px 16px;
-                        margin: 20px auto 30px;
-                        border-radius: 12px;
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-                        }
-
-                        .head h1 {
-                        font-size: 2rem;
-                        margin: 0;
-                        text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
-                        letter-spacing: 1px;
-                        }
-
-                        .timetable-container {
-                        display: grid;
-                        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-                        gap: 20px;
-                        padding: 20px;
-                        max-width: 1300px;
-                        margin: 0 auto 60px;
-                        }
-
-                        .week-card {
-                        background: #fff;
-                        border-radius: 12px;
-                        padding: 16px;
-                        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
-                        transition: transform 0.3s ease, box-shadow 0.3s ease;
-                        text-align: left;
-                        position: relative;
-                        }
-
-                        .week-card:hover {
-                        transform: translateY(-5px);
-                        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-                        }
-
-                        .week-title {
-                        font-size: 1.2rem;
-                        font-weight: bold;
-                        margin-bottom: 6px;
-                        }
-
-                        .week-type {
-                        font-size: 0.9rem;
-                        padding: 4px 10px;
-                        border-radius: 8px;
-                        display: inline-block;
-                        margin-bottom: 12px;
-                        }
-
-                        .teaching { background-color: #004080; color: #fff; }
-                        .reading { background-color: #f0ad4e; color: #fff; }
-                        .break { background-color: #bd61d9; color: #fff; }
-                        .assessment { background-color: #d9534f; color: #fff; }
-
-                        .highlight {
-                        border: 2px solid #28a745;
-                        background-color: #e6ffe6;
-                        }
-                        .assessment-badge {
-                        position: absolute;
-                        top: 12px;
-                        right: 12px;
-                        background-color: #dc3545;
-                        color: white;
-                        font-size: 0.75rem;
-                        padding: 4px 10px;
-                        border-radius: 6px;
-                        font-weight: bold;
-                        letter-spacing: 0.5px;
-                        box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-                        }
-
-                        .session-date {
-                        font-weight: 500;
-                        color: #333;
-                        margin-bottom: 4px;
-                        }
-
-                        .session-location {
-                        font-size: 0.95rem;
-                        color: #555;
-                        margin-bottom: 6px;
-                        }
-
-                        .session-topic {
-                        font-size: 0.95rem;
-                        color: #333;
-                        }
-
-                        .session-date i,
-                        .session-topic i {
-                        margin-right: 6px;
-                        color: #0073e6;
-                        }
-                        .session-location i {
-                        margin-right: 9px;
-                        margin-left: 3px;
-                        color: #0073e6;
-                        }
-                        
-                        .tooltip {
-                        position: relative;
-                        display: inline-block;
-                        cursor: help;
-                        }
-                        
-                        .tooltip .tooltiptext {
-                        visibility: hidden;
-                        width: max-content;
-                        background-color: #333;
-                        color: #fff;
-                        text-align: center;
-                        border-radius: 6px;
-                        padding: 4px 8px;
-                        position: absolute;
-                        z-index: 10;
-                        bottom: 125%;
-                        left: 50%;
-                        transform: translateX(-50%);
-                        opacity: 0;
-                        transition: opacity 0.3s ease;
-                        font-size: 0.75rem;
-                        white-space: nowrap;
-                        }
-                        
-                        .tooltip:hover .tooltiptext {
-                        visibility: visible;
-                        opacity: 1;
-                        }
-
-                    </style>
-                </head>
-                <body>
-                    <div class="head">
-                        <h1>Module Timetable</h1>
-                    </div>
-
-                    <div class="timetable-container">
-                      <!-- Use this structure for each week -->
-                    ${content}
-                    </div>
-                </html>
-                `.trim();
-
-      const blob = new Blob([fullHTML], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      window.open(url, '_blank');
-
-      showToast("🧾 Opening preview in new tab...", "info");
-    }
-
-    // - confirmReset
-    function confirmReset() {
-      document.getElementById('resetModal').style.display = 'flex';
-    }
-
-    // - closeModal
-    function closeModal() {
-      document.getElementById('resetModal').style.display = 'none';
-    }
-
-    // - performReset
-    function performReset() {
-      resetWeeks();
-      closeModal();
-      showToast("🔄 Timetable changes reset.", "success");
-
-      document.getElementById("previewBtn").disabled = true;
-      document.getElementById("openTabBtn").disabled = true;
-      document.getElementById("copyBtn").disabled = true;
-      document.getElementById("resetBtn").disabled = true;
-
-      // Hide module details
-      document.getElementById("moduleDetails").style.display = "none";
-      document.getElementById("previewFrame").style.display = "none";
-
-      // Clear values
-      document.getElementById("modName").textContent = "Module Name";
-      document.getElementById("modCode").textContent = "Not Defined";
-      document.getElementById("modYear").textContent = "Not Defined";
-      document.getElementById("modLeader").textContent = "Not Defined";
-      document.getElementById("modStart").textContent = "Not Defined";
-      document.querySelector("#modTutors ul").innerHTML = "";
-
-
-      const iframe = document.getElementById("previewFrame");
-      if (iframe) iframe.srcdoc = "";
-    }
-
-  </script>
-
-  <!-- Modal for Reset Confirmation -->
-  <div id="resetModal" class="modal-overlay">
-    <div class="modal-box">
-      <h3>Are you sure?</h3>
-      <p>This will remove all current weeks from the timetable.</p>
-      <div class="modal-actions">
-        <button onclick="closeModal()" class="cancel-btn">Cancel</button>
-        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
-      </div>
+  <section class="hero" style="height: calc(100vh - 48px); margin-top: 48px; padding: 0; text-align: center; background: var(--bg-secondary); display: flex; flex-direction: column; justify-content: center; align-items: center; transform: translateY(-5vh);">
+    <h1 style="font-size:2.5rem; font-weight:700; margin-bottom: 12px; letter-spacing: -1px; color: var(--text-primary);">Welcome to MScSimEd Tools</h1>
+    <p style="font-size:1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px auto;">Easily generate, preview, and manage aspects of the MSc Simulated Practice Education programme. Start by generating a timetable or creating a new preset for your modules.</p>
+    <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin-top: 32px;">
+      <a href="timetable/generate.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px;">
+        📅 Timetable
+      </a>
+      <a href="#" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-secondary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; opacity: 0.6; cursor: not-allowed;">
+        🚧 Coming Soon
+      </a>
     </div>
-  </div>
-
-  <!-- Toast Notifications -->
-  <div id="toast" style="display: none;"></div>
-
+  </section>
+  <script>
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+    initTheme();
+  </script>
+  <style>
+    body {
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+    }
+    @media (max-width: 768px) {
+      .hero {
+        padding: 20px !important;
+        transform: translateY(-2vh) !important;
+      }
+      .hero h1 {
+        font-size: 2rem !important;
+        margin-bottom: 16px !important;
+      }
+      .hero p {
+        font-size: 1rem !important;
+        margin-bottom: 24px !important;
+      }
+      .hero > div {
+        flex-direction: column !important;
+        gap: 16px !important;
+      }
+      .hero > div > a {
+        padding: 16px 24px !important;
+        font-size: 1rem !important;
+      }
+    }
+    @media (max-width: 480px) {
+      .hero {
+        transform: translateY(-1vh) !important;
+      }
+      .hero h1 {
+        font-size: 1.75rem !important;
+      }
+    }
+  </style>
 </body>
-</html>
+</html> 
