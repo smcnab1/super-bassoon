@@ -1,12 +1,12 @@
 /* CSS Custom Properties for Theming */
 :root {
-  /* Light theme colors */
+  /* Light theme colors - WCAG 2.1 AA compliant */
   --bg-primary: #eef2f5;
   --bg-secondary: #ffffff;
-  --text-primary: #333333;
-  --text-secondary: #555555;
-  --text-muted: #666666;
-  --border-color: #cccccc;
+  --text-primary: #1a1a1a; /* Improved contrast */
+  --text-secondary: #2d2d2d; /* Improved contrast */
+  --text-muted: #4a4a4a; /* Improved contrast */
+  --border-color: #666666; /* Improved contrast */
   --shadow-color: rgba(0, 0, 0, 0.1);
   --shadow-color-light: rgba(0, 0, 0, 0.05);
   --navbar-bg: #003366;
@@ -17,26 +17,36 @@
   --preset-bg: #004080;
   --preset-hover: #003060;
   --week-header-teaching: #004080;
-  --week-header-reading: #f0ad4e;
-  --week-header-assessment: #dc3545;
-  --week-header-break: #bd61d9;
-  --toast-bg: #333333;
+  --week-header-reading: #d97706; /* Improved contrast */
+  --week-header-assessment: #dc2626; /* Improved contrast */
+  --week-header-break: #9333ea; /* Improved contrast */
+  --toast-bg: #1f2937; /* Improved contrast */
   --modal-overlay: rgba(0, 0, 0, 0.5);
   --modal-bg: #ffffff;
   --input-bg: #ffffff;
-  --input-border: #cccccc;
+  --input-border: #666666; /* Improved contrast */
   --input-focus: #0073e6;
-  --input-focus-shadow: rgba(0, 115, 230, 0.2);
+  --input-focus-shadow: rgba(0, 115, 230, 0.3);
+  
+  /* Accessibility focus indicators */
+  --focus-outline: 3px solid #0073e6;
+  --focus-outline-offset: 2px;
+  --focus-ring: 0 0 0 3px rgba(0, 115, 230, 0.3);
+  
+  /* Skip link styles */
+  --skip-link-bg: #0073e6;
+  --skip-link-color: #ffffff;
+  --skip-link-hover-bg: #0056b3;
 }
 
-/* Dark theme colors */
+/* Dark theme colors - WCAG 2.1 AA compliant */
 [data-theme="dark"] {
   --bg-primary: #1a1a1a;
   --bg-secondary: #2d2d2d;
   --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --text-muted: #999999;
-  --border-color: #444444;
+  --text-secondary: #e5e7eb; /* Improved contrast */
+  --text-muted: #d1d5db; /* Improved contrast */
+  --border-color: #6b7280; /* Improved contrast */
   --shadow-color: rgba(0, 0, 0, 0.3);
   --shadow-color-light: rgba(0, 0, 0, 0.2);
   --navbar-bg: #1a1a1a;
@@ -47,24 +57,84 @@
   --preset-bg: #2d2d2d;
   --preset-hover: #404040;
   --week-header-teaching: #0073e6;
-  --week-header-reading: #ffc107;
-  --week-header-assessment: #dc3545;
-  --week-header-break: #e83e8c;
-  --toast-bg: #2d2d2d;
+  --week-header-reading: #f59e0b; /* Improved contrast */
+  --week-header-assessment: #ef4444; /* Improved contrast */
+  --week-header-break: #a855f7; /* Improved contrast */
+  --toast-bg: #374151; /* Improved contrast */
   --modal-overlay: rgba(0, 0, 0, 0.7);
   --modal-bg: #2d2d2d;
   --input-bg: #404040;
-  --input-border: #555555;
+  --input-border: #6b7280; /* Improved contrast */
   --input-focus: #0073e6;
-  --input-focus-shadow: rgba(0, 115, 230, 0.3);
+  --input-focus-shadow: rgba(0, 115, 230, 0.4);
+  
+  /* Dark theme focus indicators */
+  --focus-outline: 3px solid #0073e6;
+  --focus-outline-offset: 2px;
+  --focus-ring: 0 0 0 3px rgba(0, 115, 230, 0.4);
+  
+  /* Dark theme skip link styles */
+  --skip-link-bg: #0073e6;
+  --skip-link-color: #ffffff;
+  --skip-link-hover-bg: #0056b3;
 }
 
 [data-theme="dark"] .dropdown-content {
-  background: #2d3748;
+  background: #374151; /* Improved contrast */
 }
 
 [data-theme="dark"] .dropdown-content a {
-  color: #e2e8f0;
+  color: #f9fafb; /* Improved contrast */
+}
+
+/* WCAG 2.1 AA Accessibility Improvements */
+
+/* Skip to main content link */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 6px;
+  background: var(--skip-link-bg);
+  color: var(--skip-link-color);
+  padding: 8px 16px;
+  text-decoration: none;
+  border-radius: 4px;
+  font-weight: 600;
+  z-index: 10000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 6px;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Focus indicators for all interactive elements */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+a:focus,
+[tabindex]:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* Remove default focus outline and use custom one */
+button:focus,
+input:focus,
+select:focus,
+textarea:focus,
+a:focus {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
+/* High contrast focus for keyboard navigation */
+*:focus-visible {
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Theme transition */
@@ -72,80 +142,135 @@
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* Base accessibility improvements */
 body { 
-  font-family: 'Segoe UI', sans-serif; 
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif; 
   padding: 0 0 80px 0; /* top, right, bottom, left */
   background: var(--bg-primary); 
   margin: 0; 
   color: var(--text-primary);
+  line-height: 1.6; /* Improved readability */
+  font-size: 16px; /* Minimum readable font size */
+}
+
+/* Improved heading hierarchy and contrast */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--text-primary);
+  line-height: 1.3;
+  margin-top: 1.5em;
+  margin-bottom: 0.5em;
 }
 
 h1 { 
   text-align: center; 
   color: var(--text-primary); 
   margin-bottom: 30px; 
+  font-size: 2rem;
+  font-weight: 700;
 }
 
+h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+/* Improved label accessibility */
 label { 
   font-weight: 500; 
   display: block; 
-  margin-bottom: 4px; 
+  margin-bottom: 8px; 
   color: var(--text-primary); 
+  font-size: 1rem;
 }
 
-input, select {
-  padding: 8px 10px;
-  margin-bottom: 12px;
-  border-radius: 6px;
-  border: 1px solid var(--input-border);
-  font-size: 14px;
+/* Required field indicators */
+label.required::after {
+  content: " *";
+  color: #dc2626;
+  font-weight: bold;
+}
+
+[data-theme="dark"] label.required::after {
+  color: #ef4444;
+}
+
+/* Improved form controls */
+input, select, textarea {
+  padding: 12px 16px;
+  margin-bottom: 16px;
+  border-radius: 8px;
+  border: 2px solid var(--input-border);
+  font-size: 16px; /* Minimum readable font size */
   width: 100%;
   box-sizing: border-box;
   background-color: var(--input-bg);
   color: var(--text-primary);
+  line-height: 1.5;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--input-focus);
+  box-shadow: var(--focus-ring);
+  outline: none;
+}
+
+/* Improved select styling */
 select {
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   background-color: var(--input-bg);
-  border: 1px solid var(--input-border);
-  padding: 8px 12px;
-  font-size: 1rem;
-  border-radius: 6px;
-  background-image: url("data:image/svg+xml;utf8,<svg fill='gray' height='14' viewBox='0 0 20 20' width='14' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548l4.484 4.484 4.484-4.484L15.484 9 10 14.484 4.516 9z'/></svg>");
+  border: 2px solid var(--input-border);
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 8px;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23666' height='16' viewBox='0 0 20 20' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548l4.484 4.484 4.484-4.484L15.484 9 10 14.484 4.516 9z'/></svg>");
   background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 14px;
-  transition: border 0.3s ease;
+  background-position: right 12px center;
+  background-size: 16px;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
+[data-theme="dark"] select {
+  background-image: url("data:image/svg+xml;utf8,<svg fill='%23fff' height='16' viewBox='0 0 20 20' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M5.516 7.548l4.484 4.484 4.484-4.484L15.484 9 10 14.484 4.516 9z'/></svg>");
+}
+
+/* Improved date input */
 input[type="date"] {
   appearance: none;
   -webkit-appearance: none;
   background-color: var(--input-bg);
-  border: 1px solid var(--input-border);
-  padding: 8px 12px;
-  font-size: 1rem;
-  border-radius: 6px;
+  border: 2px solid var(--input-border);
+  padding: 12px 16px;
+  font-size: 16px;
+  border-radius: 8px;
   box-sizing: border-box;
-  height: 35px; 
-  transition: border 0.3s ease;
+  height: 48px; 
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
   color: var(--text-primary);
 }
 
 input[type="date"]:focus {
-  outline: none;
   border-color: var(--input-focus);
-  box-shadow: 0 0 0 3px var(--input-focus-shadow);
+  box-shadow: var(--focus-ring);
+  outline: none;
 }
 
 /* Fix for Chrome calendar icon spacing */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(0.5);
   cursor: pointer;
-  margin-left: 5px;
+  margin-left: 8px;
+  width: 20px;
+  height: 20px;
 }
 
 /* Dark mode calendar icon */
@@ -153,9 +278,10 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
 
+/* Improved navbar accessibility */
 .main-navbar {
   background: var(--navbar-bg);
-  padding: 4px 24px;
+  padding: 8px 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -163,6 +289,7 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   width: 100%;
   margin: 0;
   box-sizing: border-box;
+  min-height: 56px; /* Minimum touch target size */
 }
 
 .main-navbar .navbar-title {
@@ -183,12 +310,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .main-navbar .title-subtitle {
   font-size: 1rem;
   font-weight: 500;
-  opacity: 0.85;
+  opacity: 0.9; /* Improved contrast */
   letter-spacing: -0.3px;
 }
 
 .main-navbar .title-separator {
-  opacity: 0.4;
+  opacity: 0.6; /* Improved contrast */
   font-size: 1.1rem;
   font-weight: 300;
 }
@@ -210,21 +337,32 @@ input[type="date"]::-webkit-calendar-picker-indicator {
   color: #ddd;
 }
 
-/* Theme toggle button */
+/* Theme toggle button - WCAG 2.1 AA compliant */
 .theme-toggle {
   background: none;
   border: none;
   color: white;
   font-size: 1.2rem;
   cursor: pointer;
-  padding: 8px;
+  padding: 12px;
   border-radius: 6px;
   transition: background-color 0.2s ease;
   margin-left: 10px;
+  min-width: 44px; /* Minimum touch target size */
+  min-height: 44px; /* Minimum touch target size */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .theme-toggle:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.theme-toggle:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .preview-controls {
@@ -321,20 +459,41 @@ select:focus {
   min-width: 150px;
 }
 
+/* WCAG 2.1 AA compliant button styles */
 button {
   margin: 10px 5px;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--button-primary);
   color: white;
   cursor: pointer;
-  font-size: 14px;
-  transition: background 0.3s ease;
+  font-size: 16px; /* Minimum readable font size */
+  font-weight: 500;
+  transition: background 0.2s ease, transform 0.1s ease;
+  min-height: 44px; /* Minimum touch target size */
+  min-width: 44px; /* Minimum touch target size */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  line-height: 1.5;
 }
 
 button:hover {
   background: var(--button-primary-hover);
+  transform: translateY(-1px);
+}
+
+button:focus {
+  background: var(--button-primary-hover);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  transform: translateY(-1px);
+}
+
+button:active {
+  transform: translateY(0);
 }
 
 .preset-container {
@@ -352,21 +511,34 @@ button:hover {
   border: none;
   padding: 16px 16px 32px;
   border-radius: 8px;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Improved readability */
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background 0.2s ease, transform 0.1s ease;
   min-width: 240px;
-  height: 85px;
+  min-height: 85px; /* Minimum touch target size */
   text-align: left;
   box-shadow: 0 2px 6px var(--shadow-color);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  line-height: 1.4;
 }
 
 .preset-btn:hover {
   background: var(--preset-hover);
+  transform: translateY(-2px);
+}
+
+.preset-btn:focus {
+  background: var(--preset-hover);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+  transform: translateY(-2px);
+}
+
+.preset-btn:active {
+  transform: translateY(0);
 }
 
 .module-code {
@@ -791,18 +963,26 @@ button:disabled {
   background: none;
   border: none;
   color: white;
-  font-size: 0.95rem;
+  font-size: 1rem; /* Improved readability */
   cursor: pointer;
-  padding: 8px 12px;
+  padding: 12px 16px;
   border-radius: 6px;
   transition: background-color 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
+  min-height: 44px; /* Minimum touch target size */
+  min-width: 44px; /* Minimum touch target size */
 }
 
 .dropdown-btn:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.dropdown-btn:focus {
+  background-color: rgba(255, 255, 255, 0.2);
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 .dropdown-content {
@@ -826,16 +1006,17 @@ button:disabled {
 
 .dropdown-content a {
   color: #ffffff;
-  padding: 8px 16px;
+  padding: 12px 16px;
   text-decoration: none;
   display: block;
   transition: background-color 0.2s ease;
   border-bottom: 1px solid var(--border-color);
   white-space: nowrap;
-  line-height: 1.2;
-  min-height: 32px;
+  line-height: 1.4;
+  min-height: 44px; /* Minimum touch target size */
   display: flex;
   align-items: center;
+  font-size: 1rem; /* Improved readability */
 }
 
 .dropdown-content a:last-child {
@@ -846,8 +1027,20 @@ button:disabled {
   background-color: #2a4365;
 }
 
+.dropdown-content a:focus {
+  background-color: #2a4365;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
+}
+
 [data-theme="dark"] .dropdown-content a:hover {
   background-color: #1a202c;
+}
+
+[data-theme="dark"] .dropdown-content a:focus {
+  background-color: #1a202c;
+  outline: var(--focus-outline);
+  outline-offset: var(--focus-outline-offset);
 }
 
 /* Responsive dropdown */

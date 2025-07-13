@@ -312,61 +312,64 @@
   </style>
 </head>
 <body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#moduleDetails" class="skip-link">Skip to main content</a>
+  
   <!-- Navbar -->
-  <nav class="main-navbar">
-    <div class="navbar-title">
-      <a href="../../index.html" style="text-decoration: none; color: inherit;">
-        <div class="title-main">🤖 MScSimEd</div>
-      </a>
-      <span class="title-separator">|</span>
-      <div class="title-subtitle">🎯 Generate</div>
-    </div>
-    <div class="navbar-links">
-      <div class="dropdown">
-        <button class="dropdown-btn">📅 Timetable</button>
-        <div class="dropdown-content">
-          <a href="generate.html">🎯 Generate</a>
-          <a href="preset/new.html">📄 New Preset</a>
-          <a href="preset/edit.html">✏️ Edit Preset</a>
-        </div>
+  <nav class="main-navbar" role="navigation" aria-label="Main navigation">
+          <div class="navbar-title">
+        <a href="../../index.html" style="text-decoration: none; color: inherit;" aria-label="MScSimEd Home">
+          <div class="title-main">🤖 MScSimEd</div>
+        </a>
+        <span class="title-separator">|</span>
+        <div class="title-subtitle">🎯 Generate</div>
       </div>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
-    </div>
+      <div class="navbar-links">
+        <div class="dropdown">
+          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
+          <div class="dropdown-content" role="menu">
+            <a href="generate.html" role="menuitem">🎯 Generate</a>
+            <a href="preset/new.html" role="menuitem">📄 New Preset</a>
+            <a href="preset/edit.html" role="menuitem">✏️ Edit Preset</a>
+          </div>
+        </div>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+      </div>
   </nav>
 
   <!-- Preset Buttons -->
-  <div class="preset-container">
-    <button class="preset-btn" onclick="loadPreset('ED70011X')">
+  <div class="preset-container" role="group" aria-label="Module presets">
+    <button class="preset-btn" onclick="loadPreset('ED70011X')" aria-label="Load Foundations of Simulation Education preset">
       <strong>Foundations of Simulation Education</strong>
       <span class="module-code">ED70011X</span>
       <span class="year-tag year-1">Year 1</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('ED70012X')" disabled>
+    <button class="preset-btn" onclick="loadPreset('ED70012X')" disabled aria-label="Simulation Delivery & Leadership preset (not available)">
       <strong>Simulation Delivery & Leadership</strong>
       <span class="module-code">ED70012X</span>
       <span class="year-tag year-1">Year 1</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('ED70013X')">
+    <button class="preset-btn" onclick="loadPreset('ED70013X')" aria-label="Load Digital Technologies in Education preset">
       <strong>Digital Technologies in Education</strong>
       <span class="module-code">ED70013X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('ED70014X')" disabled>
+    <button class="preset-btn" onclick="loadPreset('ED70014X')" disabled aria-label="Current Issues & Policies in Simulation Education preset (not available)">
       <strong>Current Issues & Policies in Simulation Education</strong>
       <span class="module-code">ED70014X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('ED70015X')" disabled>
+    <button class="preset-btn" onclick="loadPreset('ED70015X')" disabled aria-label="Simulation in Innovative Practice preset (not available)">
       <strong>Simulation in Innovative Practice</strong>
       <span class="module-code">ED70015X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
 
-    <button class="preset-btn" onclick="loadPreset('ED70016X')" disabled>
+    <button class="preset-btn" onclick="loadPreset('ED70016X')" disabled aria-label="Quality Improvement & Demonstrative Simulation preset (not available)">
       <strong>Quality Improvement & Demonstrative Simulation</strong>
       <span class="module-code">ED70016X</span>
       <span class="year-tag year-3">Year 3</span>
@@ -436,13 +439,13 @@
   <form id="timetableForm"></form>
     
   <!-- Preview Controls: Preview, Open Tab, Copy HTML, Export PDF, Export Calendar -->
-  <div class="sticky-footer">
-    <button id="previewBtn" onclick="previewTimetable()" disabled>🔍 Preview</button>
-    <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled>🧾 New Tab</button>
-    <button id="copyBtn" onclick="copyFullHTML()" disabled>📋 Copy</button>
-    <button id="pdfBtn" onclick="exportToPDF()" disabled>📄 PDF</button>
-    <button id="calendarBtn" onclick="exportToCalendar()" disabled>📅 Calendar</button>
-    <button class="reset-btn" id="resetBtn" onclick="confirmReset()" disabled>🔄 Reset</button>
+  <div class="sticky-footer" role="toolbar" aria-label="Timetable actions">
+    <button id="previewBtn" onclick="previewTimetable()" disabled aria-label="Preview timetable">🔍 Preview</button>
+    <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled aria-label="Open preview in new tab">🧾 New Tab</button>
+    <button id="copyBtn" onclick="copyFullHTML()" disabled aria-label="Copy timetable HTML">📋 Copy</button>
+    <button id="pdfBtn" onclick="exportToPDF()" disabled aria-label="Export timetable as PDF">📄 PDF</button>
+    <button id="calendarBtn" onclick="exportToCalendar()" disabled aria-label="Export timetable as calendar file">📅 Calendar</button>
+    <button class="reset-btn" id="resetBtn" onclick="confirmReset()" disabled aria-label="Reset all changes">🔄 Reset</button>
   </div>
   
   <!-- iFrame Preview -->
@@ -734,7 +737,7 @@
     // - loadPreset
     function loadPreset(presetKey) {
       console.log('Loading preset:', presetKey);
-      
+
       const presetData = sharedPresets[presetKey];
 
       if (!presetData) {
@@ -945,7 +948,7 @@
                 <option value="no">No</option>
                 <option value="yes">Yes</option>
               </select>
-            </div>
+              </div>
           </div>
           <div class="form-row">
             <div>
@@ -1486,8 +1489,8 @@
           loadPresetWithCohort(lastPreset, lastCohort);
         } else {
           // Try to load preset (will show cohort selection if needed)
-          console.log('Loading preset:', lastPreset);
-          loadPreset(lastPreset);
+        console.log('Loading preset:', lastPreset);
+        loadPreset(lastPreset);
         }
       } else {
         console.log('No preset to restore or preset not found');

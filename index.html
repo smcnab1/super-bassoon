@@ -8,6 +8,9 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#mainApp" class="skip-link">Skip to main content</a>
+  
   <!-- Login Screen -->
   <div id="loginScreen" class="login-screen">
     <div class="login-container">
@@ -20,9 +23,9 @@
       <form id="loginForm" class="login-form" onsubmit="authenticate(event)">
         <div class="input-group">
           <label for="password">Password:</label>
-          <input type="password" id="password" name="password" required autocomplete="current-password">
+          <input type="password" id="password" name="password" required autocomplete="current-password" aria-describedby="passwordHelp">
         </div>
-        <button type="submit" class="login-btn">🔓 Access Application</button>
+        <button type="submit" class="login-btn" aria-label="Access application with password">🔓 Access Application</button>
       </form>
       
       <div id="loginError" class="login-error" style="display: none;">
@@ -33,9 +36,9 @@
 
   <!-- Main Application (Hidden until authenticated) -->
   <div id="mainApp" class="main-app" style="display: none;">
-    <nav class="main-navbar">
+    <nav class="main-navbar" role="navigation" aria-label="Main navigation">
       <div class="navbar-title">
-        <a href="index.html" style="text-decoration: none; color: inherit;">
+        <a href="index.html" style="text-decoration: none; color: inherit;" aria-label="MScSimEd Home">
           <div class="title-main">🤖 MScSimEd</div>
         </a>
         <span class="title-separator">|</span>
@@ -43,32 +46,32 @@
       </div>
       <div class="navbar-links">
         <div class="dropdown">
-          <button class="dropdown-btn">📅 Timetable</button>
-          <div class="dropdown-content">
-            <a href="timetable/generate.html">🎯 Generate</a>
-            <a href="timetable/preset/new.html">📄 New Preset</a>
-            <a href="timetable/preset/edit.html">✏️ Edit Preset</a>
+          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
+          <div class="dropdown-content" role="menu">
+            <a href="timetable/generate.html" role="menuitem">🎯 Generate</a>
+            <a href="timetable/preset/new.html" role="menuitem">📄 New Preset</a>
+            <a href="timetable/preset/edit.html" role="menuitem">✏️ Edit Preset</a>
           </div>
         </div>
-        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
-        <button class="logout-btn" onclick="logout()" title="Logout">🚪</button>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+        <button class="logout-btn" onclick="logout()" aria-label="Logout from application">🚪</button>
       </div>
     </nav>
     
-    <section class="hero" style="height: calc(100vh - 48px); margin-top: 48px; padding: 0; text-align: center; background: var(--bg-secondary); display: flex; flex-direction: column; justify-content: center; align-items: center; transform: translateY(-5vh);">
+    <main class="hero" style="height: calc(100vh - 48px); margin-top: 48px; padding: 0; text-align: center; background: var(--bg-secondary); display: flex; flex-direction: column; justify-content: center; align-items: center; transform: translateY(-5vh);">
       <h1 style="font-size:2.5rem; font-weight:700; margin-bottom: 12px; letter-spacing: -1px; color: var(--text-primary);">Welcome to MScSimEd Tools</h1>
       <p style="font-size:1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px auto;">Easily generate, preview, and manage aspects of the MSc Simulated Practice Education programme. Start by generating a timetable or creating a new preset for your modules.</p>
       <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin-top: 32px;">
-        <a href="timetable/generate.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px;">
+        <a href="timetable/generate.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; min-height: 44px;" aria-label="Go to timetable generator">
           📅 Timetable
         </a>
-        <a href="#" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-secondary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; opacity: 0.6; cursor: not-allowed;">
+        <a href="#" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-secondary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; opacity: 0.6; cursor: not-allowed; min-height: 44px;" aria-label="Coming soon feature" aria-disabled="true">
           🚧 Coming Soon
         </a>
       </div>
-    </section>
+    </main>
   </div>
-
+  
   <script src="config.js"></script>
   <script>
     // Password protection system with SHA-256 hashing
@@ -181,10 +184,73 @@
           document.getElementById('loginForm').dispatchEvent(new Event('submit'));
         }
       });
+      
+      // Add dropdown accessibility
+      setupDropdownAccessibility();
     });
+    
+    // Setup dropdown accessibility
+    function setupDropdownAccessibility() {
+      const dropdowns = document.querySelectorAll('.dropdown');
+      
+      dropdowns.forEach(dropdown => {
+        const button = dropdown.querySelector('.dropdown-btn');
+        const content = dropdown.querySelector('.dropdown-content');
+        
+        if (button && content) {
+          // Handle keyboard navigation
+          button.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              toggleDropdown(button, content);
+            }
+          });
+          
+          // Handle escape key
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+              closeDropdown(button, content);
+            }
+          });
+          
+          // Handle mouse events
+          button.addEventListener('click', function() {
+            toggleDropdown(button, content);
+          });
+          
+          // Close dropdown when clicking outside
+          document.addEventListener('click', function(e) {
+            if (!dropdown.contains(e.target)) {
+              closeDropdown(button, content);
+            }
+          });
+        }
+      });
+    }
+    
+    function toggleDropdown(button, content) {
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+      if (isExpanded) {
+        closeDropdown(button, content);
+      } else {
+        openDropdown(button, content);
+      }
+    }
+    
+    function openDropdown(button, content) {
+      button.setAttribute('aria-expanded', 'true');
+      content.style.display = 'block';
+      content.querySelector('a').focus();
+    }
+    
+    function closeDropdown(button, content) {
+      button.setAttribute('aria-expanded', 'false');
+      content.style.display = 'none';
+      button.focus();
+    }
   </script>
   
-  <style>
+                <style>
     /* Login Screen Styles */
     .login-screen {
       position: fixed;
@@ -207,7 +273,7 @@
       border: 1px solid var(--border-color);
       max-width: 400px;
       width: 90%;
-      text-align: center;
+                    text-align: center;
     }
     
     .login-header {
@@ -245,7 +311,7 @@
       display: block;
       margin-bottom: 8px;
       color: var(--text-primary);
-      font-weight: 500;
+                    font-weight: 500;
     }
     
     .input-group input {
@@ -313,10 +379,10 @@
       min-height: 100vh;
     }
     
-    body {
+                        body {
       overflow: hidden;
-      margin: 0;
-      padding: 0;
+                        margin: 0;
+                        padding: 0;
     }
     
     @media (max-width: 768px) {
