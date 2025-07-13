@@ -1,239 +1,492 @@
 {
   "ED70011X": {
-    "moduleName": "Foundations of Simulation Education",
-    "moduleCode": "ED70011X",
-    "year": "1",
-    "moduleLeader": "Anita Sudhagar",
-    "firstTeachingDate": "2025-09-23",
-    "moduleTutors": [
-      { "name": "Anita Sudhagar", "campus": "London" },
-      { "name": "Sam Knipe", "campus": "Reading" }
-    ],
-    "weeks": [
-      {
-        "week": 1,
-        "type": "teaching",
-        "highlight": true,
-        "date": "2025-09-23",
-        "location": "UWL Reading",
-        "topic": "Welcome & Introduction"
-      },
-      {
-        "week": 2,
-        "type": "reading",
-        "highlight": false,
-        "date": "2025-09-30",
-        "location": "Online",
-        "topic": "Self-Directed Study"
-      }
-    ]
+    "april": {
+      "cohort": "April",
+      "moduleName": "Foundations of Simulation Education",
+      "moduleCode": "ED70011X",
+      "year": "1",
+      "moduleLeader": "Anita Sudhagar",
+      "firstTeachingDate": "2025-04-23",
+      "moduleTutors": [
+        { "name": "Anita Sudhagar", "campus": "London" },
+        { "name": "Sam Knipe", "campus": "Reading" }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "type": "teaching",
+          "highlight": true,
+          "date": "2025-04-23",
+          "location": "UWL Reading",
+          "topic": "Welcome & Introduction"
+        },
+        {
+          "week": 2,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-04-30",
+          "location": "Online",
+          "topic": "Self-Directed Study"
+        }
+      ]
+    },
+    "september": {
+      "cohort": "September",
+      "moduleName": "Foundations of Simulation Education",
+      "moduleCode": "ED70011X",
+      "year": "1",
+      "moduleLeader": "Anita Sudhagar",
+      "firstTeachingDate": "2025-09-23",
+      "moduleTutors": [
+        { "name": "Anita Sudhagar", "campus": "London" },
+        { "name": "Sam Knipe", "campus": "Reading" }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "type": "teaching",
+          "highlight": true,
+          "date": "2025-09-23",
+          "location": "UWL Reading",
+          "topic": "Welcome & Introduction"
+        },
+        {
+          "week": 2,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-09-30",
+          "location": "Online",
+          "topic": "Self-Directed Study"
+        }
+      ]
+    }
   },
-"ED70012X": {
-  "moduleName": "Simulation Delivery & Leadership",
-  "moduleCode": "ED70012X",
-  "year": "1",
-  "moduleLeader": "asd",
-  "moduleTutors": [
-    {
-      "name": "asd",
-      "campus": "London"
+  "ED70012X": {
+    "april": {
+      "cohort": "April",
+      "moduleName": "Simulation Delivery & Leadership",
+      "moduleCode": "ED70012X",
+      "year": "1",
+      "moduleLeader": "asd",
+      "firstTeachingDate": "2025-04-23",
+      "moduleTutors": [
+        {
+          "name": "asd",
+          "campus": "London"
+        }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-04-23",
+          "location": "Online",
+          "topic": "asdasd"
+        },
+        {
+          "week": 2,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-04-30",
+          "location": "Location TBC",
+          "topic": "asd"
+        },
+        {
+          "week": 3,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-05-07",
+          "location": "Location TBC",
+          "topic": "asd"
+        }
+      ]
+    },
+    "september": {
+      "cohort": "September",
+      "moduleName": "Simulation Delivery & Leadership",
+      "moduleCode": "ED70012X",
+      "year": "1",
+      "moduleLeader": "asd",
+      "firstTeachingDate": "2025-09-23",
+      "moduleTutors": [
+        {
+          "name": "asd",
+          "campus": "London"
+        }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-09-23",
+          "location": "Online",
+          "topic": "asdasd"
+        },
+        {
+          "week": 2,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-09-30",
+          "location": "Location TBC",
+          "topic": "asd"
+        },
+        {
+          "week": 3,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-10-07",
+          "location": "Location TBC",
+          "topic": "asd"
+        }
+      ]
     }
-  ],
-  "weeks": [
-    {
-      "week": 1,
-      "type": "reading",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "asdasd"
+  },
+  "ED70013X": {
+    "april": {
+      "cohort": "April",
+      "moduleName": "Digital Technologies in Education",
+      "moduleCode": "ED70013X",
+      "year": "2",
+      "moduleLeader": "Sam McNab",
+      "firstTeachingDate": "2025-04-23",
+      "moduleTutors": [
+        {
+          "name": "Sam McNab",
+          "campus": "London"
+        },
+        {
+          "name": "Antony Newman",
+          "campus": "Reading"
+        }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-04-23",
+          "location": "Location TBC",
+          "topic": "Introduction to Digital Tech in Sim Ed"
+        },
+        {
+          "week": 2,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-04-30",
+          "location": "Location TBC",
+          "topic": "Simulation Platforms & Tools"
+        },
+        {
+          "week": 3,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-05-07",
+          "location": "Location TBC",
+          "topic": "Design Thinking & Scenario Building"
+        },
+        {
+          "week": 4,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-05-14",
+          "location": "Location TBC",
+          "topic": "User Experience, Access & Inclusion"
+        },
+        {
+          "week": 5,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-05-21",
+          "location": "Location TBC",
+          "topic": "Debriefing in Digital Contexts"
+        },
+        {
+          "week": 6,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-05-28",
+          "location": "Location TBC",
+          "topic": "Gamification & Interactivity"
+        },
+        {
+          "week": 7,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-06-04",
+          "location": "Location TBC",
+          "topic": "Ethics, Privacy & Professionalism"
+        },
+        {
+          "week": 8,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-06-11",
+          "location": "Location TBC",
+          "topic": "Peer Review & Feedback"
+        },
+        {
+          "week": 9,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-06-18",
+          "location": "Online",
+          "topic": "Independent Study"
+        },
+        {
+          "week": 10,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-06-25",
+          "location": "Online",
+          "topic": "Project Preparation"
+        },
+        {
+          "week": 11,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-07-02",
+          "location": "Location TBC",
+          "topic": "Feedback Lab"
+        },
+        {
+          "week": 12,
+          "type": "assessment",
+          "highlight": true,
+          "date": "2025-07-09",
+          "location": "Location TBC",
+          "topic": "A1: Immersive Event Assessment"
+        },
+        {
+          "week": 13,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-07-16",
+          "location": "Location TBC",
+          "topic": "The Psychology of Debriefing"
+        },
+        {
+          "week": 14,
+          "type": "break",
+          "highlight": false,
+          "date": "2025-07-23",
+          "location": "University Closed",
+          "topic": "Summer Break"
+        },
+        {
+          "week": 15,
+          "type": "break",
+          "highlight": false,
+          "date": "2025-07-30",
+          "location": "University Closed",
+          "topic": "Summer Break"
+        },
+        {
+          "week": 16,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-08-06",
+          "location": "Location TBC",
+          "topic": "Debriefing Masterclass"
+        },
+        {
+          "week": 17,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-08-13",
+          "location": "Location TBC",
+          "topic": "OSCE Simulation & Peer Practice"
+        },
+        {
+          "week": 18,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-08-20",
+          "location": "Location TBC",
+          "topic": "Reflective Simulation Leadership"
+        },
+        {
+          "week": 19,
+          "type": "assessment",
+          "highlight": true,
+          "date": "2025-08-27",
+          "location": "Location TBC",
+          "topic": "A2: Debriefing OSCE"
+        }
+      ]
     },
-    {
-      "week": 2,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "asd"
-    },
-    {
-      "week": 3,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "asd"
+    "september": {
+      "cohort": "September",
+      "moduleName": "Digital Technologies in Education",
+      "moduleCode": "ED70013X",
+      "year": "2",
+      "moduleLeader": "Sam McNab",
+      "firstTeachingDate": "2025-09-23",
+      "moduleTutors": [
+        {
+          "name": "Sam McNab",
+          "campus": "London"
+        },
+        {
+          "name": "Antony Newman",
+          "campus": "Reading"
+        }
+      ],
+      "weeks": [
+        {
+          "week": 1,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-09-23",
+          "location": "Location TBC",
+          "topic": "Introduction to Digital Tech in Sim Ed"
+        },
+        {
+          "week": 2,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-09-30",
+          "location": "Location TBC",
+          "topic": "Simulation Platforms & Tools"
+        },
+        {
+          "week": 3,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-10-07",
+          "location": "Location TBC",
+          "topic": "Design Thinking & Scenario Building"
+        },
+        {
+          "week": 4,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-10-14",
+          "location": "Location TBC",
+          "topic": "User Experience, Access & Inclusion"
+        },
+        {
+          "week": 5,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-10-21",
+          "location": "Location TBC",
+          "topic": "Debriefing in Digital Contexts"
+        },
+        {
+          "week": 6,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-10-28",
+          "location": "Location TBC",
+          "topic": "Gamification & Interactivity"
+        },
+        {
+          "week": 7,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-11-04",
+          "location": "Location TBC",
+          "topic": "Ethics, Privacy & Professionalism"
+        },
+        {
+          "week": 8,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-11-11",
+          "location": "Location TBC",
+          "topic": "Peer Review & Feedback"
+        },
+        {
+          "week": 9,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-11-18",
+          "location": "Online",
+          "topic": "Independent Study"
+        },
+        {
+          "week": 10,
+          "type": "reading",
+          "highlight": false,
+          "date": "2025-11-25",
+          "location": "Online",
+          "topic": "Project Preparation"
+        },
+        {
+          "week": 11,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-12-02",
+          "location": "Location TBC",
+          "topic": "Feedback Lab"
+        },
+        {
+          "week": 12,
+          "type": "assessment",
+          "highlight": true,
+          "date": "2025-12-09",
+          "location": "Location TBC",
+          "topic": "A1: Immersive Event Assessment"
+        },
+        {
+          "week": 13,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2025-12-16",
+          "location": "Location TBC",
+          "topic": "The Psychology of Debriefing"
+        },
+        {
+          "week": 14,
+          "type": "break",
+          "highlight": false,
+          "date": "2025-12-23",
+          "location": "University Closed",
+          "topic": "University Closed for Winter Break"
+        },
+        {
+          "week": 15,
+          "type": "break",
+          "highlight": false,
+          "date": "2025-12-30",
+          "location": "University Closed",
+          "topic": "University Closed for Winter Break"
+        },
+        {
+          "week": 16,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2026-01-06",
+          "location": "Location TBC",
+          "topic": "Debriefing Masterclass"
+        },
+        {
+          "week": 17,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2026-01-13",
+          "location": "Location TBC",
+          "topic": "OSCE Simulation & Peer Practice"
+        },
+        {
+          "week": 18,
+          "type": "teaching",
+          "highlight": false,
+          "date": "2026-01-20",
+          "location": "Location TBC",
+          "topic": "Reflective Simulation Leadership"
+        },
+        {
+          "week": 19,
+          "type": "assessment",
+          "highlight": true,
+          "date": "2026-01-27",
+          "location": "Location TBC",
+          "topic": "A2: Debriefing OSCE"
+        }
+      ]
     }
-  ]
-},
-"ED70013X": {
-  "moduleName": "Digital Technologies in Education",
-  "moduleCode": "ED70013X",
-  "year": "2",
-  "moduleLeader": "Sam McNab",
-  "moduleTutors": [
-    {
-      "name": "Sam McNab",
-      "campus": "London"
-    },
-    {
-      "name": "Antony Newman",
-      "campus": "Reading"
-    }
-  ],
-  "weeks": [
-    {
-      "week": 1,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Introduction to Digital Tech in Sim Ed"
-    },
-    {
-      "week": 2,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Simulation Platforms & Tools"
-    },
-    {
-      "week": 3,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Design Thinking & Scenario Building"
-    },
-    {
-      "week": 4,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "User Experience, Access & Inclusion"
-    },
-    {
-      "week": 5,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Debriefing in Digital Contexts"
-    },
-    {
-      "week": 6,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Gamification & Interactivity"
-    },
-    {
-      "week": 7,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Ethics, Privacy & Professionalism"
-    },
-    {
-      "week": 8,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Peer Review & Feedback"
-    },
-    {
-      "week": 9,
-      "type": "reading",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Independent Study"
-    },
-    {
-      "week": 10,
-      "type": "reading",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Project Preparation"
-    },
-    {
-      "week": 11,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Feedback Lab"
-    },
-    {
-      "week": 12,
-      "type": "assessment",
-      "highlight": true,
-      "date": "",
-      "location": "",
-      "topic": "A1: Immersive Event Assessment"
-    },
-    {
-      "week": 13,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "The Psychology of Debriefing"
-    },
-    {
-      "week": 14,
-      "type": "break",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "University Closed for Winter Break"
-    },
-    {
-      "week": 15,
-      "type": "break",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "University Closed for Winter Break"
-    },
-    {
-      "week": 16,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Debriefing Masterclass"
-    },
-    {
-      "week": 17,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "OSCE Simulation & Peer Practice"
-    },
-    {
-      "week": 18,
-      "type": "teaching",
-      "highlight": false,
-      "date": "",
-      "location": "",
-      "topic": "Reflective Simulation Leadership"
-    },
-    {
-      "week": 19,
-      "type": "assessment",
-      "highlight": true,
-      "date": "",
-      "location": "",
-      "topic": "A2: Debriefing OSCE"
-    }
-  ]
-}
+  }
 }

@@ -6,6 +6,7 @@
   <title>Module Timetable Generator</title>
   <link rel="stylesheet" href="../../styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="../../auth.js"></script>
   <style>
     /* CSS Variables for consistent theming */
     :root {
@@ -747,7 +748,7 @@
         <div class="title-main">🤖 MScSimEd</div>
       </a>
       <span class="title-separator">|</span>
-      <div class="title-subtitle">📋 TimetableGen</div>
+      <div class="title-subtitle">📄 New Preset</div>
     </div>
     <div class="navbar-links">
       <div class="dropdown">
@@ -782,6 +783,11 @@
         </div>
         <div class="form-row">
           <div><label class="required">Module Leader</label><input type="text" name="moduleLeader" required placeholder="Enter module leader name"></div>
+          <div><label class="required">Cohort</label><select name="cohort" required>
+            <option value="">Select Cohort</option>
+            <option value="april">🌱 April Cohort</option>
+            <option value="september">🍂 September Cohort</option>
+          </select></div>
         </div>
       </form>
     </div>
@@ -923,6 +929,7 @@
       const moduleCode = document.querySelector('[name="moduleCode"]').value;
       const year = document.querySelector('[name="year"]').value;
       const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
+      const cohort = document.querySelector('[name="cohort"]').value;
 
       const tutorElements = document.querySelectorAll('.tutor-row');
       const moduleTutors = Array.from(tutorElements).map(row => ({
@@ -945,6 +952,7 @@
         moduleCode,
         year,
         moduleLeader,
+        cohort,
         moduleTutors,
         weeks
       };
@@ -958,11 +966,13 @@
       const moduleCode = document.querySelector('[name="moduleCode"]').value.trim();
       const year = document.querySelector('[name="year"]').value;
       const moduleLeader = document.querySelector('[name="moduleLeader"]').value.trim();
+      const cohort = document.querySelector('[name="cohort"]').value;
       
       if (!moduleName) errors.push("Module Name is required");
       if (!moduleCode) errors.push("Module Code is required");
       if (!year) errors.push("Year is required");
       if (!moduleLeader) errors.push("Module Leader is required");
+      if (!cohort) errors.push("Cohort is required");
       
       // Check weeks - use array index instead of reading from DOM
       const weekElements = document.querySelectorAll('.week-row');
@@ -1003,9 +1013,34 @@
           showToast("❌ Module Code is required for presets.json export", "error");
           return;
         }
-        json = JSON.stringify({ [data.moduleCode]: data }, null, 2);
+        if (!data.cohort) {
+          showToast("❌ Cohort is required for presets.json export", "error");
+          return;
+        }
+        // Create the nested structure for presets.json
+        const presetStructure = {
+          [data.moduleCode]: {
+            [data.cohort]: {
+              cohort: data.cohort === 'april' ? 'April' : 'September',
+              moduleName: data.moduleName,
+              moduleCode: data.moduleCode,
+              year: data.year,
+              moduleLeader: data.moduleLeader,
+              firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23',
+              moduleTutors: data.moduleTutors,
+              weeks: data.weeks
+            }
+          }
+        };
+        json = JSON.stringify(presetStructure, null, 2);
       } else {
-        json = JSON.stringify(data, null, 2);
+        // Export as single preset with cohort info
+        const singlePreset = {
+          ...data,
+          cohort: data.cohort === 'april' ? 'April' : 'September',
+          firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23'
+        };
+        json = JSON.stringify(singlePreset, null, 2);
       }
       navigator.clipboard.writeText(json).then(() => {
         showToast("✅ Preset JSON copied to clipboard!", "success");
@@ -1028,9 +1063,34 @@
           showToast("❌ Module Code is required for presets.json export", "error");
           return;
         }
-        json = JSON.stringify({ [data.moduleCode]: data }, null, 2);
+        if (!data.cohort) {
+          showToast("❌ Cohort is required for presets.json export", "error");
+          return;
+        }
+        // Create the nested structure for presets.json
+        const presetStructure = {
+          [data.moduleCode]: {
+            [data.cohort]: {
+              cohort: data.cohort === 'april' ? 'April' : 'September',
+              moduleName: data.moduleName,
+              moduleCode: data.moduleCode,
+              year: data.year,
+              moduleLeader: data.moduleLeader,
+              firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23',
+              moduleTutors: data.moduleTutors,
+              weeks: data.weeks
+            }
+          }
+        };
+        json = JSON.stringify(presetStructure, null, 2);
       } else {
-        json = JSON.stringify(data, null, 2);
+        // Export as single preset with cohort info
+        const singlePreset = {
+          ...data,
+          cohort: data.cohort === 'april' ? 'April' : 'September',
+          firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23'
+        };
+        json = JSON.stringify(singlePreset, null, 2);
       }
       const blob = new Blob([json], { type: "application/json" });
       const link = document.createElement("a");
@@ -1323,6 +1383,7 @@
       document.querySelector('[name="moduleCode"]').value = '';
       document.querySelector('[name="year"]').value = '';
       document.querySelector('[name="moduleLeader"]').value = '';
+      document.querySelector('[name="cohort"]').value = '';
 
       // Reset tutors (keep only one empty row)
       clearTutors();
@@ -1369,6 +1430,7 @@
         moduleCode: document.querySelector('[name="moduleCode"]').value,
         year: document.querySelector('[name="year"]').value,
         moduleLeader: document.querySelector('[name="moduleLeader"]').value,
+        cohort: document.querySelector('[name="cohort"]').value,
         tutors: getTutorsData(),
         weeks: getWeeksData()
       };
@@ -1386,6 +1448,7 @@
           if (data.moduleCode) document.querySelector('[name="moduleCode"]').value = data.moduleCode;
           if (data.year) document.querySelector('[name="year"]').value = data.year;
           if (data.moduleLeader) document.querySelector('[name="moduleLeader"]').value = data.moduleLeader;
+          if (data.cohort) document.querySelector('[name="cohort"]').value = data.cohort;
 
 
           // Load tutors
@@ -1511,8 +1574,9 @@
       const moduleCode = document.querySelector('[name="moduleCode"]').value.trim();
       const year = document.querySelector('[name="year"]').value;
       const moduleLeader = document.querySelector('[name="moduleLeader"]').value.trim();
+      const cohort = document.querySelector('[name="cohort"]').value;
       
-      const isComplete = moduleName && moduleCode && year && moduleLeader;
+      const isComplete = moduleName && moduleCode && year && moduleLeader && cohort;
       
       const tutorSection = document.getElementById('tutorSection');
       const weekSection = document.getElementById('weekSection');
