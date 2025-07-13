@@ -1,0 +1,1369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Team Generator | MScSimEd</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="../favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../favicon/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../favicon/web-app-manifest-512x512.png">
+  <link rel="manifest" href="../favicon/site.webmanifest">
+  <meta name="theme-color" content="#4a90e2">
+  
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="../../auth.js"></script>
+  <style>
+    /* Team Generator Specific Styles */
+    .team-member-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+    }
+
+    .team-member-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      cursor: pointer;
+      padding: 12px;
+      border-radius: 8px;
+      transition: background-color 0.2s ease;
+    }
+
+    .team-member-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .team-member-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      flex: 1;
+    }
+
+    .team-member-toggle {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .team-member-content {
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .team-member-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .remove-team-member {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background-color 0.2s ease;
+    }
+
+    .remove-team-member:hover {
+      background: #c82333;
+    }
+
+    .team-member-fields {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .team-member-fields label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .team-member-fields input,
+    .team-member-fields select {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .team-member-fields input:focus,
+    .team-member-fields select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+
+    .add-team-member-btn {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+    }
+
+    .add-team-member-btn:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* JSON Import Section Styles */
+    .json-import-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .section-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .section-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+    }
+
+    .toggle-icon {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .section-content {
+      padding: 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .import-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border-bottom-color: var(--button-primary);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 0 20px 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .json-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+
+    .json-textarea:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+
+    .text-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .import-btn, .clear-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .import-btn {
+      background: var(--button-primary);
+      color: white;
+    }
+
+    .import-btn:hover:not(:disabled) {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .import-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .clear-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .clear-btn:hover:not(:disabled) {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+
+    .clear-btn:disabled {
+      background: var(--border-color);
+      color: var(--text-secondary);
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .file-upload-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .file-select-btn {
+      padding: 10px 16px;
+      background: var(--button-secondary);
+      color: var(--text-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .file-select-btn:hover {
+      background: var(--button-secondary-hover);
+      transform: translateY(-1px);
+    }
+
+    .selected-file {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Footer spacer and sticky footer */
+    .footer-spacer {
+      height: 90px;
+    }
+
+    @media (max-width: 768px) {
+      .team-member-fields {
+        grid-template-columns: 1fr;
+      }
+      
+      .text-buttons {
+        flex-direction: column;
+      }
+      
+      .import-btn,
+      .clear-btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#teamForm" class="skip-link">Skip to main content</a>
+  
+  <!-- Navbar -->
+  <nav class="main-navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-title">
+        <a href="../index.html" style="text-decoration: none; color: inherit;" aria-label="MScSimEd Home">
+          <div class="title-main">
+            <img src="../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
+            MScSimEd
+          </div>
+        </a>
+      <span class="title-separator">|</span>
+        <div class="title-subtitle">👥 Team</div>
+    </div>
+      <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    <div class="navbar-links">
+        <div class="dropdown">
+          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
+          <div class="dropdown-content" role="menu">
+            <a href="../timetable/generate.html" role="menuitem">🎯 Generate</a>
+            <a href="../timetable/preset/new.html" role="menuitem">📄 New Preset</a>
+            <a href="../timetable/preset/edit.html" role="menuitem">✏️ Edit Preset</a>
+          </div>
+        </div>
+        <a href="../overview/new.html" class="navbar-link">📘 Module Overview</a>
+        <a href="generate.html" class="navbar-link">👥 Module Team</a>
+        <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </nav>
+
+  <!-- JSON Import Section -->
+  <div class="json-import-section">
+    <div class="section-header" onclick="toggleJsonImport()">
+      <h3>📄 Import Custom JSON</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-content" id="jsonImportContent">
+      <div class="import-tabs">
+        <button class="tab-btn active" onclick="switchTab('paste')">📋 Paste JSON</button>
+        <button class="tab-btn" onclick="switchTab('file')">📁 Upload File</button>
+      </div>
+      
+      <div id="pasteTab" class="tab-content active">
+        <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON team data here..." oninput="updateTextButtons()"></textarea>
+        <div class="text-buttons">
+          <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>📥 Import JSON</button>
+          <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>🗑️ Clear</button>
+        </div>
+      </div>
+      
+      <div id="fileTab" class="tab-content">
+        <div class="file-upload-area">
+          <input type="file" id="jsonFileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
+          <button class="file-select-btn" onclick="document.getElementById('jsonFileInput').click()">📁 Choose JSON File</button>
+          <span id="selectedFileName" class="selected-file">No file selected</span>
+        </div>
+        <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>📥 Import File</button>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- Team Form -->
+  <div class="container">
+    <form id="teamForm">
+      <!-- Module Leader Section -->
+      <div class="form-section">
+        <h2><i class="fas fa-crown"></i> Module Leader</h2>
+        <p>Select or manually enter the module leader information.</p>
+        
+        <!-- Module Leader Preset Buttons -->
+        <div class="preset-container" role="group" aria-label="Module leader presets" id="leaderPresetContainer">
+          <button type="button" class="preset-btn" onclick="loadLeaderPreset('sam-mcnab')" aria-label="Load Sam McNab as Module Leader">
+            <strong>Sam McNab</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="loadLeaderPreset('antony-newman')" aria-label="Load Antony Newman as Module Leader">
+            <strong>Antony Newman</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="loadLeaderPreset('sam-knipe')" aria-label="Load Sam Knipe as Module Leader">
+            <strong>Sam Knipe</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="loadLeaderPreset('anita-sudhagar')" aria-label="Load Anita Sudhagar as Module Leader">
+            <strong>Anita Sudhagar</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+        </div>
+        
+        <button type="button" class="add-team-member-btn" onclick="addManualLeader()">
+          <i class="fas fa-plus"></i> Add Manual Module Leader
+        </button>
+
+        <div id="module-leader-container">
+          <!-- Module leader card will be added here -->
+        </div>
+      </div>
+
+      <!-- Module Tutors Section -->
+      <div class="form-section">
+        <h2><i class="fas fa-users"></i> Module Tutors</h2>
+        <p>Add module tutors to your team. You can select from presets or add manually.</p>
+        
+        <!-- Module Tutors Preset Buttons -->
+        <div class="preset-container" role="group" aria-label="Module tutor presets" id="tutorPresetContainer">
+          <button type="button" class="preset-btn" onclick="addTutorPreset('sam-mcnab')" aria-label="Add Sam McNab as Module Tutor">
+            <strong>Sam McNab</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="addTutorPreset('antony-newman')" aria-label="Add Antony Newman as Module Tutor">
+            <strong>Antony Newman</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="addTutorPreset('sam-knipe')" aria-label="Add Sam Knipe as Module Tutor">
+            <strong>Sam Knipe</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+          <button type="button" class="preset-btn" onclick="addTutorPreset('anita-sudhagar')" aria-label="Add Anita Sudhagar as Module Tutor">
+            <strong>Anita Sudhagar</strong>
+            <span class="year-tag year-1">UWL Staff</span>
+          </button>
+        </div>
+        
+        <button type="button" class="add-team-member-btn" onclick="addManualTutor()">
+          <i class="fas fa-plus"></i> Add Manual Module Tutor
+        </button>
+
+        <div id="module-tutors-container">
+          <!-- Module tutor cards will be added here -->
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- iFrame Preview -->
+  <iframe id="previewFrame"></iframe>
+
+  <!-- Footer Spacer to prevent overlap -->
+  <div class="footer-spacer"></div>
+
+  <!-- Preview Controls -->
+  <div class="sticky-footer" role="toolbar" aria-label="Team actions">
+    <button id="previewBtn" onclick="previewTeam()" disabled aria-label="Preview team">🔍 Preview</button>
+    <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled aria-label="Open preview in new tab">🧾 New Tab</button>
+    <button id="copyBtn" onclick="copyFullHTML()" disabled aria-label="Copy team HTML">📋 Copy</button>
+    <button onclick="copyTeamJSON()" aria-label="Copy team JSON">📋 Copy JSON</button>
+    <button onclick="downloadTeamJSON()" aria-label="Download team JSON">💾 Download JSON</button>
+    <button class="reset-btn" id="resetBtn" onclick="confirmReset()" disabled aria-label="Reset all changes">🔄 Reset</button>
+  </div>
+
+  <!-- Modal for Reset Confirmation -->
+  <div id="resetModal" class="modal-overlay" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+    <div class="modal-box">
+      <h3 id="modal-title">Are you sure?</h3>
+      <p id="modal-description">This will clear all team member data. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="cancel-btn" aria-label="Cancel reset">Cancel</button>
+        <button onclick="performReset()" class="confirm-btn" aria-label="Confirm reset">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
+
+  <script>
+    let moduleLeader = null;
+    let moduleTutors = [];
+
+    // Preset team member data
+    const teamPresets = {
+      'sam-mcnab': {
+        name: "Sam McNab",
+        title: "Module Lead",
+        image: "https://www.uwl.ac.uk/sites/uwl/files/styles/statistic_2x/public/2024-04/Staff%20Profile%20700x700%20%286%29.png?h=031b01a4&itok=QkinGjHE",
+        email: "sam.mcnab@uwl.ac.uk",
+        teams: "mcnasam@uwl.ac.uk",
+        website: "https://www.uwl.ac.uk/staff/sam-mcnab",
+        phone: "02082094482"
+      },
+      'antony-newman': {
+        name: "Antony Newman",
+        title: "Module Lead",
+        image: "https://www.uwl.ac.uk/sites/uwl/files/styles/statistic_2x/public/2024-10/Staff%20Profile%20700x700_0.png?h=031b01a4&itok=gPK1xruL",
+        email: "antony.newman@uwl.ac.uk",
+        teams: "newmant@uwl.ac.uk",
+        website: "https://www.uwl.ac.uk/staff/antony-newman",
+        phone: "02082094062"
+      },
+      'sam-knipe': {
+        name: "Sam Knipe",
+        title: "Module Lead",
+        image: "https://i.imgur.com/4FsvBgw.jpeg",
+        email: "samantha.knipe@uwl.ac.uk",
+        teams: "knipsam@uwl.ac.uk",
+        website: "https://www.uwl.ac.uk/staff/samantha-knipe",
+        phone: "02082094037"
+      },
+      'anita-sudhagar': {
+        name: "Anita Sudhagar",
+        title: "Module Lead",
+        image: "https://i.imgur.com/4FsvBgw.jpeg",
+        email: "anita.sudhagar@uwl.ac.uk",
+        teams: "sudhani@uwl.ac.uk",
+        website: "https://www.uwl.ac.uk/staff/antony-newman",
+        phone: "02082094044"
+      }
+    };
+
+    // Theme management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    // Initialize theme on page load
+    initTheme();
+    
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      hamburger.classList.toggle('active');
+      navbarLinks.classList.toggle('active');
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
+        hamburger.classList.remove('active');
+        navbarLinks.classList.remove('active');
+      }
+    });
+
+    // JSON Import functionality
+    function toggleJsonImport() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        localStorage.setItem('jsonImportCollapsed', 'false');
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        localStorage.setItem('jsonImportCollapsed', 'true');
+      }
+    }
+
+    function switchTab(tabName) {
+      // Hide all tab contents
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // Remove active class from all tab buttons
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected tab content
+      document.getElementById(tabName + 'Tab').classList.add('active');
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+    }
+
+    function updateTextButtons() {
+      const textarea = document.getElementById('jsonTextarea');
+      const importBtn = document.getElementById('importFromText');
+      const clearBtn = document.getElementById('clearTextBtn');
+      
+      const hasContent = textarea.value.trim().length > 0;
+      importBtn.disabled = !hasContent;
+      clearBtn.disabled = !hasContent;
+    }
+
+    function importFromText() {
+      const jsonText = document.getElementById('jsonTextarea').value.trim();
+      
+      if (!jsonText) {
+        showToast('❌ Please enter JSON data', 'error');
+        return;
+      }
+      
+      try {
+        const data = JSON.parse(jsonText);
+        
+        // Handle both old and new JSON formats
+        if (data.teamMembers && Array.isArray(data.teamMembers)) {
+          // Old format - convert to new format
+          const leader = data.teamMembers.find(member => member.title.toLowerCase().includes('lead'));
+          const tutors = data.teamMembers.filter(member => !member.title.toLowerCase().includes('lead'));
+          
+          moduleLeader = leader || null;
+          moduleTutors = tutors;
+        } else if (data.moduleLeader !== undefined || data.moduleTutors !== undefined) {
+          // New format
+          moduleLeader = data.moduleLeader || null;
+          moduleTutors = data.moduleTutors || [];
+        } else {
+          showToast('❌ Invalid JSON format. Expected "teamMembers" array or "moduleLeader"/"moduleTutors" objects.', 'error');
+          return;
+        }
+        
+        renderModuleLeader();
+        renderModuleTutors();
+        updateLeaderPresetButtons();
+        enableActionButtons();
+        
+        const totalMembers = (moduleLeader ? 1 : 0) + moduleTutors.length;
+        showToast(`✅ Successfully imported ${totalMembers} team member(s)`, 'success');
+        
+      } catch (error) {
+        showToast('❌ Invalid JSON format: ' + error.message, 'error');
+      }
+    }
+
+    function clearTextarea() {
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      const fileNameSpan = document.getElementById('selectedFileName');
+      const importBtn = document.getElementById('importFromFile');
+      
+      if (file) {
+        fileNameSpan.textContent = file.name;
+        importBtn.disabled = false;
+      } else {
+        fileNameSpan.textContent = 'No file selected';
+        importBtn.disabled = true;
+      }
+    }
+
+    function importFromFile() {
+      const fileInput = document.getElementById('jsonFileInput');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        showToast('❌ Please select a file first', 'error');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = JSON.parse(e.target.result);
+          
+          // Handle both old and new JSON formats
+          if (data.teamMembers && Array.isArray(data.teamMembers)) {
+            // Old format - convert to new format
+            const leader = data.teamMembers.find(member => member.title.toLowerCase().includes('lead'));
+            const tutors = data.teamMembers.filter(member => !member.title.toLowerCase().includes('lead'));
+            
+            moduleLeader = leader || null;
+            moduleTutors = tutors;
+          } else if (data.moduleLeader !== undefined || data.moduleTutors !== undefined) {
+            // New format
+            moduleLeader = data.moduleLeader || null;
+            moduleTutors = data.moduleTutors || [];
+          } else {
+            showToast('❌ Invalid JSON format. Expected "teamMembers" array or "moduleLeader"/"moduleTutors" objects.', 'error');
+            return;
+          }
+          
+          renderModuleLeader();
+          renderModuleTutors();
+          updateLeaderPresetButtons();
+          enableActionButtons();
+          
+          const totalMembers = (moduleLeader ? 1 : 0) + moduleTutors.length;
+          showToast(`✅ Successfully imported ${totalMembers} team member(s) from file`, 'success');
+          
+        } catch (error) {
+          showToast('❌ Invalid JSON format: ' + error.message, 'error');
+        }
+      };
+      
+      reader.readAsText(file);
+    }
+
+    function loadLeaderPreset(presetKey) {
+      const preset = teamPresets[presetKey];
+      if (!preset) {
+        showToast('❌ Preset not found', 'error');
+        return;
+      }
+      
+      // Set as module leader
+      moduleLeader = { ...preset, title: "Module Lead" };
+      renderModuleLeader();
+      updateLeaderPresetButtons();
+      enableActionButtons();
+      showToast(`✅ ${preset.name} loaded as Module Leader`, 'success');
+    }
+
+    function addTutorPreset(presetKey) {
+      const preset = teamPresets[presetKey];
+      if (!preset) {
+        showToast('❌ Preset not found', 'error');
+        return;
+      }
+      
+      // Add as module tutor
+      const tutor = { ...preset, title: "Module Tutor" };
+      moduleTutors.push(tutor);
+      renderModuleTutors();
+      enableActionButtons();
+      showToast(`✅ ${preset.name} added as Module Tutor`, 'success');
+    }
+
+    function addManualLeader() {
+      // Check if a module leader already exists
+      if (moduleLeader !== null) {
+        showToast('❌ A module leader is already selected. Please remove the current leader first.', 'error');
+        return;
+      }
+      
+      moduleLeader = {
+        name: "",
+        title: "Module Lead",
+        image: "",
+        email: "",
+        teams: "",
+        website: "",
+        phone: ""
+      };
+      renderModuleLeader();
+      updateLeaderPresetButtons();
+    }
+
+    function addManualTutor() {
+      const tutor = {
+        name: "",
+        title: "Module Tutor",
+        image: "",
+        email: "",
+        teams: "",
+        website: "",
+        phone: ""
+      };
+      moduleTutors.push(tutor);
+      renderModuleTutors();
+    }
+
+    // Team member management
+    function addTeamMember(memberData = null) {
+      const member = memberData || {
+        name: "",
+        title: "",
+        image: "",
+        email: "",
+        teams: "",
+        website: "",
+        phone: ""
+      };
+
+      teamMembers.push(member);
+      renderTeamMembers();
+      enableActionButtons();
+    }
+
+    function removeTeamMember(index) {
+      teamMembers.splice(index, 1);
+      renderTeamMembers();
+      enableActionButtons();
+    }
+
+    function updateModuleLeader(field, value) {
+      moduleLeader[field] = value;
+      enableActionButtons();
+      
+      // Update header text if name changed
+      if (field === 'name') {
+        updateModuleLeaderHeader();
+      }
+    }
+
+    function updateModuleTutor(index, field, value) {
+      moduleTutors[index][field] = value;
+      enableActionButtons();
+      
+      // Update header text if name changed
+      if (field === 'name') {
+        updateModuleTutorHeader(index);
+      }
+    }
+
+    function toggleModuleLeader() {
+      const content = document.getElementById('content-leader');
+      const toggle = document.getElementById('toggle-leader');
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggle.textContent = '▼';
+      } else {
+        content.classList.add('collapsed');
+        toggle.textContent = '▶';
+      }
+    }
+
+    function toggleModuleTutor(index) {
+      const content = document.getElementById(`content-tutor-${index}`);
+      const toggle = document.getElementById(`toggle-tutor-${index}`);
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggle.textContent = '▼';
+      } else {
+        content.classList.add('collapsed');
+        toggle.textContent = '▶';
+      }
+    }
+
+    function removeModuleLeader() {
+      moduleLeader = null;
+      renderModuleLeader();
+      updateLeaderPresetButtons();
+      enableActionButtons();
+      showToast('🗑️ Module Leader removed', 'success');
+    }
+
+    function removeModuleTutor(index) {
+      moduleTutors.splice(index, 1);
+      renderModuleTutors();
+      enableActionButtons();
+      showToast('🗑️ Module Tutor removed', 'success');
+    }
+
+    function updateModuleLeaderHeader() {
+      const header = document.querySelector('#content-leader').previousElementSibling.querySelector('h3');
+      const headerText = moduleLeader.name 
+        ? `${moduleLeader.name} - Module Leader`
+        : 'Module Leader';
+      header.textContent = headerText;
+    }
+
+    function updateModuleTutorHeader(index) {
+      const header = document.querySelector(`#content-tutor-${index}`).previousElementSibling.querySelector('h3');
+      const tutor = moduleTutors[index];
+      const headerText = tutor.name 
+        ? `${tutor.name} - Module Tutor`
+        : `Module Tutor ${index + 1}`;
+      header.textContent = headerText;
+    }
+
+    function renderModuleLeader() {
+      const container = document.getElementById('module-leader-container');
+      container.innerHTML = '';
+
+      if (!moduleLeader) {
+        return;
+      }
+
+      const card = document.createElement('div');
+      card.className = 'team-member-card';
+      
+      const headerText = moduleLeader.name 
+        ? `${moduleLeader.name} - Module Leader`
+        : 'Module Leader';
+      
+      card.innerHTML = `
+        <div class="team-member-header" onclick="toggleModuleLeader()">
+          <h3>${headerText}</h3>
+          <span class="team-member-toggle" id="toggle-leader">▶</span>
+          <button type="button" class="remove-team-member" onclick="event.stopPropagation(); removeModuleLeader()">
+            <i class="fas fa-trash"></i> Remove
+          </button>
+        </div>
+        <div class="team-member-content collapsed" id="content-leader">
+          <div class="team-member-fields">
+            <div>
+              <label for="leader-name">Name *</label>
+              <input type="text" id="leader-name" value="${moduleLeader.name}" 
+                     onchange="updateModuleLeader('name', this.value)" required>
+            </div>
+            <div>
+              <label for="leader-image">Profile Image URL</label>
+              <input type="url" id="leader-image" value="${moduleLeader.image}" 
+                     onchange="updateModuleLeader('image', this.value)">
+            </div>
+            <div>
+              <label for="leader-email">Email Address *</label>
+              <input type="email" id="leader-email" value="${moduleLeader.email}" 
+                     onchange="updateModuleLeader('email', this.value)" required>
+            </div>
+            <div>
+              <label for="leader-teams">MS Teams Username</label>
+              <input type="text" id="leader-teams" value="${moduleLeader.teams}" 
+                     onchange="updateModuleLeader('teams', this.value)">
+            </div>
+            <div>
+              <label for="leader-website">Website URL</label>
+              <input type="url" id="leader-website" value="${moduleLeader.website}" 
+                     onchange="updateModuleLeader('website', this.value)">
+            </div>
+            <div>
+              <label for="leader-phone">Phone Number</label>
+              <input type="tel" id="leader-phone" value="${moduleLeader.phone}" 
+                     onchange="updateModuleLeader('phone', this.value)">
+            </div>
+          </div>
+        </div>
+      `;
+      
+      container.appendChild(card);
+    }
+
+    function renderModuleTutors() {
+      const container = document.getElementById('module-tutors-container');
+      container.innerHTML = '';
+
+      moduleTutors.forEach((tutor, index) => {
+        const card = document.createElement('div');
+        card.className = 'team-member-card';
+        
+        const headerText = tutor.name 
+          ? `${tutor.name} - Module Tutor`
+          : `Module Tutor ${index + 1}`;
+        
+        card.innerHTML = `
+          <div class="team-member-header" onclick="toggleModuleTutor(${index})">
+            <h3>${headerText}</h3>
+            <span class="team-member-toggle" id="toggle-tutor-${index}">▶</span>
+            <button type="button" class="remove-team-member" onclick="event.stopPropagation(); removeModuleTutor(${index})">
+              <i class="fas fa-trash"></i> Remove
+            </button>
+          </div>
+          <div class="team-member-content collapsed" id="content-tutor-${index}">
+            <div class="team-member-fields">
+              <div>
+                <label for="tutor-name-${index}">Name *</label>
+                <input type="text" id="tutor-name-${index}" value="${tutor.name}" 
+                       onchange="updateModuleTutor(${index}, 'name', this.value)" required>
+              </div>
+              <div>
+                <label for="tutor-image-${index}">Profile Image URL</label>
+                <input type="url" id="tutor-image-${index}" value="${tutor.image}" 
+                       onchange="updateModuleTutor(${index}, 'image', this.value)">
+              </div>
+              <div>
+                <label for="tutor-email-${index}">Email Address *</label>
+                <input type="email" id="tutor-email-${index}" value="${tutor.email}" 
+                       onchange="updateModuleTutor(${index}, 'email', this.value)" required>
+              </div>
+              <div>
+                <label for="tutor-teams-${index}">MS Teams Username</label>
+                <input type="text" id="tutor-teams-${index}" value="${tutor.teams}" 
+                       onchange="updateModuleTutor(${index}, 'teams', this.value)">
+              </div>
+              <div>
+                <label for="tutor-website-${index}">Website URL</label>
+                <input type="url" id="tutor-website-${index}" value="${tutor.website}" 
+                       onchange="updateModuleTutor(${index}, 'website', this.value)">
+              </div>
+              <div>
+                <label for="tutor-phone-${index}">Phone Number</label>
+                <input type="tel" id="tutor-phone-${index}" value="${tutor.phone}" 
+                       onchange="updateModuleTutor(${index}, 'phone', this.value)">
+              </div>
+            </div>
+          </div>
+        `;
+        
+        container.appendChild(card);
+      });
+    }
+
+    function updateLeaderPresetButtons() {
+      const leaderButtons = document.querySelectorAll('#leaderPresetContainer .preset-btn');
+      const manualLeaderBtn = document.querySelector('button[onclick="addManualLeader()"]');
+      const hasLeader = moduleLeader !== null;
+      
+      // Update preset buttons
+      leaderButtons.forEach(button => {
+        button.disabled = hasLeader;
+        if (hasLeader) {
+          button.style.opacity = '0.5';
+          button.style.cursor = 'not-allowed';
+        } else {
+          button.style.opacity = '1';
+          button.style.cursor = 'pointer';
+        }
+      });
+      
+      // Update manual leader button
+      if (manualLeaderBtn) {
+        manualLeaderBtn.disabled = hasLeader;
+        if (hasLeader) {
+          manualLeaderBtn.style.opacity = '0.5';
+          manualLeaderBtn.style.cursor = 'not-allowed';
+        } else {
+          manualLeaderBtn.style.opacity = '1';
+          manualLeaderBtn.style.cursor = 'pointer';
+        }
+      }
+    }
+
+    function enableActionButtons() {
+      const hasValidLeader = moduleLeader && moduleLeader.name && moduleLeader.email;
+      const hasValidTutors = moduleTutors.length > 0 && moduleTutors.every(tutor => 
+        tutor.name && tutor.email
+      );
+      const hasValidTeam = hasValidLeader && hasValidTutors;
+      
+      document.getElementById('previewBtn').disabled = !hasValidTeam;
+      document.getElementById('openTabBtn').disabled = !hasValidTeam;
+      document.getElementById('copyBtn').disabled = !hasValidTeam;
+      document.getElementById('resetBtn').disabled = !hasValidTeam;
+    }
+
+    // Preview and export functions
+    function previewTeam() {
+      const html = generateHTML();
+      const previewFrame = document.getElementById('previewFrame');
+      previewFrame.srcdoc = html;
+      previewFrame.style.display = 'block';
+      showToast('✅ Team preview generated', 'success');
+    }
+
+    function openPreviewInNewTab() {
+      const html = generateHTML();
+      const newWindow = window.open('', '_blank');
+      newWindow.document.write(html);
+      newWindow.document.close();
+    }
+
+    function copyFullHTML() {
+      const html = generateHTML();
+      navigator.clipboard.writeText(html).then(() => {
+        showToast('✅ HTML copied to clipboard', 'success');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        showToast('❌ Failed to copy to clipboard', 'error');
+      });
+    }
+
+
+
+    function copyTeamJSON() {
+      const jsonData = {
+        moduleLeader: moduleLeader,
+        moduleTutors: moduleTutors
+      };
+      
+      navigator.clipboard.writeText(JSON.stringify(jsonData, null, 2)).then(() => {
+        showToast('✅ JSON copied to clipboard', 'success');
+      }).catch(err => {
+        console.error('Failed to copy: ', err);
+        showToast('❌ Failed to copy JSON', 'error');
+      });
+    }
+
+    function downloadTeamJSON() {
+      const jsonData = {
+        moduleLeader: moduleLeader,
+        moduleTutors: moduleTutors
+      };
+      
+      const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'team-data.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast('✅ JSON file downloaded', 'success');
+    }
+
+    function confirmReset() {
+      document.getElementById('resetModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+
+    function performReset() {
+      moduleLeader = null;
+      moduleTutors = [];
+      renderModuleLeader();
+      renderModuleTutors();
+      updateLeaderPresetButtons();
+      enableActionButtons();
+      
+      // Clear JSON textarea
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+      
+      // Hide preview
+      document.getElementById('previewFrame').style.display = 'none';
+      
+      closeModal();
+      showToast('🔄 Team data reset', 'success');
+    }
+
+    function generateHTML() {
+      let cardsHTML = '';
+      
+      // Generate module leader card (first on its own row)
+      if (moduleLeader && moduleLeader.name && moduleLeader.email) {
+        cardsHTML += generateCardHTML(moduleLeader, true);
+      }
+
+      // Generate module tutor cards
+      if (moduleTutors.length > 0) {
+        const validTutors = moduleTutors.filter(tutor => tutor.name && tutor.email);
+        if (validTutors.length > 0) {
+          cardsHTML += '<div class="card-row">\n';
+          validTutors.forEach(tutor => {
+            cardsHTML += generateCardHTML(tutor, false);
+          });
+          cardsHTML += '</div>\n';
+        }
+      }
+
+      return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <title>Module Team</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: #f5f7fa;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .head {
+      background: linear-gradient(135deg, #004080, #0073e6);
+      color: #fff;
+      text-align: center;
+      padding: 20px 16px;
+      margin: 10px auto 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+
+    .head h1 {
+      font-size: 2rem;
+      margin: 0;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.3);
+      letter-spacing: 1px;
+    }
+
+    .card-row {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin: 20px auto;
+      padding: 0 20px;
+    }
+    .card-row:last-of-type {
+      padding-bottom: 60px; 
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      max-width: 300px;
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .card img {
+      width: 100%;
+      border-bottom: 1px solid #eee;
+    }
+
+    .card h1 {
+      font-size: 1.5rem;
+      margin: 16px 0 8px;
+    }
+
+    .title {
+      color: #666;
+      font-size: 1rem;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      margin: 4px 0;
+      color: #333;
+    }
+
+    .card-links {
+      margin: 24px 0;
+    }
+
+    .card a {
+      text-decoration: none;
+      color: #333;
+      margin: 0 6px;
+      font-size: 20px;
+      transition: color 0.3s ease;
+    }
+
+    .card a:hover {
+      color: #0073e6;
+    }
+
+    .card button {
+      border: none;
+      outline: 0;
+      padding: 10px;
+      color: #fff;
+      background-color: #004080;
+      cursor: pointer;
+      width: 80%;
+      font-size: 16px;
+      border-radius: 8px;
+      margin: 12px auto;
+      display: block;
+      transition: background-color 0.3s ease;
+    }
+
+    .card button:hover {
+      background-color: #0059b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="head">
+    <h1>Module Team</h1>
+  </div>
+
+${cardsHTML}
+</html>`;
+    }
+
+    function generateCardHTML(member, isModuleLead) {
+      const cardRow = isModuleLead ? '  <div class="card-row">\n' : '';
+      const cardRowEnd = isModuleLead ? '  </div>\n' : '';
+      
+      return `${cardRow}    <div class="card">
+      <img src="${member.image || 'https://via.placeholder.com/300x300?text=Profile+Image'}" alt="${member.name}">
+      <h1>${member.name}</h1>
+      <p class="title">${member.title}</p>
+      <p>University of West London</p>
+      <div class="card-links">
+        <a href="mailto:${member.email}" target="_blank"><i class="fa fa-envelope"></i></a>
+        ${member.teams ? `<a href="https://teams.microsoft.com/l/chat/0/0?users=${member.teams}" target="_blank"><i class="fa fa-comments"></i></a>` : ''}
+        ${member.website ? `<a href="${member.website}" target="_blank"><i class="fa fa-globe"></i></a>` : ''}
+        ${member.phone ? `<a href="tel:${member.phone}" target="_blank"><i class="fa fa-phone"></i></a>` : ''}
+      </div>
+      <p><a href="mailto:${member.email}" target="_blank"><button>Contact</button></a></p>
+    </div>${cardRowEnd}`;
+    }
+
+    // Toast notifications
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById('toast');
+      toast.textContent = message;
+      toast.className = `toast toast-${type}`;
+      toast.style.display = 'block';
+      
+      setTimeout(() => {
+        toast.style.display = 'none';
+      }, 3000);
+    }
+
+    // Initialize page
+    window.addEventListener('load', function() {
+      // Load JSON import collapsed state
+      const jsonImportCollapsed = localStorage.getItem('jsonImportCollapsed') === 'true';
+      if (jsonImportCollapsed) {
+        document.getElementById('jsonImportContent').classList.add('collapsed');
+        document.querySelector('.toggle-icon').textContent = '▶';
+      }
+      
+      // Initialize empty containers
+      renderModuleLeader();
+      renderModuleTutors();
+      updateLeaderPresetButtons();
+    });
+  </script>
+</body>
+</html> 
