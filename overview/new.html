@@ -498,6 +498,11 @@
       <span class="title-separator">|</span>
       <div class="title-subtitle">📘 Overview</div>
     </div>
+      <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
     <div class="navbar-links">
       <div class="dropdown">
         <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
@@ -507,8 +512,8 @@
           <a href="../timetable/preset/edit.html" role="menuitem">✏️ Edit Preset</a>
         </div>
       </div>
-      <!-- Replace the Overview dropdown with a direct link -->
       <a href="new.html" class="navbar-link">📘 Module Overview</a>
+      <a href="../team/generate.html" class="navbar-link">👥 Module Team</a>
       <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
     </div>
   </nav>
@@ -674,6 +679,26 @@
 
     // Initialize theme on page load
     initTheme();
+    
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      hamburger.classList.toggle('active');
+      navbarLinks.classList.toggle('active');
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
+        hamburger.classList.remove('active');
+        navbarLinks.classList.remove('active');
+      }
+    });
 
     // JSON Import functionality
     function toggleJsonImport() {

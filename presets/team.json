@@ -1,0 +1,40 @@
+{
+  "teamMembers": [
+    {
+      "name": "Sam McNab",
+      "title": "Module Lead",
+      "image": "https://www.uwl.ac.uk/sites/uwl/files/styles/statistic_2x/public/2024-04/Staff%20Profile%20700x700%20%286%29.png?h=031b01a4&itok=QkinGjHE",
+      "email": "sam.mcnab@uwl.ac.uk",
+      "teams": "mcnasam@uwl.ac.uk",
+      "website": "https://www.uwl.ac.uk/staff/sam-mcnab",
+      "phone": "02082094482"
+    },
+    {
+      "name": "Antony Newman",
+      "title": "Module Tutor",
+      "image": "https://www.uwl.ac.uk/sites/uwl/files/styles/statistic_2x/public/2024-10/Staff%20Profile%20700x700_0.png?h=031b01a4&itok=gPK1xruL",
+      "email": "antony.newman@uwl.ac.uk",
+      "teams": "newmant@uwl.ac.uk",
+      "website": "https://www.uwl.ac.uk/staff/antony-newman",
+      "phone": "02082094062"
+    },
+    {
+      "name": "Sam Knipe",
+      "title": "Module Tutor",
+      "image": "https://i.imgur.com/4FsvBgw.jpeg",
+      "email": "samantha.knipe@uwl.ac.uk",
+      "teams": "knipsam@uwl.ac.uk",
+      "website": "https://www.uwl.ac.uk/staff/samantha-knipe",
+      "phone": "02082094037"
+    },
+    {
+      "name": "Anita Sudhagar",
+      "title": "Module Tutor",
+      "image": "https://i.imgur.com/4FsvBgw.jpeg",
+      "email": "anita.sudhagar@uwl.ac.uk",
+      "teams": "sudhani@uwl.ac.uk",
+      "website": "https://www.uwl.ac.uk/staff/anita-sudhagar",
+      "phone": "02082094044"
+    }
+  ]
+} 
