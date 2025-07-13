@@ -49,7 +49,7 @@ function logout() {
     localStorage.setItem('theme', currentTheme);
   }
   
-  window.location.href = getIndexPath();
+  window.location.href = '/index.html';
 }
 
 // Initialize authentication check

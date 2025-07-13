@@ -31,16 +31,16 @@
       <div class="login-header">
         <div class="login-logo">
           <img src="images/logo.png" alt="MScSimEd Logo" style="width: 80px; height: 80px; object-fit: contain;">
-        </div>
+    </div>
         <h1>MScSimEd Tools</h1>
         <p>Please enter the password to access the timetable generator</p>
-      </div>
-      
+  </div>
+
       <form id="loginForm" class="login-form" onsubmit="authenticate(event)">
         <div class="input-group">
           <label for="password">Password:</label>
           <input type="password" id="password" name="password" required autocomplete="current-password" aria-describedby="passwordHelp">
-        </div>
+  </div>
         <button type="submit" class="login-btn" aria-label="Access application with password">🔓 Access Application</button>
       </form>
       
@@ -72,6 +72,8 @@
             <a href="timetable/preset/edit.html" role="menuitem">✏️ Edit Preset</a>
           </div>
         </div>
+        <!-- Replace the Overview dropdown with a direct link -->
+        <a href="overview/new.html" class="navbar-link">📘 Module Overview</a>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
         <button class="logout-btn" onclick="logout()" aria-label="Logout from application">🚪</button>
       </div>
@@ -83,6 +85,9 @@
       <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin-top: 32px;">
         <a href="timetable/generate.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; min-height: 44px;" aria-label="Go to timetable generator">
           📅 Timetable
+        </a>
+        <a href="overview/new.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; min-height: 44px;" aria-label="Go to overview generator">
+          📘 Overview
         </a>
         <a href="#" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-secondary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; opacity: 0.6; cursor: not-allowed; min-height: 44px;" aria-label="Coming soon feature" aria-disabled="true">
           🚧 Coming Soon

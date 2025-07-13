@@ -1,0 +1,34 @@
+{
+  "ED70011X": {
+    "moduleName": "Foundations of Simulation Education",
+    "moduleAims": "To introduce the principles and practices of simulation-based education.",
+    "learningOutcomes": [
+      "Describe the key concepts in simulation education.",
+      "Apply simulation techniques in educational settings."
+    ],
+    "moduleFlow": [
+      { "weeks": "1-2", "description": "Introduction and foundational concepts." },
+      { "weeks": "3-4", "description": "Practical simulation exercises." }
+    ],
+    "assessments": [
+      { "title": "A1 - Reflective Essay", "description": "Write a reflective essay on simulation education principles." }
+    ],
+    "keyNotes": "Attendance is mandatory.\nAll assignments must be submitted via the portal."
+  },
+  "ED70013X": {
+    "moduleName": "Digital Technologies in Education",
+    "moduleAims": "Explore the use of digital tools in modern educational practice.",
+    "learningOutcomes": [
+      "Evaluate digital platforms for education.",
+      "Design a digital learning activity."
+    ],
+    "moduleFlow": [
+      { "weeks": "1-3", "description": "Overview of digital technologies." },
+      { "weeks": "4-6", "description": "Project-based learning and presentations." }
+    ],
+    "assessments": [
+      { "title": "A1 - Digital Project", "description": "Create and present a digital learning project." }
+    ],
+    "keyNotes": "Bring your own device.\nParticipation in group work is required."
+  }
+} 

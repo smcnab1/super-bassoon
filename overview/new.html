@@ -1,0 +1,1584 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Overview Generator | MScSimEd</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../favicon/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="../favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../favicon/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../favicon/web-app-manifest-512x512.png">
+  <link rel="manifest" href="../favicon/site.webmanifest">
+  <meta name="theme-color" content="#4a90e2">
+  
+  <link rel="stylesheet" href="../styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="../../auth.js"></script>
+  <style>
+    /* CSS Variables for consistent theming */
+    :root {
+      --error-color: #dc3545;
+      --error-color-hover: #c82333;
+      --success-color: #28a745;
+      --success-color-hover: #218838;
+      --hover-bg: rgba(0, 0, 0, 0.05);
+      --card-bg: var(--bg-secondary);
+    }
+
+    [data-theme="dark"] {
+      --error-color: #e74c3c;
+      --error-color-hover: #c0392b;
+      --success-color: #27ae60;
+      --success-color-hover: #229954;
+      --hover-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modern responsive design for overview form */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Form layout improvements */
+    .form-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+    }
+
+    .form-section h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-section h2 i {
+      color: var(--button-primary);
+    }
+
+    /* Improved form row layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-row label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .form-row label.required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] .form-row label.required::after {
+      color: #e74c3c;
+    }
+
+    .form-row input,
+    .form-row select,
+    .form-row textarea {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .form-row input:focus,
+    .form-row select:focus,
+    .form-row textarea:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+
+    /* Dynamic content containers */
+    .dynamic-container {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 16px;
+      background: var(--input-bg);
+      margin-bottom: 16px;
+    }
+
+    .dynamic-item {
+      display: flex;
+      align-items: stretch;
+      gap: 12px;
+      margin-bottom: 12px;
+      padding: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-secondary);
+    }
+
+    .dynamic-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .dynamic-item input,
+    .dynamic-item textarea {
+      flex: 1;
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      min-height: 28px;
+      box-sizing: border-box;
+    }
+
+    .dynamic-item textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+
+    .dynamic-item input:focus,
+    .dynamic-item textarea:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    .button-placeholder {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 6px;
+      background: transparent;
+    }
+
+    /* Remove button styling */
+    .remove-btn {
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 0;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: bold;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+    }
+
+    .remove-btn:hover {
+      background: #660000;
+      transform: scale(1.05);
+    }
+
+    [data-theme="dark"] .remove-btn {
+      background: #a52a2a;
+    }
+
+    [data-theme="dark"] .remove-btn:hover {
+      background: #8b0000;
+    }
+
+    /* Add button styling */
+    .add-button {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-top: 12px;
+    }
+
+    .add-button:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Flow item specific styling */
+    .flow-item {
+      display: grid;
+      grid-template-columns: 1fr 2fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .flow-item:first-child {
+      grid-template-columns: 1fr 2fr 32px;
+    }
+
+    /* Assessment item specific styling */
+    .assessment-item {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .assessment-item:first-child {
+      padding-right: 44px;
+    }
+
+    /* JSON Import Section */
+    .json-import-section {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .section-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .section-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+    }
+
+    .toggle-icon {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .section-content {
+      padding: 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .section-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .import-tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border-color);
+      margin-bottom: 20px;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 16px;
+      background: var(--bg-secondary);
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .tab-btn:hover {
+      background: var(--hover-bg);
+      color: var(--text-primary);
+    }
+
+    .tab-btn.active {
+      background: var(--card-bg);
+      color: var(--text-primary);
+      border-bottom-color: var(--button-primary);
+    }
+
+    .tab-content {
+      display: none;
+      padding: 0 20px 20px;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .json-textarea {
+      width: 100%;
+      min-height: 150px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 12px;
+    }
+
+    .json-textarea:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    .text-buttons {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .import-btn, .clear-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .import-btn {
+      background: var(--button-primary);
+      color: white;
+    }
+
+    .import-btn:hover:not(:disabled) {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .import-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .clear-btn {
+      background: #dc3545;
+      color: white;
+    }
+
+    .clear-btn:hover:not(:disabled) {
+      background: #c82333;
+      transform: translateY(-1px);
+    }
+
+    .clear-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .file-upload-area {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .file-select-btn {
+      background: var(--button-secondary);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .file-select-btn:hover {
+      background: var(--button-secondary-hover);
+    }
+
+    .selected-file {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    /* Footer spacer and sticky footer */
+    .footer-spacer {
+      height: 90px;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+
+      .flow-item {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+      
+      .dynamic-item {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+      }
+
+      .form-section h2 {
+        font-size: 1.2rem;
+      }
+
+      .form-row input,
+      .form-row select,
+      .form-row textarea {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
+  <!-- Skip to main content link for accessibility -->
+  <a href="#overviewForm" class="skip-link">Skip to main content</a>
+  
+  <!-- Navbar -->
+  <nav class="main-navbar" role="navigation" aria-label="Main navigation">
+    <div class="navbar-title">
+        <a href="../../index.html" style="text-decoration: none; color: inherit;">
+            <div class="title-main">
+              <img src="../../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
+              MScSimEd
+            </div>
+          </a>
+      <span class="title-separator">|</span>
+      <div class="title-subtitle">📘 Overview</div>
+    </div>
+    <div class="navbar-links">
+      <div class="dropdown">
+        <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
+        <div class="dropdown-content" role="menu">
+          <a href="../timetable/generate.html" role="menuitem">🎯 Generate</a>
+          <a href="../timetable/preset/new.html" role="menuitem">📄 New Preset</a>
+          <a href="../timetable/preset/edit.html" role="menuitem">✏️ Edit Preset</a>
+        </div>
+      </div>
+      <!-- Replace the Overview dropdown with a direct link -->
+      <a href="new.html" class="navbar-link">📘 Module Overview</a>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+    </div>
+  </nav>
+
+  <!-- JSON Import Section -->
+  <div class="json-import-section">
+    <div class="section-header" onclick="toggleJsonImport()">
+      <h3>📄 Import Custom JSON</h3>
+      <span class="toggle-icon">▼</span>
+    </div>
+    <div class="section-content" id="jsonImportContent">
+      <div class="import-tabs">
+        <button class="tab-btn active" onclick="switchTab('paste')">📋 Paste JSON</button>
+        <button class="tab-btn" onclick="switchTab('file')">📁 Upload File</button>
+      </div>
+      
+      <div id="pasteTab" class="tab-content active">
+        <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON overview here..." oninput="updateTextButtons()"></textarea>
+        <div class="text-buttons">
+          <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>📥 Import JSON</button>
+          <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>🗑️ Clear</button>
+        </div>
+      </div>
+      
+      <div id="fileTab" class="tab-content">
+        <div class="file-upload-area">
+          <input type="file" id="jsonFileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
+          <button class="file-select-btn" onclick="document.getElementById('jsonFileInput').click()">📁 Choose JSON File</button>
+          <span id="selectedFileName" class="selected-file">No file selected</span>
+        </div>
+        <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>📥 Import File</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Preset Buttons for Module Overview -->
+  <div class="preset-container" role="group" aria-label="Module overview presets" id="overviewPresetContainer"></div>
+
+
+  <!-- Overview Form -->
+  <div class="container">
+    <form id="overviewForm">
+      <div class="form-section">
+        <h2><i class="fa fa-book"></i> Module Name</h2>
+        <div class="form-row">
+          <div>
+            <label class="required">Module Name</label>
+            <input type="text" id="moduleName" placeholder="Enter module name" required>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2><i class="fa fa-bullseye"></i> Module Aims</h2>
+        <div class="form-row">
+          <div>
+            <label class="required">Module Aims</label>
+            <textarea id="moduleAims" placeholder="Enter module aims and objectives..." required></textarea>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h2><i class="fa fa-graduation-cap"></i> Learning Outcomes</h2>
+        <div class="dynamic-container" id="learningOutcomesContainer">
+          <div class="dynamic-item">
+            <input type="text" placeholder="Enter learning outcome..." required>
+            <div class="button-placeholder"></div>
+          </div>
+        </div>
+        <button type="button" class="add-button" onclick="addLearningOutcome()">➕ Add Learning Outcome</button>
+      </div>
+
+      <div class="form-section">
+        <h2><i class="fa fa-random"></i> Module Flow</h2>
+        <div class="dynamic-container" id="moduleFlowContainer">
+          <div class="dynamic-item flow-item">
+            <input type="text" placeholder="Weeks (e.g., 1-8)" required>
+            <input type="text" placeholder="Description..." required>
+            <div class="button-placeholder"></div>
+          </div>
+        </div>
+        <button type="button" class="add-button" onclick="addFlowItem()">➕ Add Flow Item</button>
+      </div>
+
+      <div class="form-section">
+        <h2><i class="fa fa-pencil-square-o"></i> Assessment Overview</h2>
+        <div class="dynamic-container" id="assessmentContainer">
+          <div class="dynamic-item assessment-item">
+            <input type="text" placeholder="Assessment title (e.g., A1 - Business Pitch)" required>
+            <textarea placeholder="Assessment description..." required></textarea>
+            <div class="button-placeholder"></div>
+          </div>
+        </div>
+        <button type="button" class="add-button" onclick="addAssessment()">➕ Add Assessment</button>
+      </div>
+
+      <div class="form-section">
+        <h2><i class="fa fa-info-circle"></i> Key Notes for Students</h2>
+        <div class="form-row">
+          <div>
+            <label>Key Notes for Students</label>
+            <textarea id="keyNotes" placeholder="Enter key notes and important information for students..."></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- iFrame Preview -->
+  <iframe id="previewFrame"></iframe>
+
+  <!-- Footer Spacer to prevent overlap -->
+  <div class="footer-spacer"></div>
+
+  <!-- Preview Controls -->
+  <div class="sticky-footer" role="toolbar" aria-label="Overview actions">
+    <button id="previewBtn" onclick="previewOverview()" disabled aria-label="Preview overview">🔍 Preview</button>
+    <button id="openTabBtn" onclick="openPreviewInNewTab()" disabled aria-label="Open preview in new tab">🧾 New Tab</button>
+    <button id="copyBtn" onclick="copyFullHTML()" disabled aria-label="Copy overview HTML">📋 Copy</button>
+    <button id="pdfBtn" onclick="exportToPDF()" disabled aria-label="Export overview as PDF">📄 PDF</button>
+    <button onclick="copyOverviewJSON()" aria-label="Copy overview JSON">📋 Copy JSON</button>
+    <button onclick="downloadOverviewJSON()" aria-label="Download overview JSON">💾 Download JSON</button>
+    <button class="reset-btn" id="resetBtn" onclick="confirmReset()" disabled aria-label="Reset all changes">🔄 Reset</button>
+  </div>
+
+  <!-- Modal for Reset Confirmation -->
+  <div id="resetModal" class="modal-overlay" role="dialog" aria-labelledby="modal-title" aria-describedby="modal-description">
+    <div class="modal-box">
+      <h3 id="modal-title">Are you sure?</h3>
+      <p id="modal-description">This will clear all module overview data. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="cancel-btn" aria-label="Cancel reset">Cancel</button>
+        <button onclick="performReset()" class="confirm-btn" aria-label="Confirm reset">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script>
+    // Theme management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    // Initialize theme on page load
+    initTheme();
+
+    // JSON Import functionality
+    function toggleJsonImport() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        localStorage.setItem('jsonImportCollapsed', 'false');
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        localStorage.setItem('jsonImportCollapsed', 'true');
+      }
+    }
+
+    function switchTab(tabName) {
+      // Hide all tab contents
+      const tabContents = document.querySelectorAll('.tab-content');
+      tabContents.forEach(content => content.classList.remove('active'));
+      
+      // Remove active class from all tab buttons
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      tabButtons.forEach(btn => btn.classList.remove('active'));
+      
+      // Show selected tab content
+      document.getElementById(tabName + 'Tab').classList.add('active');
+      
+      // Add active class to clicked button
+      event.target.classList.add('active');
+    }
+
+    function updateTextButtons() {
+      const textarea = document.getElementById('jsonTextarea');
+      const importBtn = document.getElementById('importFromText');
+      const clearBtn = document.getElementById('clearTextBtn');
+      
+      const hasText = textarea.value.trim().length > 0;
+      importBtn.disabled = !hasText;
+      clearBtn.disabled = !hasText;
+    }
+
+    function clearTextarea() {
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      const fileNameSpan = document.getElementById('selectedFileName');
+      const importBtn = document.getElementById('importFromFile');
+      
+      if (file) {
+        fileNameSpan.textContent = file.name;
+        importBtn.disabled = false;
+      } else {
+        fileNameSpan.textContent = 'No file selected';
+        importBtn.disabled = true;
+      }
+    }
+
+    function importFromText() {
+      const textarea = document.getElementById('jsonTextarea');
+      const jsonText = textarea.value.trim();
+      
+      try {
+        const overviewData = JSON.parse(jsonText);
+        populateForm(overviewData);
+        showToast('JSON imported successfully!', 'success');
+        updateButtonStates();
+        closeJsonImport(); // Collapse JSON import section after successful import
+      } catch (error) {
+        showToast('Invalid JSON format. Please check your input.', 'error');
+      }
+    }
+
+    function importFromFile() {
+      const fileInput = document.getElementById('jsonFileInput');
+      const file = fileInput.files[0];
+      
+      if (!file) {
+        showToast('Please select a file first.', 'error');
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const overviewData = JSON.parse(e.target.result);
+          populateForm(overviewData);
+          showToast('File imported successfully!', 'success');
+          updateButtonStates();
+          closeJsonImport(); // Collapse JSON import section after successful import
+        } catch (error) {
+          showToast('Invalid JSON file. Please check the file format.', 'error');
+        }
+      };
+      reader.readAsText(file);
+    }
+
+    // Form management
+    function addLearningOutcome() {
+      const container = document.getElementById('learningOutcomesContainer');
+      const newItem = document.createElement('div');
+      newItem.className = 'dynamic-item';
+      newItem.innerHTML = `
+        <input type="text" placeholder="Enter learning outcome..." required>
+        <button type="button" class="remove-btn" onclick="removeLearningOutcome(this)">❌</button>
+      `;
+      container.appendChild(newItem);
+      
+      // Add event listener to new input
+      const newInput = newItem.querySelector('input');
+      newInput.addEventListener('input', function() {
+        updateButtonStates();
+        saveFormData();
+      });
+      
+      updateButtonStates();
+    }
+
+    function removeLearningOutcome(button) {
+      const container = document.getElementById('learningOutcomesContainer');
+      if (container.children.length > 1) {
+        button.parentElement.remove();
+      }
+      updateButtonStates();
+    }
+
+    function addFlowItem() {
+      const container = document.getElementById('moduleFlowContainer');
+      const newItem = document.createElement('div');
+      newItem.className = 'dynamic-item flow-item';
+      const isFirst = container.children.length === 0;
+      newItem.innerHTML = `
+        <input type="text" placeholder="Weeks (e.g., 1-8)" required>
+        <input type="text" placeholder="Description..." required>
+        ${isFirst ? '<div class="button-placeholder"></div>' : '<button type="button" class="remove-btn" onclick="removeFlowItem(this)">❌</button>'}
+      `;
+      container.appendChild(newItem);
+
+      // Add event listeners to new inputs
+      const newInputs = newItem.querySelectorAll('input');
+      newInputs.forEach(input => {
+        input.addEventListener('input', function() {
+          updateButtonStates();
+          saveFormData();
+        });
+      });
+
+      updateButtonStates();
+    }
+
+    function removeFlowItem(button) {
+      const container = document.getElementById('moduleFlowContainer');
+      if (container.children.length > 1) {
+        button.parentElement.remove();
+      }
+      updateButtonStates();
+    }
+
+    function addAssessment() {
+      const container = document.getElementById('assessmentContainer');
+      const newItem = document.createElement('div');
+      newItem.className = 'dynamic-item assessment-item';
+      const isFirst = container.children.length === 0;
+      newItem.innerHTML = `
+        <input type="text" placeholder="Assessment title (e.g., A1 - Business Pitch)" required>
+        <textarea placeholder="Assessment description..." required></textarea>
+        ${isFirst ? '<div class="button-placeholder"></div>' : '<button type="button" class="remove-btn" onclick="removeAssessment(this)">❌</button>'}
+      `;
+      container.appendChild(newItem);
+      
+      // Add event listeners to new elements
+      const newInput = newItem.querySelector('input');
+      const newTextarea = newItem.querySelector('textarea');
+      
+      newInput.addEventListener('input', function() {
+        updateButtonStates();
+        saveFormData();
+      });
+      
+      newTextarea.addEventListener('input', function() {
+        updateButtonStates();
+        saveFormData();
+      });
+      
+      updateButtonStates();
+    }
+
+    function removeAssessment(button) {
+      const container = document.getElementById('assessmentContainer');
+      if (container.children.length > 1) {
+        button.parentElement.remove();
+      }
+      updateButtonStates();
+    }
+
+    function populateForm(data) {
+      // Populate basic fields
+      document.getElementById('moduleName').value = data.moduleName || '';
+      document.getElementById('moduleAims').value = data.moduleAims || '';
+      document.getElementById('keyNotes').value = data.keyNotes || '';
+      
+      // Populate learning outcomes
+      const outcomesContainer = document.getElementById('learningOutcomesContainer');
+      outcomesContainer.innerHTML = '';
+      if (data.learningOutcomes && data.learningOutcomes.length > 0) {
+        data.learningOutcomes.forEach((outcome, index) => {
+          const item = document.createElement('div');
+          item.className = 'dynamic-item';
+          if (index === 0) {
+            item.innerHTML = `<input type="text" value="${outcome}" required><div class="button-placeholder"></div>`;
+          } else {
+            item.innerHTML = `
+              <input type="text" value="${outcome}" required>
+              <button type="button" class="remove-btn" onclick="removeLearningOutcome(this)">❌</button>
+            `;
+          }
+          outcomesContainer.appendChild(item);
+        });
+      } else {
+        addLearningOutcome();
+      }
+      
+      // Populate module flow
+      const flowContainer = document.getElementById('moduleFlowContainer');
+      flowContainer.innerHTML = '';
+      if (data.moduleFlow && data.moduleFlow.length > 0) {
+        data.moduleFlow.forEach((flow, index) => {
+          const item = document.createElement('div');
+          item.className = 'dynamic-item flow-item';
+          if (index === 0) {
+            item.innerHTML = `
+              <input type="text" value="${flow.weeks}" required>
+              <input type="text" value="${flow.description}" required>
+              <div class="button-placeholder"></div>
+            `;
+          } else {
+            item.innerHTML = `
+              <input type="text" value="${flow.weeks}" required>
+              <input type="text" value="${flow.description}" required>
+              <button type="button" class="remove-btn" onclick="removeFlowItem(this)">❌</button>
+            `;
+          }
+          flowContainer.appendChild(item);
+        });
+      } else {
+        addFlowItem();
+      }
+      
+      // Populate assessments
+      const assessmentContainer = document.getElementById('assessmentContainer');
+      assessmentContainer.innerHTML = '';
+      if (data.assessments && data.assessments.length > 0) {
+        data.assessments.forEach((assessment, index) => {
+          const item = document.createElement('div');
+          item.className = 'dynamic-item assessment-item';
+          if (index === 0) {
+            item.innerHTML = `
+              <input type="text" value="${assessment.title}" required>
+              <textarea required>${assessment.description}</textarea>
+              <div class="button-placeholder"></div>
+            `;
+          } else {
+            item.innerHTML = `
+              <input type="text" value="${assessment.title}" required>
+              <textarea required>${assessment.description}</textarea>
+              <button type="button" class="remove-btn" onclick="removeAssessment(this)">❌</button>
+            `;
+          }
+          assessmentContainer.appendChild(item);
+        });
+      } else {
+        addAssessment();
+      }
+      
+      // Setup event listeners for all populated elements
+      setupFormEventListeners();
+      updateButtonStates();
+    }
+
+    function getOverviewData() {
+      const learningOutcomes = Array.from(document.querySelectorAll('#learningOutcomesContainer input')).map(input => input.value.trim()).filter(value => value);
+      const moduleFlow = Array.from(document.querySelectorAll('#moduleFlowContainer .dynamic-item')).map(item => {
+        const inputs = item.querySelectorAll('input');
+        return {
+          weeks: inputs[0].value.trim(),
+          description: inputs[1].value.trim()
+        };
+      }).filter(flow => flow.weeks && flow.description);
+      
+      const assessments = Array.from(document.querySelectorAll('#assessmentContainer .dynamic-item')).map(item => {
+        const titleInput = item.querySelector('input');
+        const descriptionTextarea = item.querySelector('textarea');
+        return {
+          title: titleInput.value.trim(),
+          description: descriptionTextarea.value.trim()
+        };
+      }).filter(assessment => assessment.title && assessment.description);
+
+      return {
+        moduleName: document.getElementById('moduleName').value.trim(),
+        moduleAims: document.getElementById('moduleAims').value.trim(),
+        learningOutcomes: learningOutcomes,
+        moduleFlow: moduleFlow,
+        assessments: assessments,
+        keyNotes: document.getElementById('keyNotes').value.trim()
+      };
+    }
+
+    function updateButtonStates() {
+      const data = getOverviewData();
+      const isValid =
+        data.moduleName &&
+        data.moduleAims &&
+        data.learningOutcomes.length > 0 &&
+        data.moduleFlow.length > 0 &&
+        data.assessments.length > 0 &&
+        data.keyNotes;
+
+      // Enable/disable main action buttons based on full validation
+      document.getElementById('previewBtn').disabled = !isValid;
+      document.getElementById('openTabBtn').disabled = !isValid;
+      document.getElementById('copyBtn').disabled = !isValid;
+      document.getElementById('pdfBtn').disabled = !isValid;
+
+      // Enable reset/copy/download JSON if there is any data in the form
+      const hasAnyData =
+        data.moduleName ||
+        data.moduleAims ||
+        data.learningOutcomes.length > 0 ||
+        data.moduleFlow.length > 0 ||
+        data.assessments.length > 0 ||
+        data.keyNotes;
+      document.getElementById('resetBtn').disabled = !hasAnyData;
+      // Disable Copy JSON and Download JSON if no data
+      document.querySelectorAll('button[onclick="copyOverviewJSON()"], button[onclick="downloadOverviewJSON()"]')
+        .forEach(btn => btn.disabled = !hasAnyData);
+
+      // --- Validation styling ---
+      // Module Name
+      const moduleNameInput = document.getElementById('moduleName');
+      moduleNameInput.classList.remove('valid', 'invalid');
+      if (moduleNameInput.value.trim()) moduleNameInput.classList.add('valid');
+      else moduleNameInput.classList.add('invalid');
+
+      // Module Aims
+      const moduleAimsTextarea = document.getElementById('moduleAims');
+      moduleAimsTextarea.classList.remove('valid', 'invalid');
+      if (moduleAimsTextarea.value.trim()) moduleAimsTextarea.classList.add('valid');
+      else moduleAimsTextarea.classList.add('invalid');
+
+      // Learning Outcomes
+      const outcomeInputs = document.querySelectorAll('#learningOutcomesContainer input');
+      outcomeInputs.forEach(input => {
+        input.classList.remove('valid', 'invalid');
+        if (input.value.trim()) input.classList.add('valid');
+        else input.classList.add('invalid');
+      });
+
+      // Module Flow
+      const flowItems = document.querySelectorAll('#moduleFlowContainer .dynamic-item');
+      flowItems.forEach(item => {
+        const [weeks, desc] = item.querySelectorAll('input');
+        weeks.classList.remove('valid', 'invalid');
+        desc.classList.remove('valid', 'invalid');
+        if (weeks.value.trim() && desc.value.trim()) {
+          weeks.classList.add('valid');
+          desc.classList.add('valid');
+        } else {
+          weeks.classList.add('invalid');
+          desc.classList.add('invalid');
+        }
+      });
+
+      // Assessments
+      const assessmentItems = document.querySelectorAll('#assessmentContainer .dynamic-item');
+      assessmentItems.forEach(item => {
+        const title = item.querySelector('input');
+        const desc = item.querySelector('textarea');
+        title.classList.remove('valid', 'invalid');
+        desc.classList.remove('valid', 'invalid');
+        if (title.value.trim() && desc.value.trim()) {
+          title.classList.add('valid');
+          desc.classList.add('valid');
+        } else {
+          title.classList.add('invalid');
+          desc.classList.add('invalid');
+        }
+      });
+
+      // Key Notes
+      const keyNotesTextarea = document.getElementById('keyNotes');
+      keyNotesTextarea.classList.remove('valid', 'invalid');
+      if (keyNotesTextarea.value.trim()) keyNotesTextarea.classList.add('valid');
+      else keyNotesTextarea.classList.add('invalid');
+    }
+
+    // Preview functionality
+    function previewOverview() {
+      const data = getOverviewData();
+      const html = generateOverviewHTML(data);
+      
+      const previewFrame = document.getElementById('previewFrame');
+      previewFrame.style.display = 'block';
+      previewFrame.style.width = '100%';
+      previewFrame.style.height = '80vh';
+      previewFrame.style.border = 'none';
+      previewFrame.style.marginTop = '20px';
+      
+      const frameDoc = previewFrame.contentDocument || previewFrame.contentWindow.document;
+      frameDoc.open();
+      frameDoc.write(html);
+      frameDoc.close();
+    }
+
+    function openPreviewInNewTab() {
+      const data = getOverviewData();
+      const html = generateOverviewHTML(data);
+      
+      const newWindow = window.open('', '_blank');
+      newWindow.document.write(html);
+      newWindow.document.close();
+    }
+
+    function generateOverviewHTML(data) {
+      const learningOutcomesList = data.learningOutcomes.map(outcome => `<li>${outcome}</li>`).join('');
+      const moduleFlowList = data.moduleFlow.map(flow => `<li><strong>${flow.weeks}:</strong> ${flow.description}</li>`).join('');
+      const assessmentsHTML = data.assessments.map(assessment => `
+        <div class="assessment-box">
+          <strong>${assessment.title}</strong>
+          ${assessment.description}
+        </div>
+      `).join('');
+
+      return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Module Overview</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f5f7fa;
+      line-height: 1.6;
+      color: #333;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+    }
+
+    h1, h2 {
+      color: #004080;
+    }
+
+    .section {
+      margin-bottom: 40px;
+    }
+
+    .icon-title {
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .icon-title i {
+      color: #0073e6;
+      margin-right: 10px;
+    }
+
+    ul {
+      padding-left: 20px;
+    }
+
+    ul li {
+      margin-bottom: 8px;
+    }
+
+    .assessment-box {
+      background-color: #e8f1fc;
+      padding: 16px;
+      border-left: 6px solid #004080;
+      border-radius: 8px;
+      margin-top: 10px;
+    }
+
+    .assessment-box strong {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .note {
+      background-color: #fff3cd;
+      border-left: 6px solid #ffc107;
+      padding: 16px;
+      border-radius: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📘 ${data.moduleName}</h1>
+
+    <div class="section">
+      <h2 class="icon-title"><i class="fa fa-bullseye"></i> Module Aims</h2>
+      <p>${data.moduleAims}</p>
+    </div>
+
+    <div class="section">
+      <h2 class="icon-title"><i class="fa fa-graduation-cap"></i> Learning Outcomes</h2>
+      <ul>
+        ${learningOutcomesList}
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 class="icon-title"><i class="fa fa-random"></i> Module Flow</h2>
+      <p>The module is delivered over multiple teaching weeks. The structure includes:</p>
+      <ul>
+        ${moduleFlowList}
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2 class="icon-title"><i class="fa fa-pencil-square-o"></i> Assessment Overview</h2>
+      ${assessmentsHTML}
+    </div>
+
+    ${data.keyNotes ? `
+    <div class="section">
+      <h2 class="icon-title"><i class="fa fa-info-circle"></i> Key Notes for Students</h2>
+      <div class="note">
+        <ul>
+          ${data.keyNotes.split('\n').map(note => `<li>${note}</li>`).join('')}
+        </ul>
+      </div>
+    </div>
+    ` : ''}
+  </div>
+</html>`;
+    }
+
+    // Export functionality
+    function copyFullHTML() {
+      const data = getOverviewData();
+      const html = generateOverviewHTML(data);
+      
+      navigator.clipboard.writeText(html).then(() => {
+        showToast('HTML copied to clipboard!', 'success');
+      }).catch(() => {
+        showToast('Failed to copy HTML. Please try again.', 'error');
+      });
+    }
+
+    function exportToPDF() {
+      const data = getOverviewData();
+      const html = generateOverviewHTML(data);
+      
+      // Create a temporary iframe to render the HTML
+      const tempFrame = document.createElement('iframe');
+      tempFrame.style.position = 'absolute';
+      tempFrame.style.left = '-9999px';
+      tempFrame.style.top = '-9999px';
+      document.body.appendChild(tempFrame);
+      
+      tempFrame.onload = function() {
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF();
+        
+        // Add content to PDF
+        pdf.html(tempFrame.contentDocument.body, {
+          callback: function(pdf) {
+            pdf.save('module-overview.pdf');
+            document.body.removeChild(tempFrame);
+            showToast('PDF exported successfully!', 'success');
+          },
+          x: 10,
+          y: 10,
+          width: 190
+        });
+      };
+      
+      tempFrame.src = 'data:text/html;charset=utf-8,' + encodeURIComponent(html);
+    }
+
+    function copyOverviewJSON() {
+      const data = getOverviewData();
+      const jsonString = JSON.stringify(data, null, 2);
+      
+      navigator.clipboard.writeText(jsonString).then(() => {
+        showToast('JSON copied to clipboard!', 'success');
+      }).catch(() => {
+        showToast('Failed to copy JSON. Please try again.', 'error');
+      });
+    }
+
+    function downloadOverviewJSON() {
+      const data = getOverviewData();
+      const jsonString = JSON.stringify(data, null, 2);
+      const blob = new Blob([jsonString], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'module-overview.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+      showToast('JSON file downloaded!', 'success');
+    }
+
+    function confirmReset() {
+      const modal = document.getElementById('resetModal');
+      modal.style.display = 'flex';
+      // Focus the first button for accessibility
+      setTimeout(() => {
+        modal.querySelector('.cancel-btn').focus();
+      }, 100);
+    }
+
+    function closeModal() {
+      const modal = document.getElementById('resetModal');
+      modal.style.display = 'none';
+      // Restore focus to the reset button
+      document.getElementById('resetBtn').focus();
+    }
+
+    function performReset() {
+      resetForm();
+      closeModal();
+    }
+
+    // Close modal when clicking outside or pressing Escape
+    document.addEventListener('DOMContentLoaded', function() {
+      const modal = document.getElementById('resetModal');
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) {
+          closeModal();
+        }
+      });
+      
+      // Close modal with Escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+          closeModal();
+        }
+      });
+    });
+
+    function resetForm() {
+      document.getElementById('overviewForm').reset();
+      document.getElementById('learningOutcomesContainer').innerHTML = `
+        <div class="dynamic-item">
+          <input type="text" placeholder="Enter learning outcome..." required>
+          <div class="button-placeholder"></div>
+        </div>
+      `;
+      document.getElementById('moduleFlowContainer').innerHTML = `
+        <div class="dynamic-item flow-item">
+          <input type="text" placeholder="Weeks (e.g., 1-8)" required>
+          <input type="text" placeholder="Description..." required>
+          <div class="button-placeholder"></div>
+        </div>
+      `;
+      document.getElementById('assessmentContainer').innerHTML = `
+        <div class="dynamic-item assessment-item">
+          <input type="text" placeholder="Assessment title (e.g., A1 - Business Pitch)" required>
+          <textarea placeholder="Assessment description..." required></textarea>
+          <div class="button-placeholder"></div>
+        </div>
+      `;
+      
+      // Clear saved data
+      localStorage.removeItem('overviewFormData');
+      
+      // Re-setup event listeners for new elements
+      setupFormEventListeners();
+      
+      updateButtonStates();
+      showToast('Form reset successfully!', 'success');
+    }
+
+    // Setup event listeners for form elements
+    function setupFormEventListeners() {
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('input', function() {
+          updateButtonStates();
+          saveFormData();
+        });
+      });
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById("toast");
+
+      toast.className = '';
+      toast.classList.add('show', `toast-${type}`);
+      toast.textContent = message;
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.style.display = "none";
+          toast.className = '';
+        }, 500);
+      }, 3000);
+
+      toast.style.display = "block";
+    }
+
+    // Data persistence functions
+    function saveFormData() {
+      const data = getOverviewData();
+      localStorage.setItem('overviewFormData', JSON.stringify(data));
+    }
+
+    function loadFormData() {
+      const savedData = localStorage.getItem('overviewFormData');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          populateForm(data);
+          showToast('Previous data restored!', 'info');
+        } catch (error) {
+          console.error('Error loading saved data:', error);
+        }
+      }
+    }
+
+    function closeJsonImport() {
+      const content = document.getElementById('jsonImportContent');
+      const toggleIcon = document.querySelector('.toggle-icon');
+      content.classList.add('collapsed');
+      toggleIcon.textContent = '▶';
+      localStorage.setItem('jsonImportCollapsed', 'true');
+    }
+
+    // --- Module Overview Preset Logic ---
+    let overviewPresets = {};
+
+    function renderOverviewPresetButtons() {
+      const container = document.getElementById('overviewPresetContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      // List of all modules from timetable.json
+      const allModules = [
+        { key: 'ED70011X', name: 'Foundations of Simulation Education', code: 'ED70011X', year: '1' },
+        { key: 'ED70012X', name: 'Simulation Delivery & Leadership', code: 'ED70012X', year: '1' },
+        { key: 'ED70013X', name: 'Digital Technologies in Education', code: 'ED70013X', year: '2' },
+        { key: 'ED70014X', name: 'Current Issues & Policies in Simulation Education', code: 'ED70014X', year: '2' },
+        { key: 'ED70015X', name: 'Simulation in Innovative Practice', code: 'ED70015X', year: '2' },
+        { key: 'ED70016X', name: 'Quality Improvement & Demonstrative Simulation', code: 'ED70016X', year: '3' }
+      ];
+
+      allModules.forEach(({ key, name, code, year }) => {
+        const preset = overviewPresets[key];
+        const btn = document.createElement('button');
+        btn.className = 'preset-btn';
+        btn.innerHTML = `
+          <strong>${name}</strong>
+          <span class="module-code">${code}</span>
+          <span class="year-tag year-${year}">Year ${year}</span>
+        `;
+        btn.onclick = () => { if (preset) loadOverviewPreset(key); };
+        btn.setAttribute('aria-label', `Load ${name} preset`);
+        if (!preset) btn.disabled = true;
+        container.appendChild(btn);
+      });
+    }
+
+    function loadOverviewPreset(key) {
+      const preset = overviewPresets[key];
+      if (!preset) {
+        showToast(`No preset found for "${key}"`, 'error');
+        return;
+      }
+      populateForm(preset);
+      showToast(`${preset.moduleName || key} preset loaded!`, 'success');
+      updateButtonStates();
+    }
+
+    fetch('../presets/overview.json')
+      .then(res => res.json())
+      .then(data => {
+        overviewPresets = data;
+        renderOverviewPresetButtons();
+      });
+
+    // Initialize form state
+    function initFormState() {
+      const jsonImportCollapsed = localStorage.getItem('jsonImportCollapsed');
+      if (jsonImportCollapsed === 'true') {
+        const content = document.getElementById('jsonImportContent');
+        const toggleIcon = document.querySelector('.toggle-icon');
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+      }
+      // Load saved form data
+      loadFormData();
+      updateButtonStates();
+    }
+
+    // Event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      initFormState();
+      updateButtonStates();
+      
+      // Add input event listeners for real-time validation and auto-save
+      const inputs = document.querySelectorAll('input, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('input', function() {
+          updateButtonStates();
+          saveFormData();
+        });
+      });
+      
+      // Add auto-save for dynamic content changes
+      setupAutoSave();
+      
+      // Add dropdown accessibility
+      setupDropdownAccessibility();
+
+      const moduleNameInput = document.getElementById('moduleName');
+      if (moduleNameInput) {
+        moduleNameInput.addEventListener('input', function handler() {
+          closeJsonImport();
+          moduleNameInput.removeEventListener('input', handler);
+        });
+      }
+    });
+
+    // Setup auto-save for dynamic content
+    function setupAutoSave() {
+      // Monitor for changes in dynamic containers
+      const containers = [
+        'learningOutcomesContainer',
+        'moduleFlowContainer', 
+        'assessmentContainer'
+      ];
+      
+      containers.forEach(containerId => {
+        const container = document.getElementById(containerId);
+        if (container) {
+          // Use MutationObserver to detect when items are added/removed
+          const observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+              if (mutation.type === 'childList') {
+                saveFormData();
+                updateButtonStates();
+              }
+            });
+          });
+          
+          observer.observe(container, {
+            childList: true,
+            subtree: true
+          });
+        }
+      });
+    }
+
+    // Setup dropdown accessibility
+    function setupDropdownAccessibility() {
+      const dropdowns = document.querySelectorAll('.dropdown');
+      
+      dropdowns.forEach(dropdown => {
+        const button = dropdown.querySelector('.dropdown-btn');
+        const content = dropdown.querySelector('.dropdown-content');
+        
+        if (button && content) {
+          button.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              const isExpanded = button.getAttribute('aria-expanded') === 'true';
+              button.setAttribute('aria-expanded', !isExpanded);
+              content.style.display = isExpanded ? 'none' : 'block';
+            }
+          });
+          
+          button.addEventListener('blur', function() {
+            setTimeout(() => {
+              if (!dropdown.contains(document.activeElement)) {
+                button.setAttribute('aria-expanded', 'false');
+                content.style.display = 'none';
+              }
+            }, 100);
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html> 

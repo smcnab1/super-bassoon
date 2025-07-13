@@ -328,17 +328,17 @@
   
   <!-- Navbar -->
   <nav class="main-navbar" role="navigation" aria-label="Main navigation">
-          <div class="navbar-title">
+    <div class="navbar-title">
         <a href="../index.html" style="text-decoration: none; color: inherit;" aria-label="MScSimEd Home">
           <div class="title-main">
             <img src="../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
             MScSimEd
           </div>
         </a>
-        <span class="title-separator">|</span>
+      <span class="title-separator">|</span>
         <div class="title-subtitle">🎯 Generate</div>
-      </div>
-      <div class="navbar-links">
+    </div>
+    <div class="navbar-links">
         <div class="dropdown">
           <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
           <div class="dropdown-content" role="menu">
@@ -347,8 +347,9 @@
             <a href="preset/edit.html" role="menuitem">✏️ Edit Preset</a>
           </div>
         </div>
+        <a href="../overview/new.html" class="navbar-link">📘 Module Overview</a>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
-      </div>
+    </div>
   </nav>
 
   <!-- Preset Buttons -->
@@ -358,31 +359,26 @@
       <span class="module-code">ED70011X</span>
       <span class="year-tag year-1">Year 1</span>
     </button>
-
     <button class="preset-btn" onclick="loadPreset('ED70012X')" disabled aria-label="Simulation Delivery & Leadership preset (not available)">
       <strong>Simulation Delivery & Leadership</strong>
       <span class="module-code">ED70012X</span>
       <span class="year-tag year-1">Year 1</span>
     </button>
-
     <button class="preset-btn" onclick="loadPreset('ED70013X')" aria-label="Load Digital Technologies in Education preset">
       <strong>Digital Technologies in Education</strong>
       <span class="module-code">ED70013X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
-
     <button class="preset-btn" onclick="loadPreset('ED70014X')" disabled aria-label="Current Issues & Policies in Simulation Education preset (not available)">
       <strong>Current Issues & Policies in Simulation Education</strong>
       <span class="module-code">ED70014X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
-
     <button class="preset-btn" onclick="loadPreset('ED70015X')" disabled aria-label="Simulation in Innovative Practice preset (not available)">
       <strong>Simulation in Innovative Practice</strong>
       <span class="module-code">ED70015X</span>
       <span class="year-tag year-2">Year 2</span>
     </button>
-
     <button class="preset-btn" onclick="loadPreset('ED70016X')" disabled aria-label="Quality Improvement & Demonstrative Simulation preset (not available)">
       <strong>Quality Improvement & Demonstrative Simulation</strong>
       <span class="module-code">ED70016X</span>
@@ -741,7 +737,7 @@
       }
     });
 
-    fetch('presets.json')
+    fetch('../presets/timetable.json')
       .then(res => res.json())
       .then(data => {
         sharedPresets = data;
