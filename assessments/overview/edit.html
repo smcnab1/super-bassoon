@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Preset | MScSimEd</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../../favicon/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="../../favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../favicon/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon/web-app-manifest-512x512.png">
+  <link rel="manifest" href="../../favicon/site.webmanifest">
+  <meta name="theme-color" content="#4a90e2">
+  
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="../../auth.js"></script>
+  <style>
+    /* CSS Variables for consistent theming */
+    :root {
+      --error-color: #dc3545;
+      --error-color-hover: #c82333;
+      --success-color: #28a745;
+      --success-color-hover: #218838;
+      --hover-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --error-color: #e74c3c;
+      --error-color-hover: #c0392b;
+      --success-color: #27ae60;
+      --success-color-hover: #229954;
+      --hover-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modern responsive design for edit form */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .container h1 {
+      margin-bottom: 32px;
+      color: var(--text-primary);
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* Form layout improvements */
+    .form-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+    }
+
+    .form-section h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    /* Improved form row layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-row label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .form-row input,
+    .form-row select {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .form-row input:focus,
+    .form-row select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+
+    /* Required field styling */
+    .form-row label.required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] .form-row label.required::after {
+      color: #e74c3c;
+    }
+
+    /* Table header required styling */
+    #weekTable th .required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] #weekTable th .required::after {
+      color: #e74c3c;
+    }
+
+    /* Tutor section improvements */
+    .compact-tutor {
+      grid-template-columns: 1fr 1fr 40px;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .compact-tutor > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .compact-tutor input,
+    .compact-tutor select {
+      margin-bottom: 0;
+    }
+
+    .compact-tutor button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      min-width: auto;
+      margin: 0;
+    }
+
+    .button-placeholder {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      margin: 0 auto;
+    }
+
+    /* Better button styling */
+    .remove-btn {
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 8px 8px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: bold;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn:hover {
+      background: #660000;
+      transform: scale(1.05);
+    }
+
+    [data-theme="dark"] .remove-btn {
+      background: #a52a2a;
+    }
+
+    [data-theme="dark"] .remove-btn:hover {
+      background: #8b0000;
+    }
+
+    /* Table improvements */
+    #weekTable {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+      margin-bottom: 16px;
+    }
+
+    #weekTable th {
+      background: var(--navbar-bg);
+      color: white;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    #weekTable td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    #weekTable tr:last-child td {
+      border-bottom: none;
+    }
+
+    #weekTable input,
+    #weekTable select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    #weekTable input:focus,
+    #weekTable select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    /* Action buttons in table */
+    .action-buttons {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .action-buttons button {
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      min-width: auto;
+      margin: 0;
+      background: var(--button-secondary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .action-buttons button:hover {
+      background: var(--button-secondary-hover);
+    }
+
+    .action-buttons button[onclick*="removeRow"],
+    .action-buttons button[onclick*="removeWeekRow"] {
+      background: #8b0000 !important;
+      font-weight: bold !important;
+    }
+
+    .action-buttons button[onclick*="removeRow"]:hover,
+    .action-buttons button[onclick*="removeWeekRow"]:hover {
+      background: #660000 !important;
+    }
+
+    [data-theme="dark"] .action-buttons button[onclick*="removeRow"],
+    [data-theme="dark"] .action-buttons button[onclick*="removeWeekRow"] {
+      background: #a52a2a !important;
+    }
+
+    [data-theme="dark"] .action-buttons button[onclick*="removeRow"]:hover,
+    [data-theme="dark"] .action-buttons button[onclick*="removeWeekRow"]:hover {
+      background: #8b0000 !important;
+    }
+
+    /* Up and down arrow button styling */
+    .action-buttons button[onclick*="moveWeekUp"],
+    .action-buttons button[onclick*="moveWeekDown"] {
+      background: var(--button-primary) !important;
+      font-weight: bold !important;
+    }
+
+    .action-buttons button[onclick*="moveWeekUp"]:hover,
+    .action-buttons button[onclick*="moveWeekDown"]:hover {
+      background: var(--button-primary-hover) !important;
+    }
+
+    /* Week number styling */
+    .week-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    /* Add buttons */
+    .add-button {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+    }
+
+    .add-button:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    .add-weeks-section {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .add-multiple-weeks {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 44px;
+    }
+
+    .weeks-input {
+      width: 60px;
+      height: 44px;
+      line-height: 44px;
+      padding: 0 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 1rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      text-align: center;
+      box-sizing: border-box;
+      vertical-align: middle;
+      margin: 0;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    .add-multiple-button {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 0 24px;
+      height: 44px;
+      line-height: 44px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      vertical-align: middle;
+      margin: 0;
+    }
+
+    /* Sticky footer improvements */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--navbar-bg);
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      box-shadow: 0 -2px 10px var(--shadow-color);
+      z-index: 100;
+    }
+
+    .sticky-footer button {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 140px;
+    }
+
+    .sticky-footer button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .sticky-footer button:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    /* Import section styling */
+    .import-section {
+      background: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 30px;
+      border: 2px dashed var(--border-color);
+    }
+
+    .import-section h2 {
+      margin-top: 0;
+      color: var(--text-primary);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .import-methods {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 20px;
+    }
+
+    .import-method {
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .import-method h3 {
+      margin-top: 0;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+    }
+
+    .json-textarea {
+      width: 100%;
+      min-height: 200px;
+      padding: 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      resize: vertical;
+      margin-bottom: 15px;
+      box-sizing: border-box;
+    }
+
+    .file-input-wrapper {
+      position: relative;
+      display: inline-block;
+      cursor: pointer;
+      margin-bottom: 15px;
+    }
+
+    .file-input {
+      position: absolute;
+      opacity: 0;
+      width: 100%;
+      height: 100%;
+      cursor: pointer;
+    }
+
+    .file-input-label {
+      display: inline-block;
+      padding: 12px 24px;
+      background: var(--button-primary);
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .file-input-label:hover {
+      background: var(--button-primary-hover);
+    }
+
+    .import-btn {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .import-btn:hover {
+      background: var(--button-primary-hover);
+    }
+
+    .import-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .clear-btn {
+      background: var(--button-secondary);
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-left: 10px;
+      transition: background 0.3s ease;
+    }
+
+    .clear-btn:hover {
+      background: var(--button-secondary-hover);
+    }
+
+    .reset-btn {
+      background: #dc3545;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 0.3s ease;
+    }
+
+    .reset-btn:hover {
+      background: #c82333;
+    }
+
+    .status-message {
+      margin-top: 10px;
+      padding: 8px 12px;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    /* Custom toggle switch for exportForPresetsJson */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+      vertical-align: middle;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .3s;
+      border-radius: 26px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    input:checked + .slider {
+      background-color: #0073e6;
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .switch-label {
+      margin-left: 12px;
+      font-size: 1em;
+      color: var(--text-primary);
+      cursor: pointer;
+      user-select: none;
+    }
+    .sticky-footer {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Advanced Settings Section */
+    .advanced-settings {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .advanced-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .advanced-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .advanced-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .advanced-toggle-icon {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .advanced-content {
+      padding: 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .advanced-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .advanced-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+    }
+
+    .advanced-option .switch-label {
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .advanced-description {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 4px;
+      margin-left: 60px;
+    }
+
+    @media (max-width: 768px) {
+      .import-methods {
+        grid-template-columns: 1fr;
+      }
+      
+      .add-weeks-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      
+      .add-multiple-weeks {
+        justify-content: center;
+      }
+    }
+    /* Add Weeks Row Alignment */
+    .add-weeks-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .add-weeks-left {
+      display: flex;
+      align-items: center;
+    }
+    .add-weeks-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .add-button,
+    .add-multiple-button,
+    .weeks-input {
+      height: 44px;
+      line-height: 44px;
+      font-size: 1rem;
+      margin: 0;
+      vertical-align: middle;
+    }
+    .add-button {
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .add-multiple-button {
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .weeks-input {
+      width: 60px;
+      padding: 0 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      text-align: center;
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
+
+  <!-- Navbar -->
+  <nav class="main-navbar">
+    <div class="navbar-title">
+      <a href="../../index.html" style="text-decoration: none; color: inherit;">
+        <div class="title-main">
+          <img src="../../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
+          MScSimEd
+        </div>
+      </a>
+      <span class="title-separator">|</span>
+      <div class="title-subtitle">✏️ Edit Preset</div>
+    </div>
+      <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    <div class="navbar-links">
+      <div class="dropdown">
+        <button class="dropdown-btn">📅 Timetable</button>
+        <div class="dropdown-content">
+          <a href="../../timetable/generate.html">🎯 Generate</a>
+          <a href="../../timetable/new.html">📄 New Preset</a>
+          <a href="../../timetable/edit.html">✏️ Edit Preset</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropdown-btn">📅 Assessments</button>
+        <div class="dropdown-content">
+          <a href="generate.html">🎯 Generate</a>
+          <a href="new.html">📄 New Preset</a>
+          <a href="edit.html">✏️ Edit Preset</a>
+        </div>
+      </div>
+      <a href="../../overview/new.html" class="navbar-link">📘 Module Overview</a>
+      <a href="../../team/generate.html" class="navbar-link">👥 Module Team</a>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>Edit Module Preset</h1>
+
+    <!-- JSON Import Section -->
+    <div class="import-section">
+      <h2 onclick="toggleImportSection()" style="cursor: pointer; user-select: none;">
+        📥 Import JSON Preset <span id="importToggleIcon">▲</span>
+      </h2>
+      <div id="importContent">
+        <p>Paste a JSON snippet or upload a JSON file to load an existing preset for editing.</p>
+        
+        <div class="import-methods">
+          <div class="import-method">
+            <h3>📋 Paste JSON</h3>
+            <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON preset here..." oninput="updateTextButtons()"></textarea>
+            <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>Import from Text</button>
+            <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>Clear</button>
+          </div>
+          
+          <div class="import-method">
+            <h3>📁 Upload File</h3>
+            <div class="file-input-wrapper">
+              <input type="file" id="jsonFileInput" class="file-input" accept=".json" onchange="handleFileSelect(event)">
+              <label for="jsonFileInput" class="file-input-label">Choose JSON File</label>
+            </div>
+            <p style="font-size: 0.9rem; color: var(--text-secondary);">Select a .json file to import</p>
+            <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>Import from File</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="editForm" style="display: none;">
+      <div class="form-section">
+        <h2>Module Details</h2>
+        <form id="moduleDetailsInput">
+          <div class="form-row">
+            <div><label class="required">Module Name</label><input type="text" name="moduleName" required placeholder="Enter module name"></div>
+          </div>
+          <div class="form-row">
+            <div><label class="required">Module Code</label><input type="text" name="moduleCode" required placeholder="e.g., ED70011X"></div>
+            <div><label class="required">Year</label><select name="year" required>
+              <option value="">Select Year</option>
+              <option value="1">Year 1</option>
+              <option value="2">Year 2</option>
+              <option value="3">Year 3</option>
+            </select></div>
+          </div>
+          <div class="form-row">
+            <div><label class="required">Module Leader</label><input type="text" name="moduleLeader" required placeholder="Enter module leader name"></div>
+            <div><label class="required">Cohort</label><select name="cohort" required>
+              <option value="">Select Cohort</option>
+              <option value="april">🌱 April Cohort</option>
+              <option value="september">🍂 September Cohort</option>
+            </select></div>
+          </div>
+        </form>
+      </div>
+
+      <div class="form-section">
+        <h2>Assessment Table</h2>
+        <table id="assessmentTable">
+          <thead>
+            <tr>
+              <th>Type of Assessment</th>
+              <th>AI Use</th>
+              <th>Word Count or Equivalent</th>
+              <th>Weighting</th>
+              <th>Pass Mark</th>
+              <th>Method of Submission</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="assessmentTableBody">
+            <tr class="assessment-row">
+              <td><input type="text" name="assessmentType" required placeholder="e.g. Essay"></td>
+              <td>
+                <select name="aiUse">
+                  <option value="">Select...</option>
+                  <option value="green">Green (Permitted)</option>
+                  <option value="amber">Amber (Limited)</option>
+                  <option value="red">Red (Not Permitted)</option>
+                </select>
+              </td>
+              <td><input type="text" name="wordCount" placeholder="e.g. 2000"></td>
+              <td><input type="text" name="weighting" placeholder="e.g. 50%"></td>
+              <td><input type="text" name="passMark" placeholder="e.g. 40"></td>
+              <td><input type="text" name="submissionMethod" placeholder="e.g. Online"></td>
+              <td><!-- No delete button for first row --></td>
+            </tr>
+          </tbody>
+        </table>
+        <button type="button" onclick="addAssessmentRow()" class="add-row-btn"><i class="fa fa-plus"></i> Add Assessment</button>
+      </div>
+
+      <div class="form-section">
+        <h2>AI Use in Assessment</h2>
+        <div class="ai-section">
+          <label for="aiUseStandard"><strong>Overall AI Use Standard:</strong></label>
+          <select id="aiUseStandard">
+            <option value="">Select...</option>
+            <option value="green">Green (Permitted)</option>
+            <option value="amber">Amber (Limited)</option>
+            <option value="red">Red (Not Permitted)</option>
+          </select>
+          <div style="margin-top: 18px;">
+            <strong>AI Use Permitted</strong>
+            <div id="aiUsePermittedList">
+              <div class="ai-use-row">
+                <input type="text" name="aiUsePermitted[]" placeholder="Add example..." />
+                <!-- No delete button for first row -->
+              </div>
+            </div>
+            <button type="button" onclick="addAiUsePermittedRow()">Add</button>
+          </div>
+          <div style="margin-top: 18px;">
+            <h3>AI Use That Is <u>Not</u> Permitted</h3>
+            <div id="aiUseNotPermittedList">
+              <div class="ai-use-row">
+                <input type="text" name="aiUseNotPermitted[]" placeholder="Add example..." />
+                <!-- No delete button for first row -->
+              </div>
+            </div>
+            <button type="button" onclick="addAiUseNotPermittedRow()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="sticky-footer" id="stickyFooter" style="display: none;">
+    <button onclick="copyPresetJSON()" id="copyPresetBtn">📋 Copy Preset JSON</button>
+    <button onclick="downloadPresetJSON()" id="downloadPresetBtn">💾 Download Preset JSON</button>
+    <button onclick="confirmReset()" class="reset-btn">🔄 Reset</button>
+  </div>
+
+  <!-- Advanced Settings Section -->
+  <div class="advanced-settings">
+    <div class="advanced-header" onclick="toggleAdvancedSettings()">
+      <h3>⚙️ Advanced Settings</h3>
+      <span class="advanced-toggle-icon">▼</span>
+    </div>
+    <div class="advanced-content collapsed" id="advancedContent">
+      <div class="advanced-option">
+        <label class="switch" title="Export for presets.json">
+          <input type="checkbox" id="exportForPresetsJson" />
+          <span class="slider"></span>
+        </label>
+        <span class="switch-label" onclick="document.getElementById('exportForPresetsJson').click()">Export for presets.json</span>
+      </div>
+      <div class="advanced-description">
+        When enabled, exports the preset in the format required for direct inclusion in presets.json file.
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedFile = null;
+
+    // Toggle import section
+    function toggleImportSection() {
+      const content = document.getElementById('importContent');
+      const icon = document.getElementById('importToggleIcon');
+      
+      if (content.style.display === 'none') {
+        content.style.display = 'block';
+        icon.textContent = '▲';
+      } else {
+        content.style.display = 'none';
+        icon.textContent = '▼';
+      }
+    }
+
+    // Show edit form after successful import
+    function showEditForm() {
+      document.getElementById('editForm').style.display = 'block';
+      document.getElementById('stickyFooter').style.display = 'flex';
+      // Close the import section
+      const content = document.getElementById('importContent');
+      const icon = document.getElementById('importToggleIcon');
+      content.style.display = 'none';
+      icon.textContent = '▼';
+      // Scroll to the form
+      document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Modal functions
+    function confirmReset() {
+      document.getElementById('resetModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+
+    // Reset form and return to import state
+    function performReset() {
+      // Clear all form fields
+      document.querySelector('[name="moduleName"]').value = '';
+      document.querySelector('[name="moduleCode"]').value = '';
+      document.querySelector('[name="year"]').value = '';
+      document.querySelector('[name="moduleLeader"]').value = '';
+      document.querySelector('[name="cohort"]').value = '';
+      document.getElementById('aiUseStandard').value = '';
+
+      // Clear assessments (remove all rows)
+      clearAssessments();
+      // Do NOT add a default empty row
+
+      // Clear AI use lists (remove all rows)
+      clearAiUseLists();
+      // Do NOT add a default empty row
+
+      // Clear JSON textarea
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+
+      // Clear file input
+      document.getElementById('jsonFileInput').value = '';
+      selectedFile = null;
+      document.getElementById('importFromFile').disabled = true;
+
+      // Hide the form
+      document.getElementById('editForm').style.display = 'none';
+      document.getElementById('stickyFooter').style.display = 'none';
+
+      // Show and expand the import section
+      const content = document.getElementById('importContent');
+      const icon = document.getElementById('importToggleIcon');
+      content.style.display = 'block';
+      icon.textContent = '▲';
+
+      // Clear saved draft data
+      localStorage.removeItem('editPresetDraft');
+
+      // Close modal
+      closeModal();
+
+      // Scroll to top
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      showToast('🔄 Form reset successfully', 'success');
+      // Ensure form stays hidden after reset (and on refresh)
+      loadSavedData();
+    }
+
+    // Theme management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    // Initialize theme on page load
+    initTheme();
+    
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      hamburger.classList.toggle('active');
+      navbarLinks.classList.toggle('active');
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
+        hamburger.classList.remove('active');
+        navbarLinks.classList.remove('active');
+      }
+    });
+
+    // Load saved data on page load
+    loadSavedData();
+
+    // Auto-save data when form fields change
+    setupAutoSave();
+
+    // Update week numbers on page load
+    updateWeekNumbers();
+
+    // JSON Import Functions
+    function importFromText() {
+      const textarea = document.getElementById('jsonTextarea');
+      const jsonText = textarea.value.trim();
+      
+      if (!jsonText) {
+        showToast('Please enter JSON text to import', 'error');
+        return;
+      }
+
+      try {
+        const presetData = JSON.parse(jsonText);
+        loadPresetData(presetData);
+        showToast('✅ JSON preset imported successfully!', 'success');
+      } catch (error) {
+        showToast('❌ Invalid JSON format: ' + error.message, 'error');
+      }
+    }
+
+    function handleFileSelect(event) {
+      const file = event.target.files[0];
+      if (file) {
+        selectedFile = file;
+        document.getElementById('importFromFile').disabled = false;
+        showToast(`📁 File selected: ${file.name}`, 'success');
+      }
+    }
+
+    function importFromFile() {
+      if (!selectedFile) {
+        showToast('Please select a file first', 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const presetData = JSON.parse(e.target.result);
+          loadPresetData(presetData);
+          showToast('✅ JSON file imported successfully!', 'success');
+        } catch (error) {
+          showToast('❌ Invalid JSON file: ' + error.message, 'error');
+        }
+      };
+      reader.readAsText(selectedFile);
+    }
+
+    function loadPresetData(presetData) {
+      // Load module details
+      document.querySelector('[name="moduleName"]').value = presetData.moduleName || '';
+      document.querySelector('[name="moduleCode"]').value = presetData.moduleCode || '';
+      document.querySelector('[name="year"]').value = presetData.year || '';
+      document.querySelector('[name="moduleLeader"]').value = presetData.moduleLeader || '';
+      document.querySelector('[name="cohort"]').value = presetData.cohort || '';
+
+      // Load assessments
+      clearAssessments();
+      if (presetData.assessments && Array.isArray(presetData.assessments) && presetData.assessments.length > 0) {
+        presetData.assessments.forEach(assessment => {
+          // Accept both new.html and old edit.html formats
+          addAssessmentRow({
+            assessmentType: assessment.assessmentType || '',
+            aiUse: (assessment.aiUse || '').toLowerCase(),
+            wordCount: assessment.wordCount || '',
+            weighting: (assessment.weighting || '').replace(/%$/, ''),
+            passMark: (assessment.passMark || '').replace(/%$/, ''),
+            submissionMethod: assessment.submissionMethod || ''
+          });
+        });
+      } else {
+        addAssessmentRow();
+      }
+
+      // Load AI use lists
+      clearAiUseLists();
+      let aiUseStandard = presetData.aiUseStandard || '';
+      // Accept both capitalized and lowercase
+      aiUseStandard = aiUseStandard.toLowerCase();
+      document.getElementById('aiUseStandard').value = aiUseStandard;
+      if ((aiUseStandard === 'green' || aiUseStandard === 'amber') && Array.isArray(presetData.aiUsePermitted)) {
+        presetData.aiUsePermitted.forEach(item => {
+          addAiUsePermittedRow(item);
+        });
+      } else {
+        addAiUsePermittedRow();
+      }
+      if ((aiUseStandard === 'green' || aiUseStandard === 'amber') && Array.isArray(presetData.aiUseNotPermitted)) {
+        presetData.aiUseNotPermitted.forEach(item => {
+          addAiUseNotPermittedRow(item);
+        });
+      } else {
+        addAiUseNotPermittedRow();
+      }
+
+      // Clear any existing saved draft data since we're loading new data
+      localStorage.removeItem('editPresetDraft');
+      // Show the edit form after successful import
+      showEditForm();
+      // Update week numbers and validate data after loading
+      updateWeekNumbers();
+      validateTableData();
+    }
+
+    function clearAssessments() {
+      const tbody = document.getElementById('assessmentTableBody');
+      tbody.innerHTML = '';
+    }
+
+    function clearAiUseLists() {
+      document.getElementById('aiUsePermittedList').innerHTML = '';
+      document.getElementById('aiUseNotPermittedList').innerHTML = '';
+    }
+
+    function addAssessmentRow(assessmentData = {}) {
+      const tbody = document.getElementById('assessmentTableBody');
+      const tr = document.createElement('tr');
+      tr.className = 'assessment-row';
+      const isFirstRow = tbody.children.length === 0;
+      tr.innerHTML = `
+        <td><input type="text" name="assessmentType" value="${assessmentData.assessmentType || ''}" required placeholder="e.g. Essay"></td>
+        <td>
+          <select name="aiUse">
+            <option value=""${!assessmentData.aiUse ? ' selected' : ''}>Select...</option>
+            <option value="green"${assessmentData.aiUse === 'green' ? ' selected' : ''}>Green (Permitted)</option>
+            <option value="amber"${assessmentData.aiUse === 'amber' ? ' selected' : ''}>Amber (Limited)</option>
+            <option value="red"${assessmentData.aiUse === 'red' ? ' selected' : ''}>Red (Not Permitted)</option>
+          </select>
+        </td>
+        <td><input type="text" name="wordCount" value="${assessmentData.wordCount || ''}" placeholder="e.g. 2000"></td>
+        <td><input type="text" name="weighting" value="${assessmentData.weighting || ''}" placeholder="e.g. 50%"></td>
+        <td><input type="text" name="passMark" value="${assessmentData.passMark || ''}" placeholder="e.g. 40"></td>
+        <td><input type="text" name="submissionMethod" value="${assessmentData.submissionMethod || ''}" placeholder="e.g. Online"></td>
+        <td>${isFirstRow ? '' : '<button type="button" onclick="removeAssessmentRow(this)" class="remove-btn">❌</button>'}</td>
+      `;
+      tbody.appendChild(tr);
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input, select');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+    }
+
+    function removeAssessmentRow(btn) {
+      const row = btn.closest('tr');
+      const tbody = document.getElementById('assessmentTableBody');
+      if (tbody.children.length > 1) {
+        row.remove();
+        saveData();
+      } else {
+        showToast('At least one assessment row is required.', 'error');
+      }
+    }
+
+    function addAiUsePermittedRow(item = '') {
+      const permittedList = document.getElementById('aiUsePermittedList');
+      const tr = document.createElement('div');
+      tr.className = 'ai-use-row';
+      tr.innerHTML = `
+        <input type="text" name="aiUsePermitted[]" value="${item}" placeholder="Add example..." />
+        <button type="button" onclick="removeAiUsePermittedRow(this)" class="remove-btn">❌</button>
+      `;
+      permittedList.appendChild(tr);
+
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+    }
+
+    function removeAiUsePermittedRow(button) {
+      const permittedList = document.getElementById('aiUsePermittedList');
+      const rows = permittedList.querySelectorAll('.ai-use-row');
+      if (rows.length > 1) {
+        button.closest('.ai-use-row').remove();
+      } else {
+        showToast("At least one AI Use Permitted example is required", "error");
+      }
+    }
+
+    function addAiUseNotPermittedRow(item = '') {
+      const notPermittedList = document.getElementById('aiUseNotPermittedList');
+      const tr = document.createElement('div');
+      tr.className = 'ai-use-row';
+      tr.innerHTML = `
+        <input type="text" name="aiUseNotPermitted[]" value="${item}" placeholder="Add example..." />
+        <button type="button" onclick="removeAiUseNotPermittedRow(this)" class="remove-btn">❌</button>
+      `;
+      notPermittedList.appendChild(tr);
+
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+    }
+
+    function removeAiUseNotPermittedRow(button) {
+      const notPermittedList = document.getElementById('aiUseNotPermittedList');
+      const rows = notPermittedList.querySelectorAll('.ai-use-row');
+      if (rows.length > 1) {
+        button.closest('.ai-use-row').remove();
+      } else {
+        showToast("At least one AI Use Not Permitted example is required", "error");
+      }
+    }
+
+    function updateTextButtons() {
+      const textarea = document.getElementById('jsonTextarea');
+      const importBtn = document.getElementById('importFromText');
+      const clearBtn = document.getElementById('clearTextBtn');
+      
+      const hasContent = textarea.value.trim().length > 0;
+      
+      importBtn.disabled = !hasContent;
+      clearBtn.disabled = !hasContent;
+    }
+
+    function clearTextarea() {
+      document.getElementById('jsonTextarea').value = '';
+      updateTextButtons();
+      showToast('Text area cleared', 'success');
+    }
+
+
+
+    function getPresetData() {
+      // Module details
+      const moduleName = document.querySelector('[name="moduleName"]').value;
+      const moduleCode = document.querySelector('[name="moduleCode"]').value;
+      const year = document.querySelector('[name="year"]').value;
+      const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
+      const cohort = document.querySelector('[name="cohort"]').value;
+      // Assessment table
+      const assessments = Array.from(document.querySelectorAll('#assessmentTableBody tr')).map((row, idx) => {
+        const cells = row.querySelectorAll('input, select');
+        // Add % if not present and not blank
+        let weighting = cells[3]?.value || '';
+        if (weighting && !weighting.trim().endsWith('%')) weighting = weighting + '%';
+        let passMark = cells[4]?.value || '';
+        if (passMark && !passMark.trim().endsWith('%')) passMark = passMark + '%';
+        return {
+          assessmentNumber: `A${idx + 1}`,
+          assessmentType: cells[0]?.value || '',
+          aiUse: cells[1]?.value ? (cells[1].value.charAt(0).toUpperCase() + cells[1].value.slice(1).toLowerCase()) : '',
+          wordCount: cells[2]?.value || '',
+          weighting,
+          passMark,
+          submissionMethod: cells[5]?.value || ''
+        };
+      });
+      // AI Use Standard
+      let aiUseStandard = document.getElementById('aiUseStandard').value;
+      let aiUsePermitted = null;
+      let aiUseNotPermitted = null;
+      if (aiUseStandard === 'green' || aiUseStandard === 'amber') {
+        aiUsePermitted = Array.from(document.querySelectorAll('#aiUsePermittedList input')).map(input => input.value).filter(Boolean);
+        aiUseNotPermitted = Array.from(document.querySelectorAll('#aiUseNotPermittedList input')).map(input => input.value).filter(Boolean);
+      }
+      if (aiUseStandard === 'red') {
+        aiUsePermitted = null;
+        aiUseNotPermitted = null;
+      }
+      // Capitalize aiUseStandard for output
+      aiUseStandard = aiUseStandard ? (aiUseStandard.charAt(0).toUpperCase() + aiUseStandard.slice(1).toLowerCase()) : '';
+      return {
+        moduleName,
+        moduleCode,
+        year,
+        moduleLeader,
+        cohort,
+        assessments,
+        aiUseStandard,
+        aiUsePermitted,
+        aiUseNotPermitted
+      };
+    }
+
+    function copyPresetJSON() {
+      const data = getPresetData();
+      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
+      let json;
+      if (exportForPresets) {
+        if (!data.moduleCode || !data.cohort) {
+          showToast('Module Code and Cohort are required for presets.json export', 'error');
+          return;
+        }
+        json = JSON.stringify({
+          [data.moduleCode]: {
+            [data.cohort]: { ...data }
+          }
+        }, null, 2);
+      } else {
+        json = JSON.stringify(data, null, 2);
+      }
+      navigator.clipboard.writeText(json).then(() => {
+        showToast("✅ Preset JSON copied to clipboard!", "success");
+      }).catch(() => {
+        showToast("⚠️ Failed to copy JSON", "error");
+      });
+    }
+
+    function downloadPresetJSON() {
+      const data = getPresetData();
+      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
+      let json;
+      if (exportForPresets) {
+        if (!data.moduleCode || !data.cohort) {
+          showToast('Module Code and Cohort are required for presets.json export', 'error');
+          return;
+        }
+        json = JSON.stringify({
+          [data.moduleCode]: {
+            [data.cohort]: { ...data }
+          }
+        }, null, 2);
+      } else {
+        json = JSON.stringify(data, null, 2);
+      }
+      const blob = new Blob([json], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${data.moduleCode || "preset"}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+      
+    function addRow() {
+      const tbody = document.getElementById("weekBody");
+      const tr = document.createElement("tr");
+      tr.className = 'week-row';
+      const weekNumber = tbody.rows.length + 1;
+      tr.innerHTML = `
+        <td><span class="week-number">${weekNumber}</span></td>
+        <td><select name="weekType" required>
+            <option value="">Select Type</option>
+            <option value="teaching" selected>Teaching</option>
+            <option value="reading">Reading</option>
+            <option value="assessment">Assessment</option>
+            <option value="break">Break</option>
+        </select></td>
+        <td><select name="highlight">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select></td>
+        <td><input type="text" name="topic" required placeholder="Enter topic"></td>
+        <td>
+          <div class="action-buttons">
+            <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
+            <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
+            <button type="button" onclick="removeWeekRow(this)" title="Remove week">❌</button>
+          </div>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input, select');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+        
+        // Add highlighting update for type selects
+        if (input.name === 'weekType') {
+          input.addEventListener('change', function() {
+            updateRowHighlight(this.closest('.week-row'));
+          });
+        }
+        // Add highlighting update for highlight selects
+        if (input.name === 'highlight') {
+          input.addEventListener('change', function() {
+            updateRowHighlight(this.closest('.week-row'));
+          });
+        }
+      });
+      // Update row highlighting for the new row
+      updateRowHighlight(tr);
+    }
+
+    function addMultipleWeeks() {
+      const weeksInput = document.getElementById('weeksToAdd');
+      const weeksToAdd = parseInt(weeksInput.value) || 1;
+      
+      // Validate input
+      if (weeksToAdd < 1 || weeksToAdd > 25) {
+        showToast('❌ Please enter a number between 1 and 25', 'error');
+        return;
+      }
+      
+      // Add the specified number of weeks
+      for (let i = 0; i < weeksToAdd; i++) {
+        addRow();
+      }
+      
+      // Reset input to 1
+      weeksInput.value = 1;
+      
+      // Show success message
+      if (weeksToAdd === 1) {
+        showToast('✅ 1 week added', 'success');
+      } else {
+        showToast(`✅ ${weeksToAdd} weeks added`, 'success');
+      }
+    }
+
+    function removeWeekRow(button) {
+      const weekRows = document.querySelectorAll('.week-row');
+      if (weekRows.length > 1) {
+        button.closest('.week-row').remove();
+      } else {
+        showToast("At least one week is required", "error");
+      }
+    }
+
+    function removeRow(btn) {
+      const row = btn.closest('.week-row');
+      if (row) {
+        const weekRows = document.querySelectorAll('.week-row');
+        if (weekRows.length > 1) {
+          row.remove();
+          updateWeekNumbers();
+        } else {
+          showToast("At least one week is required", "error");
+        }
+      }
+    }
+
+    function moveWeekUp(btn) {
+      const currentRow = btn.closest('.week-row');
+      const tbody = document.getElementById('weekBody');
+      const previousRow = currentRow.previousElementSibling;
+      
+      // Check if there's a previous row to swap with
+      if (previousRow && previousRow.classList.contains('week-row')) {
+        // Swap the rows
+        tbody.insertBefore(currentRow, previousRow);
+        updateWeekNumbers();
+      }
+    }
+
+    function moveWeekDown(btn) {
+      const currentRow = btn.closest('.week-row');
+      const tbody = document.getElementById('weekBody');
+      const nextRow = currentRow.nextElementSibling;
+      
+      // Check if there's a next row to swap with
+      if (nextRow && nextRow.classList.contains('week-row')) {
+        // Move the current row after the next row
+        tbody.insertBefore(currentRow, nextRow.nextElementSibling);
+        updateWeekNumbers();
+      }
+    }
+
+    function updateWeekNumbers() {
+      const weekRows = document.querySelectorAll('.week-row');
+      weekRows.forEach((row, index) => {
+        const weekNumberSpan = row.querySelector('.week-number');
+        if (weekNumberSpan) {
+          weekNumberSpan.textContent = (index + 1).toString();
+        }
+        
+        // Update button visibility
+        const upButton = row.querySelector('button[onclick="moveWeekUp(this)"]');
+        const downButton = row.querySelector('button[onclick="moveWeekDown(this)"]');
+        
+        if (upButton) {
+          upButton.style.visibility = index === 0 ? 'hidden' : 'visible';
+        }
+        if (downButton) {
+          downButton.style.visibility = index === weekRows.length - 1 ? 'hidden' : 'visible';
+        }
+        
+        // Update row highlighting based on type
+        updateRowHighlight(row);
+      });
+    }
+
+    function updateRowHighlight(row) {
+      const typeSelect = row.querySelector('select[name="weekType"]');
+      const type = typeSelect ? typeSelect.value : '';
+      const highlightSelect = row.querySelector('select[name="highlight"]');
+      const highlight = highlightSelect ? highlightSelect.value : 'no';
+
+      // Auto-set highlight to "yes" when assessment is selected
+      if (type === 'assessment' && highlight === 'no') {
+        highlightSelect.value = 'yes';
+      }
+
+      // Remove all existing highlight classes
+      row.classList.remove('row-teaching', 'row-reading', 'row-assessment', 'row-break', 'row-highlighted');
+
+      // Add appropriate highlight class based on type
+      if (type) {
+        row.classList.add(`row-${type}`);
+      }
+
+      // Add darker background if highlight is yes
+      if (highlightSelect.value === 'yes') {
+        row.classList.add('row-highlighted');
+      }
+    }
+
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById("toast");
+
+      toast.className = '';
+      toast.classList.add('show', `toast-${type}`);
+      toast.textContent = message;
+
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.style.display = "none";
+          toast.className = '';
+        }, 500);
+      }, 3000);
+
+      toast.style.display = "block";
+    }
+
+    // Persistence functions
+    function saveData() {
+      const data = {
+        moduleName: document.querySelector('[name="moduleName"]').value,
+        moduleCode: document.querySelector('[name="moduleCode"]').value,
+        year: document.querySelector('[name="year"]').value,
+        moduleLeader: document.querySelector('[name="moduleLeader"]').value,
+        cohort: document.querySelector('[name="cohort"]').value,
+        assessments: getAssessmentsData(),
+        aiUseStandard: document.getElementById('aiUseStandard').value,
+        aiUsePermitted: Array.from(document.querySelectorAll('[name="aiUsePermitted[]"]')).map(input => input.value),
+        aiUseNotPermitted: Array.from(document.querySelectorAll('[name="aiUseNotPermitted[]"]')).map(input => input.value)
+      };
+      // Only save if there is meaningful data
+      const hasAnyData =
+        data.moduleName ||
+        data.moduleCode ||
+        data.year ||
+        data.moduleLeader ||
+        data.cohort ||
+        (Array.isArray(data.assessments) && data.assessments.some(a => a.assessmentType || a.aiUse || a.wordCount || a.weighting || a.passMark || a.submissionMethod)) ||
+        data.aiUseStandard ||
+        (Array.isArray(data.aiUsePermitted) && data.aiUsePermitted.some(v => v)) ||
+        (Array.isArray(data.aiUseNotPermitted) && data.aiUseNotPermitted.some(v => v));
+      if (hasAnyData) {
+        localStorage.setItem('editPresetDraft', JSON.stringify(data));
+      } else {
+        localStorage.removeItem('editPresetDraft');
+      }
+    }
+
+    function loadSavedData() {
+      const savedData = localStorage.getItem('editPresetDraft');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          // Check if there's any meaningful data before loading
+          const hasAnyData = data.moduleName || data.moduleCode || data.moduleLeader || 
+                            (data.assessments && data.assessments.length > 0 && data.assessments.some(a => a.assessmentType || a.aiUse || a.wordCount || a.weighting || a.passMark || a.submissionMethod)) || 
+                            data.aiUseStandard || (data.aiUsePermitted && data.aiUsePermitted.length > 0 && data.aiUsePermitted.some(v => v)) || (data.aiUseNotPermitted && data.aiUseNotPermitted.length > 0 && data.aiUseNotPermitted.some(v => v));
+          if (hasAnyData) {
+            // Load module details
+            if (data.moduleName) document.querySelector('[name="moduleName"]').value = data.moduleName;
+            if (data.moduleCode) document.querySelector('[name="moduleCode"]').value = data.moduleCode;
+            if (data.year) document.querySelector('[name="year"]').value = data.year;
+            if (data.moduleLeader) document.querySelector('[name="moduleLeader"]').value = data.moduleLeader;
+            if (data.cohort) document.querySelector('[name="cohort"]').value = data.cohort;
+
+            // Load assessments
+            if (data.assessments && data.assessments.length > 0) {
+              loadAssessmentsData(data.assessments);
+            }
+
+            // Load AI use lists
+            if (data.aiUseStandard) document.getElementById('aiUseStandard').value = data.aiUseStandard;
+            if (data.aiUsePermitted && data.aiUsePermitted.length > 0) {
+              loadAiUsePermittedData(data.aiUsePermitted);
+            }
+            if (data.aiUseNotPermitted && data.aiUseNotPermitted.length > 0) {
+              loadAiUseNotPermittedData(data.aiUseNotPermitted);
+            }
+
+            // Show the form and sticky footer, hide import section
+            showEditForm();
+            showToast("📝 Draft restored from previous session", "info");
+            // Collapse import section
+            const content = document.getElementById('importContent');
+            const icon = document.getElementById('importToggleIcon');
+            if (content && icon) {
+              content.style.display = 'none';
+              icon.textContent = '▼';
+            }
+          } else {
+            // Clear empty saved data
+            localStorage.removeItem('editPresetDraft');
+            // Hide the form and sticky footer, show expanded import section
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('stickyFooter').style.display = 'none';
+            const content = document.getElementById('importContent');
+            const icon = document.getElementById('importToggleIcon');
+            if (content && icon) {
+              content.style.display = 'block';
+              icon.textContent = '▲';
+            }
+            // Also clear any assessment/AI use rows
+            clearAssessments();
+            clearAiUseLists();
+          }
+        } catch (error) {
+          console.error('Error loading saved data:', error);
+          // Clear corrupted data
+          localStorage.removeItem('editPresetDraft');
+          // Hide the form and sticky footer, show expanded import section
+          document.getElementById('editForm').style.display = 'none';
+          document.getElementById('stickyFooter').style.display = 'none';
+          const content = document.getElementById('importContent');
+          const icon = document.getElementById('importToggleIcon');
+          if (content && icon) {
+            content.style.display = 'block';
+            icon.textContent = '▲';
+          }
+          clearAssessments();
+          clearAiUseLists();
+        }
+      } else {
+        // No saved data: hide the form and sticky footer, show expanded import section
+        document.getElementById('editForm').style.display = 'none';
+        document.getElementById('stickyFooter').style.display = 'none';
+        const content = document.getElementById('importContent');
+        const icon = document.getElementById('importToggleIcon');
+        if (content && icon) {
+          content.style.display = 'block';
+          icon.textContent = '▲';
+        }
+        clearAssessments();
+        clearAiUseLists();
+      }
+    }
+
+    function getAssessmentsData() {
+      const assessmentElements = document.querySelectorAll('.assessment-row');
+      return Array.from(assessmentElements).map(row => ({
+        assessmentType: row.querySelector('[name="assessmentType"]').value,
+        aiUse: row.querySelector('[name="aiUse"]').value,
+        wordCount: row.querySelector('[name="wordCount"]').value,
+        weighting: row.querySelector('[name="weighting"]').value,
+        passMark: row.querySelector('[name="passMark"]').value,
+        submissionMethod: row.querySelector('[name="submissionMethod"]').value
+      }));
+    }
+
+    function getAiUsePermittedData() {
+      return Array.from(document.querySelectorAll('[name="aiUsePermitted[]"]')).map(input => input.value);
+    }
+
+    function getAiUseNotPermittedData() {
+      return Array.from(document.querySelectorAll('[name="aiUseNotPermitted[]"]')).map(input => input.value);
+    }
+
+    function setupAutoSave() {
+      // Auto-save on input changes
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+
+      // Auto-save when assessments or AI use lists are added/removed
+      const observer = new MutationObserver(saveData);
+      observer.observe(document.getElementById('assessmentTableBody'), { childList: true, subtree: true });
+      observer.observe(document.getElementById('aiUsePermittedList'), { childList: true, subtree: true });
+      observer.observe(document.getElementById('aiUseNotPermittedList'), { childList: true, subtree: true });
+    }
+
+    function loadAssessmentsData(assessments) {
+      const tbody = document.getElementById('assessmentTableBody');
+      tbody.innerHTML = '';
+      if (assessments && assessments.length > 0) {
+        assessments.forEach(assessment => {
+          addAssessmentRow(assessment);
+        });
+      }
+    }
+
+    function loadAiUsePermittedData(items) {
+      const permittedList = document.getElementById('aiUsePermittedList');
+      permittedList.innerHTML = ''; // Clear existing rows
+      if (items && items.length > 0) {
+        items.forEach(item => {
+          addAiUsePermittedRow(item);
+        });
+      } else {
+        addAiUsePermittedRow(); // Add one empty row if no items
+      }
+    }
+
+    function loadAiUseNotPermittedData(items) {
+      const notPermittedList = document.getElementById('aiUseNotPermittedList');
+      notPermittedList.innerHTML = ''; // Clear existing rows
+      if (items && items.length > 0) {
+        items.forEach(item => {
+          addAiUseNotPermittedRow(item);
+        });
+      } else {
+        addAiUseNotPermittedRow(); // Add one empty row if no items
+      }
+    }
+
+    // Hide sticky footer by default
+    window.addEventListener('DOMContentLoaded', function() {
+      validateTableData();
+      // On page load, ensure correct section is shown based on data
+      loadSavedData();
+    });
+
+    function validateTableData() {
+      const assessmentRows = document.querySelectorAll('.assessment-row');
+      let valid = true;
+      assessmentRows.forEach(row => {
+        const typeInput = row.querySelector('[name="assessmentType"]');
+        const aiUseSelect = row.querySelector('[name="aiUse"]');
+        const wordCountInput = row.querySelector('[name="wordCount"]');
+        const weightingInput = row.querySelector('[name="weighting"]');
+        const passMarkInput = row.querySelector('[name="passMark"]');
+        const submissionMethodInput = row.querySelector('[name="submissionMethod"]');
+
+        if (!typeInput.value || !aiUseSelect.value || !wordCountInput.value || !weightingInput.value || !passMarkInput.value || !submissionMethodInput.value) {
+          valid = false;
+        }
+      });
+      // Always show the sticky footer
+      document.querySelector('.sticky-footer').style.display = 'flex';
+      // Disable/enable buttons based on validity
+      const copyBtn = document.getElementById('copyPresetBtn');
+      const downloadBtn = document.getElementById('downloadPresetBtn');
+      if (copyBtn) {
+        copyBtn.removeAttribute('disabled');
+      }
+      if (downloadBtn) {
+        downloadBtn.removeAttribute('disabled');
+      }
+      // Never disable the reset button
+      const resetBtn = document.querySelector('button[onclick="confirmReset()"]');
+      if (resetBtn) resetBtn.removeAttribute('disabled');
+      return valid ? [] : ["Please fill in all required fields in the assessment table."];
+    }
+
+    // Patch addRow to call validation
+    const originalAddRow = addRow;
+    addRow = function() {
+      originalAddRow.apply(this, arguments);
+      validateTableData();
+    };
+
+    // Patch removeWeekRow to call validation
+    const originalRemoveWeekRow = removeWeekRow;
+    removeWeekRow = function() {
+      originalRemoveWeekRow.apply(this, arguments);
+      validateTableData();
+    };
+
+    // Patch updateButtonStates to call validation (if it exists)
+    if (typeof updateButtonStates === 'function') {
+      const originalUpdateButtonStates = updateButtonStates;
+      updateButtonStates = function() {
+        originalUpdateButtonStates.apply(this, arguments);
+        validateTableData();
+      };
+    }
+
+    // Add event listeners to table inputs for validation
+    function addTableValidationListeners() {
+      document.getElementById('weekBody').addEventListener('input', validateTableData);
+      document.getElementById('weekBody').addEventListener('change', validateTableData);
+    }
+    addTableValidationListeners();
+
+    // Toggle advanced settings section
+    function toggleAdvancedSettings() {
+      const content = document.getElementById('advancedContent');
+      const toggleIcon = document.querySelector('.advanced-toggle-icon');
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    }
+  </script>
+  <!-- Modal for Reset Confirmation -->
+  <div id="resetModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Are you sure?</h3>
+      <p>This will clear all form data, hide the form, and return to the import screen. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+</body>
+</html> 

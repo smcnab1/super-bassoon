@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>New Assessment | MScSimEd</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="../../favicon/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="../../favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../favicon/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon/web-app-manifest-512x512.png">
+  <link rel="manifest" href="../../favicon/site.webmanifest">
+  <meta name="theme-color" content="#4a90e2">
+  
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="../../auth.js"></script>
+  <style>
+    /* CSS Variables for consistent theming */
+    :root {
+      --error-color: #dc3545;
+      --error-color-hover: #c82333;
+      --success-color: #28a745;
+      --success-color-hover: #218838;
+      --hover-bg: rgba(0, 0, 0, 0.05);
+    }
+
+    [data-theme="dark"] {
+      --error-color: #e74c3c;
+      --error-color-hover: #c0392b;
+      --success-color: #27ae60;
+      --success-color-hover: #229954;
+      --hover-bg: rgba(255, 255, 255, 0.05);
+    }
+
+    /* Modern responsive design for preset form */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    /* Form layout improvements */
+    .form-section {
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+    }
+
+    .form-section h2 {
+      margin-top: 0;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+      font-size: 1.4rem;
+      font-weight: 600;
+    }
+
+    /* Improved form row layout */
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-row label {
+      font-weight: 500;
+      margin-bottom: 6px;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .form-row label.required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] .form-row label.required::after {
+      color: #e74c3c;
+    }
+
+    /* Table header required styling */
+    #weekTable th .required::after {
+      content: " *";
+      color: #dc3545;
+      font-weight: bold;
+      margin-left: 4px;
+    }
+
+    [data-theme="dark"] #weekTable th .required::after {
+      color: #e74c3c;
+    }
+
+    .form-row input,
+    .form-row select {
+      padding: 10px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    .form-row input:focus,
+    .form-row select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px var(--input-focus-shadow);
+    }
+
+    /* Tutor section improvements */
+    .tutor-section {
+      background: var(--bg-primary);
+      border-radius: 8px;
+      padding: 16px;
+      margin-top: 16px;
+    }
+
+    .tutor-section label {
+      font-weight: 600;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .compact-tutor {
+      grid-template-columns: 1fr 1fr 40px;
+      gap: 12px;
+      align-items: end;
+      margin-bottom: 12px;
+    }
+
+    .compact-tutor > div {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .compact-tutor input,
+    .compact-tutor select {
+      margin-bottom: 0;
+    }
+
+    .compact-tutor button {
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      min-width: auto;
+      margin: 0;
+    }
+
+    .button-placeholder {
+      width: 32px;
+      height: 32px;
+      flex-shrink: 0;
+      margin: 0 auto;
+    }
+
+    /* Table improvements */
+    #weekTable {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+      margin-bottom: 16px;
+    }
+
+    #weekTable th {
+      background: var(--navbar-bg);
+      color: white;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    #weekTable td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+
+    #weekTable tr:last-child td {
+      border-bottom: none;
+    }
+
+    #weekTable input,
+    #weekTable select {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+
+    #weekTable input:focus,
+    #weekTable select:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
+
+    /* Action buttons in table */
+    .action-buttons {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+
+    .action-buttons button {
+      padding: 6px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      min-width: auto;
+      margin: 0;
+      background: var(--button-secondary);
+      color: white;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .action-buttons button:hover {
+      background: var(--button-secondary-hover);
+    }
+
+    .action-buttons button[onclick*="removeRow"],
+    .action-buttons button[onclick*="removeWeekRow"] {
+      background: #8b0000 !important;
+      font-weight: bold !important;
+    }
+
+    .action-buttons button[onclick*="removeRow"]:hover,
+    .action-buttons button[onclick*="removeWeekRow"]:hover {
+      background: #660000 !important;
+    }
+
+    [data-theme="dark"] .action-buttons button[onclick*="removeRow"],
+    [data-theme="dark"] .action-buttons button[onclick*="removeWeekRow"] {
+      background: #a52a2a !important;
+    }
+
+    [data-theme="dark"] .action-buttons button[onclick*="removeRow"]:hover,
+    [data-theme="dark"] .action-buttons button[onclick*="removeWeekRow"]:hover {
+      background: #8b0000 !important;
+    }
+
+    /* Up and down arrow button styling */
+    .action-buttons button[onclick*="moveWeekUp"],
+    .action-buttons button[onclick*="moveWeekDown"] {
+      background: var(--button-primary) !important;
+      font-weight: bold !important;
+    }
+
+    .action-buttons button[onclick*="moveWeekUp"]:hover,
+    .action-buttons button[onclick*="moveWeekDown"]:hover {
+      background: var(--button-primary-hover) !important;
+    }
+
+    /* Week number styling */
+    .week-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    /* Add buttons */
+    .add-button {
+      background: var(--button-primary);
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      margin-bottom: 20px;
+    }
+
+    .add-button:hover {
+      background: var(--button-primary-hover);
+      transform: translateY(-1px);
+    }
+
+    /* Add Weeks Row Alignment */
+    .add-weeks-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    .add-weeks-left {
+      display: flex;
+      align-items: center;
+    }
+    .add-weeks-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .add-button,
+    .add-multiple-button,
+    .weeks-input {
+      height: 44px;
+      line-height: 44px;
+      font-size: 1rem;
+      margin: 0;
+      vertical-align: middle;
+    }
+    .add-button {
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 500;
+    }
+    .add-multiple-button {
+      padding: 0 24px;
+      border-radius: 8px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .weeks-input {
+      width: 60px;
+      padding: 0 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--input-bg);
+      color: var(--text-primary);
+      text-align: center;
+      box-sizing: border-box;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+
+    /* Sticky footer improvements */
+    .sticky-footer {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--navbar-bg);
+      padding: 16px 20px;
+      border-top: 1px solid var(--border-color);
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      box-shadow: 0 -2px 10px var(--shadow-color);
+      z-index: 100;
+    }
+
+    .sticky-footer button {
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      min-width: 140px;
+    }
+
+    .sticky-footer button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .sticky-footer button:not(:disabled):hover {
+      transform: translateY(-1px);
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .container {
+        padding: 16px;
+      }
+
+      .form-section {
+        padding: 16px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      .compact-tutor {
+        grid-template-columns: 1fr;
+        gap: 8px;
+      }
+
+      #weekTable {
+        font-size: 0.85rem;
+      }
+
+      #weekTable th,
+      #weekTable td {
+        padding: 8px 6px;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .action-buttons button {
+        padding: 4px 6px;
+        font-size: 0.75rem;
+      }
+
+      .add-weeks-section {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      
+      .add-multiple-weeks {
+        justify-content: center;
+      }
+
+      .sticky-footer {
+        padding: 12px 16px;
+        gap: 8px;
+      }
+
+      .sticky-footer button {
+        padding: 10px 16px;
+        font-size: 0.9rem;
+        min-width: 120px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 12px;
+      }
+
+      .form-section {
+        padding: 12px;
+      }
+
+      .sticky-footer {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .sticky-footer button {
+        width: 100%;
+        max-width: 300px;
+      }
+    }
+
+    /* Loading states */
+    .loading {
+      opacity: 0.7;
+      pointer-events: none;
+    }
+
+    /* Smooth transitions */
+    * {
+      transition: background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    /* Additional optimizations */
+    .container h1 {
+      margin-bottom: 32px;
+      color: var(--text-primary);
+      font-size: 2rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    /* Better spacing for form sections */
+    .form-section + .form-section {
+      margin-top: 32px;
+    }
+
+    /* Improved input states */
+    .form-row input:invalid,
+    .form-row select:invalid {
+      border-color: var(--error-color);
+    }
+
+    .form-row input:valid,
+    .form-row select:valid {
+      border-color: var(--success-color);
+    }
+
+    /* Better button styling */
+    .remove-btn {
+      background: #8b0000;
+      color: white;
+      border: none;
+      padding: 8px 8px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: bold;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .remove-btn:hover {
+      background: #660000;
+      transform: scale(1.05);
+    }
+
+    [data-theme="dark"] .remove-btn {
+      background: #a52a2a;
+    }
+
+    [data-theme="dark"] .remove-btn:hover {
+      background: #8b0000;
+    }
+
+    /* Table row hover effects */
+    #weekTable tbody tr:hover {
+      background: var(--hover-bg);
+    }
+
+    /* Better focus indicators */
+    .form-row input:focus,
+    .form-row select:focus,
+    #weekTable input:focus,
+    #weekTable select:focus {
+      transform: translateY(-1px);
+    }
+
+    /* Loading animation */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    .loading {
+      animation: pulse 1.5s infinite;
+    }
+
+    /* Improved mobile experience */
+    @media (max-width: 480px) {
+      .container h1 {
+        font-size: 1.5rem;
+        margin-bottom: 24px;
+      }
+
+      .form-section h2 {
+        font-size: 1.2rem;
+      }
+
+      .form-row input,
+      .form-row select {
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+
+      /* Stack action buttons vertically on very small screens */
+      .action-buttons {
+        flex-direction: column;
+        gap: 2px;
+      }
+
+      .action-buttons button {
+        padding: 6px 8px;
+        font-size: 0.75rem;
+      }
+    }
+
+    /* Accessibility improvements */
+    .form-row input:focus,
+    .form-row select:focus,
+    #weekTable input:focus,
+    #weekTable select:focus,
+    .action-buttons button:focus,
+    .add-button:focus {
+      outline: 2px solid var(--input-focus);
+      outline-offset: 2px;
+    }
+
+    /* High contrast mode support */
+    @media (prefers-contrast: high) {
+      .form-row input,
+      .form-row select,
+      #weekTable input,
+      #weekTable select {
+        border-width: 2px;
+      }
+
+      .action-buttons button {
+        border: 2px solid currentColor;
+      }
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      * {
+        transition: none !important;
+        animation: none !important;
+      }
+    }
+
+    /* Custom toggle switch for exportForPresetsJson */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+      vertical-align: middle;
+    }
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .3s;
+      border-radius: 26px;
+    }
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+    }
+    input:checked + .slider {
+      background-color: #0073e6;
+    }
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+    .switch-label {
+      margin-left: 12px;
+      font-size: 1em;
+      color: var(--text-primary);
+      cursor: pointer;
+      user-select: none;
+    }
+    .sticky-footer {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    /* Advanced Settings Section */
+    .advanced-settings {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px var(--shadow-color);
+      overflow: hidden;
+    }
+
+    .advanced-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 20px;
+      cursor: pointer;
+      background: var(--card-bg);
+      border-bottom: 1px solid var(--border-color);
+      transition: background-color 0.2s ease;
+    }
+
+    .advanced-header:hover {
+      background: var(--hover-bg);
+    }
+
+    .advanced-header h3 {
+      margin: 0;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .advanced-toggle-icon {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      transition: transform 0.3s ease;
+    }
+
+    .advanced-content {
+      padding: 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+      overflow: hidden;
+    }
+
+    .advanced-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .advanced-option {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 0;
+    }
+
+    .advanced-option .switch-label {
+      color: var(--text-primary);
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .advanced-description {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin-top: 4px;
+      margin-left: 60px;
+    }
+
+    /* New styles for AI Use lists */
+    .ai-use-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .ai-use-row input {
+      flex-grow: 1;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+    .ai-use-row .remove-btn {
+      flex-shrink: 0;
+      padding: 6px 8px;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="main-navbar">
+    <div class="navbar-title">
+      <a href="../../index.html" style="text-decoration: none; color: inherit;">
+        <div class="title-main">
+          <img src="../../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
+          MScSimEd
+        </div>
+      </a>
+      <span class="title-separator">|</span>
+      <div class="title-subtitle">📄 New Preset</div>
+    </div>
+      <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    <div class="navbar-links">
+      <div class="dropdown">
+        <button class="dropdown-btn navbar-dropdown-btn">📅 Timetable</button>
+        <div class="dropdown-content">
+          <a href="../../timetable/generate.html">🎯 Generate</a>
+          <a href="../../timetable/new.html">📄 New Preset</a>
+          <a href="../../timetable/edit.html">✏️ Edit Preset</a>
+        </div>
+      </div>
+      <div class="dropdown">
+        <button class="dropdown-btn navbar-dropdown-btn">📅 Assessments</button>
+        <div class="dropdown-content">
+          <a href="generate.html">🎯 Generate</a>
+          <a href="new.html">📄 New Preset</a>
+          <a href="edit.html">✏️ Edit Preset</a>
+        </div>
+      </div>
+      <a href="../../overview/new.html" class="navbar-link">📘 Module Overview</a>
+      <a href="../../team/generate.html" class="navbar-link">👥 Module Team</a>
+      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <h1>New Assessment Preset</h1>
+
+    <div class="form-section">
+      <h2>Module Details</h2>
+      <form id="moduleDetailsInput">
+        <div class="form-row">
+          <div><label class="required">Module Name</label><input type="text" name="moduleName" required placeholder="Enter module name"></div>
+        </div>
+        <div class="form-row">
+          <div><label class="required">Module Code</label><input type="text" name="moduleCode" required placeholder="e.g., ED70011X"></div>
+          <div><label class="required">Year</label><select name="year" required>
+            <option value="">Select Year</option>
+            <option value="1">Year 1</option>
+            <option value="2">Year 2</option>
+            <option value="3">Year 3</option>
+          </select></div>
+        </div>
+        <div class="form-row">
+          <div><label class="required">Module Leader</label><input type="text" name="moduleLeader" required placeholder="Enter module leader name"></div>
+          <div><label class="required">Cohort</label><select name="cohort" required>
+            <option value="">Select Cohort</option>
+            <option value="april">🌱 April Cohort</option>
+            <option value="september">🍂 September Cohort</option>
+          </select></div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Remove Module Tutors section from HTML -->
+
+    <!-- Remove the old Weekly Breakdown section and replace with Assessment Table -->
+    <div class="form-section" id="assessmentSection">
+      <h2>Assessment Table</h2>
+      <table id="assessmentTable">
+        <thead>
+          <tr>
+            <th>Type of Assessment</th>
+            <th>AI Use</th>
+            <th>Word Count or Equivalent</th>
+            <th>Weighting</th>
+            <th>Pass Mark</th>
+            <th>Method of Submission</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="assessmentTableBody">
+          <tr class="assessment-row">
+            <td><input type="text" name="assessmentType" required placeholder="e.g. Essay, Report, Exam"></td>
+            <td>
+              <select name="aiUse">
+                <option value="">Select...</option>
+                <option value="green">Green (Permitted)</option>
+                <option value="amber">Amber (Limited)</option>
+                <option value="red">Red (Not Permitted)</option>
+              </select>
+            </td>
+            <td><input type="text" name="wordCount" placeholder="e.g. 2000"></td>
+            <td><input type="text" name="weighting" placeholder="e.g. 50%"></td>
+            <td><input type="text" name="passMark" placeholder="e.g. 40"></td>
+            <td><input type="text" name="submissionMethod" placeholder="e.g. Online"></td>
+            <td><!-- No delete button for first row --></td>
+          </tr>
+        </tbody>
+      </table>
+      <button type="button" onclick="addAssessmentRow()" class="add-row-btn"><i class="fa fa-plus"></i> Add Assessment</button>
+    </div>
+
+    <div class="form-section" id="aiUseSection">
+      <h2>AI Use in Assessment</h2>
+      <div class="ai-section">
+        <label for="aiUseStandard"><strong>Overall AI Use Standard:</strong></label>
+        <select id="aiUseStandard">
+          <option value="">Select...</option>
+          <option value="green">Green (Permitted)</option>
+          <option value="amber">Amber (Limited)</option>
+          <option value="red">Red (Not Permitted)</option>
+        </select>
+        <div id="aiUseExamplesSection" style="display: none;">
+          <div id="aiUsePermittedSection" style="margin-top: 18px; display: block;">
+            <h3>AI Use That Is Permitted</h3>
+            <div id="aiUsePermittedList">
+              <div class="ai-use-row">
+                <input type="text" name="aiUsePermitted[]" placeholder="Add example..." />
+                <!-- No delete button for first row -->
+              </div>
+            </div>
+            <button type="button" onclick="addAiUsePermittedRow()">Add</button>
+          </div>
+          <div id="aiUseNotPermittedSection" style="margin-top: 18px; display: block;">
+            <h3>AI Use That Is Not Permitted</h3>
+            <div id="aiUseNotPermittedList">
+              <div class="ai-use-row">
+                <input type="text" name="aiUseNotPermitted[]" placeholder="Add example..." />
+                <!-- No delete button for first row -->
+              </div>
+            </div>
+            <button type="button" onclick="addAiUseNotPermittedRow()">Add</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Remove the static Assessment Information section -->
+  </div>
+  <div class="sticky-footer">
+    <button onclick="copyPresetJSON()">📋 Copy Preset JSON</button>
+    <button onclick="downloadPresetJSON()">💾 Download Preset JSON</button>
+    <button onclick="confirmReset()" class="reset-btn">🔄 Reset</button>
+    <!-- Removed Advanced Settings dropdown button from footer -->
+  </div>
+  <!-- Advanced Settings Section (restored) -->
+  <div class="advanced-settings">
+    <div class="advanced-header" onclick="toggleAdvancedSettings()">
+      <h3>⚙️ Advanced Settings</h3>
+      <span class="advanced-toggle-icon">▶</span>
+    </div>
+    <div class="advanced-content collapsed" id="advancedContent">
+      <div class="advanced-option">
+        <label class="switch" title="Export for presets.json">
+          <input type="checkbox" id="exportForPresetsJson" />
+          <span class="slider"></span>
+        </label>
+        <span class="switch-label" onclick="document.getElementById('exportForPresetsJson').click()">Export for presets.json</span>
+      </div>
+      <div class="advanced-description">
+        When enabled, exports the preset in the format required for direct inclusion in presets.json file.
+      </div>
+    </div>
+  </div>
+  <style>
+    .dropdown-content { animation: fadeIn 0.2s; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .dropdown button { background: var(--button-primary); color: #fff; border: none; border-radius: 6px; padding: 8px 16px; font-size: 1rem; cursor: pointer; }
+    .dropdown button:focus { outline: 2px solid var(--input-focus); }
+  </style>
+  <script>
+    function toggleAdvancedDropdown() {
+      const content = document.getElementById('advancedDropdownContent');
+      content.style.display = (content.style.display === 'block') ? 'none' : 'block';
+      // Close dropdown if clicking outside
+      if (content.style.display === 'block') {
+        setTimeout(() => {
+          document.addEventListener('mousedown', closeDropdownOnClickOutside);
+        }, 0);
+      }
+    }
+    function closeDropdownOnClickOutside(e) {
+      const btn = document.getElementById('advancedDropdownBtn');
+      const content = document.getElementById('advancedDropdownContent');
+      if (!content.contains(e.target) && e.target !== btn) {
+        content.style.display = 'none';
+        document.removeEventListener('mousedown', closeDropdownOnClickOutside);
+      }
+    }
+    // Keep the two toggles in sync
+    document.addEventListener('DOMContentLoaded', function() {
+      const mainToggle = document.getElementById('exportForPresetsJson');
+      const dropdownToggle = document.getElementById('exportForPresetsJsonDropdown');
+      function syncToggles(e) {
+        if (e.target === mainToggle) dropdownToggle.checked = mainToggle.checked;
+        if (e.target === dropdownToggle) mainToggle.checked = dropdownToggle.checked;
+      }
+      mainToggle.addEventListener('change', syncToggles);
+      dropdownToggle.addEventListener('change', syncToggles);
+    });
+  </script>
+
+  <!-- Add a button to output JSON and a modal/textarea to display it -->
+  <!-- Removed the Show Form JSON button and modal -->
+
+  <script>
+    // Theme management
+    function initTheme() {
+      const savedTheme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+      updateThemeIcon(savedTheme);
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      updateThemeIcon(newTheme);
+    }
+
+    function updateThemeIcon(theme) {
+      const themeToggle = document.getElementById('themeToggle');
+      if (themeToggle) {
+        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
+      }
+    }
+
+    // Initialize theme on page load
+    initTheme();
+    
+    // Mobile menu functionality
+    function toggleMobileMenu() {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      hamburger.classList.toggle('active');
+      navbarLinks.classList.toggle('active');
+    }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+      const hamburger = document.querySelector('.hamburger-menu');
+      const navbarLinks = document.querySelector('.navbar-links');
+      
+      if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
+        hamburger.classList.remove('active');
+        navbarLinks.classList.remove('active');
+      }
+    });
+
+    // Load saved data on page load
+    loadSavedData();
+
+    // Attach event listener for AI Use Standard dropdown after data is loaded
+    var aiUseStandardSelect = document.getElementById('aiUseStandard');
+    if (aiUseStandardSelect) {
+      aiUseStandardSelect.addEventListener('change', updateAiUseVisibility);
+    }
+    // Ensure AI Use visibility matches loaded data
+    updateAiUseVisibility();
+
+    // Auto-save data when form fields change
+    setupAutoSave();
+
+    // Update week numbers on page load
+    updateWeekNumbers();
+    
+    // Update button states on page load
+    updateButtonStates();
+
+    // Remove checkModuleDetails and all calls to it
+
+    function getPresetData() {
+      const moduleName = document.querySelector('[name="moduleName"]').value;
+      const moduleCode = document.querySelector('[name="moduleCode"]').value;
+      const year = document.querySelector('[name="year"]').value;
+      const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
+      const cohort = document.querySelector('[name="cohort"]').value;
+
+      const assessmentElements = document.querySelectorAll('.assessment-row');
+      const assessments = Array.from(assessmentElements).map(row => ({
+        assessmentType: row.querySelector('[name="assessmentType"]').value,
+        aiUse: row.querySelector('[name="aiUse"]').value,
+        wordCount: row.querySelector('[name="wordCount"]').value,
+        weighting: row.querySelector('[name="weighting"]').value,
+        passMark: row.querySelector('[name="passMark"]').value,
+        dueDate: row.querySelector('[name="dueDate"]').value,
+        submissionMethod: row.querySelector('[name="submissionMethod"]').value,
+        feedbackDate: row.querySelector('[name="feedbackDate"]').value
+      }));
+
+      const aiUseStandard = document.getElementById('aiUseStandard').value;
+      const aiUsePermitted = Array.from(document.querySelectorAll('#aiUsePermittedList input')).map(input => input.value).filter(Boolean);
+      const aiUseNotPermitted = Array.from(document.querySelectorAll('#aiUseNotPermittedList input')).map(input => input.value).filter(Boolean);
+
+      return {
+        moduleName,
+        moduleCode,
+        year,
+        moduleLeader,
+        cohort,
+        assessments,
+        aiUseStandard,
+        aiUsePermitted,
+        aiUseNotPermitted
+      };
+    }
+
+    function validateForm() {
+      const errors = [];
+      
+      // Check module details
+      const moduleName = document.querySelector('[name="moduleName"]').value.trim();
+      const moduleCode = document.querySelector('[name="moduleCode"]').value.trim();
+      const year = document.querySelector('[name="year"]').value;
+      const moduleLeader = document.querySelector('[name="moduleLeader"]').value.trim();
+      const cohort = document.querySelector('[name="cohort"]').value;
+      
+      if (!moduleName) errors.push("Module Name is required");
+      if (!moduleCode) errors.push("Module Code is required");
+      if (!year) errors.push("Year is required");
+      if (!moduleLeader) errors.push("Module Leader is required");
+      if (!cohort) errors.push("Cohort is required");
+      
+      // Check assessments - use array index instead of reading from DOM
+      const assessmentElements = document.querySelectorAll('.assessment-row');
+      assessmentElements.forEach((row, index) => {
+        const assessmentType = row.querySelector('[name="assessmentType"]').value;
+        const topic = row.querySelector('[name="topic"]').value.trim(); // This field is no longer used for assessment
+        
+        if (!assessmentType) errors.push(`Assessment ${index + 1}: Type is required`);
+        if (!topic) errors.push(`Assessment ${index + 1}: Topic is required`);
+      });
+      
+      return errors;
+    }
+
+    function updateButtonStates() {
+      const errors = validateForm();
+      const copyBtn = document.querySelector('button[onclick="copyPresetJSON()"]');
+      const downloadBtn = document.querySelector('button[onclick="downloadPresetJSON()"]');
+      
+      const isValid = errors.length === 0;
+      
+      if (copyBtn) copyBtn.disabled = !isValid;
+      if (downloadBtn) downloadBtn.disabled = !isValid;
+    }
+
+    function copyPresetJSON() {
+      const data = getFormJson();
+      const json = JSON.stringify(data, null, 2);
+      navigator.clipboard.writeText(json).then(() => {
+        showToast("✅ Preset JSON copied to clipboard!", "success");
+      }).catch(() => {
+        showToast("⚠️ Failed to copy JSON", "error");
+      });
+    }
+
+    function downloadPresetJSON() {
+      const data = getFormJson();
+      const json = JSON.stringify(data, null, 2);
+      const blob = new Blob([json], { type: "application/json" });
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(blob);
+      link.download = `${data.moduleCode || "preset"}.json`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+      
+
+    function updateWeekNumbers() {
+      const weekRows = document.querySelectorAll('.week-row');
+      weekRows.forEach((row, index) => {
+        const weekNumberSpan = row.querySelector('.week-number');
+        if (weekNumberSpan) {
+          weekNumberSpan.textContent = (index + 1).toString();
+        }
+        
+        // Update button visibility
+        const upButton = row.querySelector('button[onclick="moveWeekUp(this)"]');
+        const downButton = row.querySelector('button[onclick="moveWeekDown(this)"]');
+        
+        if (upButton) {
+          upButton.style.visibility = index === 0 ? 'hidden' : 'visible';
+        }
+        if (downButton) {
+          downButton.style.visibility = index === weekRows.length - 1 ? 'hidden' : 'visible';
+        }
+        
+        // Update row highlighting based on type
+        updateRowHighlight(row);
+      });
+    }
+
+    function updateRowHighlight(row) {
+      const typeSelect = row.querySelector('select[name="weekType"]');
+      const type = typeSelect ? typeSelect.value : '';
+      const highlightSelect = row.querySelector('select[name="highlight"]');
+      const highlight = highlightSelect ? highlightSelect.value : 'no';
+
+      // Auto-set highlight to "yes" when assessment is selected
+      if (type === 'assessment' && highlight === 'no') {
+        highlightSelect.value = 'yes';
+      }
+
+      // Remove all existing highlight classes
+      row.classList.remove('row-teaching', 'row-reading', 'row-assessment', 'row-break', 'row-highlighted');
+
+      // Add appropriate highlight class based on type
+      if (type) {
+        row.classList.add(`row-${type}`);
+      }
+
+      // Add darker background if highlight is yes
+      if (highlightSelect.value === 'yes') {
+        row.classList.add('row-highlighted');
+      }
+    }
+
+    function addRow() {
+      const tbody = document.getElementById("weekBody");
+      const tr = createWeekRow();
+      
+      // Add event listeners to new inputs for auto-save BEFORE adding to DOM
+      const newInputs = tr.querySelectorAll('input, select');
+      newInputs.forEach(input => {
+        input.addEventListener('input', function() {
+          saveData();
+          updateButtonStates();
+          // checkModuleDetails(); // Removed
+        });
+        input.addEventListener('change', function() {
+          saveData();
+          updateButtonStates();
+          // checkModuleDetails(); // Removed
+        });
+        
+        // Add highlighting update for type selects
+        if (input.name === 'weekType') {
+          input.addEventListener('change', function() {
+            updateRowHighlight(this.closest('.week-row'));
+          });
+        }
+      });
+      
+      // Add row highlight listeners
+      addRowHighlightListeners(tr);
+      
+      // Add the row to the DOM
+      tbody.appendChild(tr);
+      
+      // Update week numbers first, then button states
+      updateWeekNumbers();
+      updateButtonStates();
+    }
+
+    function addMultipleWeeks() {
+      const weeksInput = document.getElementById('weeksToAdd');
+      const weeksToAdd = parseInt(weeksInput.value) || 1;
+      
+      // Validate input
+      if (weeksToAdd < 1 || weeksToAdd > 25) {
+        showToast('❌ Please enter a number between 1 and 25', 'error');
+        return;
+      }
+      
+      // Add the specified number of weeks
+      for (let i = 0; i < weeksToAdd; i++) {
+        addRow();
+      }
+      
+      // Reset input to 1
+      weeksInput.value = 1;
+      
+      // Show success message
+      if (weeksToAdd === 1) {
+        showToast('✅ 1 week added', 'success');
+      } else {
+        showToast(`✅ ${weeksToAdd} weeks added`, 'success');
+      }
+    }
+
+    function removeWeekRow(button) {
+      const weekRows = document.querySelectorAll('.week-row');
+      if (weekRows.length > 1) {
+        button.closest('.week-row').remove();
+        updateWeekNumbers();
+        updateButtonStates();
+      } else {
+        showToast("At least one week is required", "error");
+      }
+    }
+
+    function removeRow(btn) {
+      const row = btn.closest('.week-row');
+      if (row) {
+        const weekRows = document.querySelectorAll('.week-row');
+        if (weekRows.length > 1) {
+          row.remove();
+          updateWeekNumbers();
+          updateButtonStates();
+        } else {
+          showToast("At least one week is required", "error");
+        }
+      }
+    }
+
+    function moveWeekUp(btn) {
+      const currentRow = btn.closest('.week-row');
+      const tbody = document.getElementById('weekBody');
+      const previousRow = currentRow.previousElementSibling;
+      
+      // Check if there's a previous row to swap with
+      if (previousRow && previousRow.classList.contains('week-row')) {
+        // Swap the rows
+        tbody.insertBefore(currentRow, previousRow);
+        updateWeekNumbers();
+        updateButtonStates();
+      }
+    }
+
+    function moveWeekDown(btn) {
+      const currentRow = btn.closest('.week-row');
+      const tbody = document.getElementById('weekBody');
+      const nextRow = currentRow.nextElementSibling;
+      
+      // Check if there's a next row to swap with
+      if (nextRow && nextRow.classList.contains('week-row')) {
+        // Move the current row after the next row
+        tbody.insertBefore(currentRow, nextRow.nextElementSibling);
+        updateWeekNumbers();
+        updateButtonStates();
+      }
+    }
+
+    function createWeekRow() {
+      const tr = document.createElement('tr');
+      tr.className = 'week-row';
+      tr.innerHTML = `
+        <td><span class="week-number"></span></td>
+        <td><select name="weekType" required>
+            <option value="">Select Type</option>
+            <option value="teaching" selected>Teaching</option>
+            <option value="reading">Reading</option>
+            <option value="assessment">Assessment</option>
+            <option value="break">Break</option>
+        </select></td>
+        <td><select name="highlight">
+            <option value="no">No</option>
+            <option value="yes">Yes</option>
+        </select></td>
+        <td><input type="text" name="topic" required placeholder="Enter topic"></td>
+        <td>
+          <div class="action-buttons">
+            <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
+            <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
+            <button type="button" onclick="removeRow(this)" title="Remove week">❌</button>
+          </div>
+        </td>
+      `;
+      addRowHighlightListeners(tr);
+      return tr;
+    }
+
+    // Utility to add highlight and type event listeners to a row
+    function addRowHighlightListeners(row) {
+      const typeSelect = row.querySelector('select[name="weekType"]');
+      if (typeSelect) {
+        typeSelect.addEventListener('change', function() {
+          updateRowHighlight(row);
+          updateButtonStates();
+        });
+      }
+      const highlightSelect = row.querySelector('select[name="highlight"]');
+      if (highlightSelect) {
+        highlightSelect.addEventListener('change', function() {
+          updateRowHighlight(row);
+          updateButtonStates();
+        });
+      }
+    }
+
+    // Toast notification system
+    function showToast(message, type = 'info') {
+      const toast = document.getElementById("toast");
+      toast.className = '';
+      toast.classList.add('show', `toast-${type}`);
+      toast.textContent = message;
+      setTimeout(() => {
+        toast.classList.remove('show');
+        setTimeout(() => {
+          toast.style.display = "none";
+          toast.className = '';
+        }, 500);
+      }, 3000);
+      toast.style.display = "block";
+    }
+
+    function confirmReset() {
+      document.getElementById('resetModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('resetModal').style.display = 'none';
+    }
+
+    function performReset() {
+      // Reset module details
+      document.querySelector('[name="moduleName"]').value = '';
+      document.querySelector('[name="moduleCode"]').value = '';
+      document.querySelector('[name="year"]').value = '';
+      document.querySelector('[name="moduleLeader"]').value = '';
+      document.querySelector('[name="cohort"]').value = '';
+
+      // Reset assessment table (remove all rows, add one empty row)
+      const tbody = document.getElementById('assessmentTableBody');
+      tbody.innerHTML = '';
+      addAssessmentRow();
+
+      // Reset AI Use fields
+      document.getElementById('aiUseStandard').value = '';
+      document.getElementById('aiUsePermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUsePermitted[]' placeholder='Add example...' /></div>`;
+      document.getElementById('aiUseNotPermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUseNotPermitted[]' placeholder='Add example...' /></div>`;
+      updateAiUseVisibility();
+
+      // Clear saved data from localStorage (assessment only)
+      localStorage.removeItem('newAssessmentOverviewDraft');
+
+      // Hide assessment and AI Use sections since module details are now empty
+      // checkModuleDetails(); // Removed
+
+      // Close the reset modal
+      closeModal();
+      showToast("🔄 All fields reset successfully!", "success");
+    }
+
+    function clearWeeks() {
+      const tbody = document.getElementById('weekBody');
+      tbody.innerHTML = '';
+      // Add one empty row
+      addRow();
+      updateWeekNumbers();
+    }
+
+    // Persistence functions
+    function saveData() {
+      const data = {
+        moduleName: document.querySelector('[name="moduleName"]').value,
+        moduleCode: document.querySelector('[name="moduleCode"]').value,
+        year: document.querySelector('[name="year"]').value,
+        moduleLeader: document.querySelector('[name="moduleLeader"]').value,
+        cohort: document.querySelector('[name="cohort"]').value,
+        assessments: getAssessmentsData(),
+        aiUseStandard: getAiUseStandard(),
+        aiUsePermitted: getAiUsePermitted(),
+        aiUseNotPermitted: getAiUseNotPermitted()
+      };
+      localStorage.setItem('newAssessmentOverviewDraft', JSON.stringify(data));
+    }
+
+    function loadSavedData() {
+      const savedData = localStorage.getItem('newAssessmentOverviewDraft');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          
+          // Load module details
+          if (data.moduleName) document.querySelector('[name="moduleName"]').value = data.moduleName;
+          if (data.moduleCode) document.querySelector('[name="moduleCode"]').value = data.moduleCode;
+          if (data.year) document.querySelector('[name="year"]').value = data.year;
+          if (data.moduleLeader) document.querySelector('[name="moduleLeader"]').value = data.moduleLeader;
+          if (data.cohort) document.querySelector('[name="cohort"]').value = data.cohort;
+
+
+          // Load assessments
+          if (data.assessments && data.assessments.length > 0) {
+            const tbody = document.getElementById('assessmentTableBody');
+            tbody.innerHTML = '';
+            data.assessments.forEach(row => addAssessmentRow(row));
+          }
+
+          // Load AI Use sections
+          if (data.aiUseStandard) document.getElementById('aiUseStandard').value = data.aiUseStandard;
+          if (data.aiUsePermitted && data.aiUsePermitted.length > 0) {
+            const container = document.getElementById('aiUsePermittedList');
+            container.innerHTML = '';
+            data.aiUsePermitted.forEach(item => {
+              addAiUsePermittedRow(item);
+            });
+          }
+          else {
+            // If no saved items, add a single empty row
+            document.getElementById('aiUsePermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUsePermitted[]' placeholder='Add example...' /></div>`;
+          }
+          if (data.aiUseNotPermitted && data.aiUseNotPermitted.length > 0) {
+            const container = document.getElementById('aiUseNotPermittedList');
+            container.innerHTML = '';
+            data.aiUseNotPermitted.forEach(item => {
+              addAiUseNotPermittedRow(item);
+            });
+          }
+          else {
+            // If no saved items, add a single empty row
+            document.getElementById('aiUseNotPermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUseNotPermitted[]' placeholder='Add example...' /></div>`;
+          }
+
+          showToast("📝 Draft restored from previous session", "info");
+          
+          // Update button states after loading data
+          updateButtonStates();
+          
+          // Check module details and show/hide sections
+          // checkModuleDetails(); // Removed
+
+          // After loading, if any main field is present, show the rest of the form
+          if (
+            (data.moduleName && data.moduleName.trim()) ||
+            (data.moduleCode && data.moduleCode.trim()) ||
+            (data.year && data.year.trim()) ||
+            (data.moduleLeader && data.moduleLeader.trim()) ||
+            (data.cohort && data.cohort.trim())
+          ) {
+            // checkModuleDetails(); // Removed
+          }
+        } catch (error) {
+          console.error('Error loading saved data:', error);
+          // Ensure at least one row is present for each list
+          document.getElementById('aiUsePermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUsePermitted[]' placeholder='Add example...' /></div>`;
+          document.getElementById('aiUseNotPermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUseNotPermitted[]' placeholder='Add example...' /></div>`;
+        }
+      } else {
+        // Ensure at least one row is present for each list
+        document.getElementById('aiUsePermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUsePermitted[]' placeholder='Add example...' /></div>`;
+        document.getElementById('aiUseNotPermittedList').innerHTML = `<div class='ai-use-row'><input type='text' name='aiUseNotPermitted[]' placeholder='Add example...' /></div>`;
+      }
+    }
+
+    function loadWeeksData(weeks) {
+      const tbody = document.getElementById('weekBody');
+      // Remove all existing week rows
+      tbody.innerHTML = '';
+      
+      // Add week rows with saved data
+      if (weeks && weeks.length > 0) {
+        weeks.forEach(week => {
+          addWeekRow(week);
+        });
+      } else {
+        // If no saved weeks, add one empty row
+        addRow();
+      }
+    }
+
+    function getWeeksData() {
+      const weekElements = document.querySelectorAll('.week-row');
+      return Array.from(weekElements).map((row, index) => ({
+        week: (index + 1).toString(),
+        type: row.querySelector('[name="weekType"]').value,
+        highlight: row.querySelector('[name="highlight"]').value,
+        date: '',
+        location: 'Location TBC',
+        topic: row.querySelector('[name="topic"]').value
+      })).filter(week => week.type || week.topic); // Save any week with any data
+    }
+
+    function setupAutoSave() {
+      // Auto-save on input changes
+      const inputs = document.querySelectorAll('input, select');
+      inputs.forEach(input => {
+        input.addEventListener('input', function() {
+          saveData();
+          updateButtonStates();
+          // checkModuleDetails(); // Removed
+        });
+        input.addEventListener('change', function() {
+          saveData();
+          updateButtonStates();
+          // checkModuleDetails(); // Removed
+        });
+      });
+
+      // Auto-save when weeks are added/removed
+      const observer = new MutationObserver(function() {
+        saveData();
+        updateButtonStates();
+      });
+      observer.observe(document.getElementById('weekBody'), { childList: true, subtree: true });
+    }
+
+    // Assessment Table Logic
+    function addAssessmentRow(rowData = {}) {
+      const tbody = document.getElementById('assessmentTableBody');
+      const isFirstRow = tbody.children.length === 0;
+      const tr = document.createElement('tr');
+      tr.className = 'assessment-row';
+      tr.innerHTML = `
+        <td><input type="text" name="assessmentType" value="${rowData.assessmentType || ''}" required placeholder="e.g. Essay, Report, Exam"></td>
+        <td>
+          <select name="aiUse">
+            <option value="">Select...</option>
+            <option value="green">Green (Permitted)</option>
+            <option value="amber">Amber (Limited)</option>
+            <option value="red">Red (Not Permitted)</option>
+          </select>
+        </td>
+        <td><input type="text" name="wordCount" value="${rowData.wordCount || ''}" placeholder="e.g. 2000"></td>
+        <td><input type="text" name="weighting" value="${rowData.weighting || ''}" placeholder="e.g. 50%"></td>
+        <td><input type="text" name="passMark" value="${rowData.passMark || ''}" placeholder="e.g. 40"></td>
+        <td><input type="text" name="submissionMethod" value="${rowData.submissionMethod || ''}" placeholder="e.g. Online"></td>
+        <td>${isFirstRow ? '' : '<button type="button" onclick="removeAssessmentRow(this)" class="remove-btn">❌</button>'}</td>
+      `;
+      tbody.appendChild(tr);
+      // Set the aiUse select value if provided
+      if (rowData.aiUse) {
+        const select = tr.querySelector('select[name="aiUse"]');
+        if (select) select.value = rowData.aiUse;
+      }
+      // Add event listeners for auto-save
+      tr.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+      tr.querySelectorAll('select').forEach(select => {
+        select.addEventListener('change', saveData);
+      });
+      saveData();
+    }
+    function removeAssessmentRow(btn) {
+      const row = btn.closest('tr');
+      const tbody = document.getElementById('assessmentTableBody');
+      // Only allow removal if not the first row
+      if (row !== tbody.firstElementChild) {
+        row.remove();
+        saveData();
+      } else {
+        showToast('At least one assessment row is required.', 'error');
+      }
+    }
+    function getAssessmentsData() {
+      const rows = document.querySelectorAll('.assessment-row');
+      return Array.from(rows).map(row => ({
+        assessmentType: row.querySelector('[name="assessmentType"]').value,
+        aiUse: row.querySelector('[name="aiUse"]').value,
+        wordCount: row.querySelector('[name="wordCount"]').value,
+        weighting: row.querySelector('[name="weighting"]').value,
+        passMark: row.querySelector('[name="passMark"]').value,
+        submissionMethod: row.querySelector('[name="submissionMethod"]').value
+      }));
+    }
+    // AI Use Section Logic
+    function addAiUsePermitted() {
+      const input = document.getElementById('aiUsePermittedInput');
+      const value = input.value.trim();
+      if (value) {
+        const ul = document.getElementById('aiUsePermittedList');
+        const li = document.createElement('li');
+        li.textContent = value;
+        li.onclick = function() { this.remove(); saveData(); };
+        ul.appendChild(li);
+        input.value = '';
+        saveData();
+      }
+    }
+    function addAiUseNotPermitted() {
+      const input = document.getElementById('aiUseNotPermittedInput');
+      const value = input.value.trim();
+      if (value) {
+        const ul = document.getElementById('aiUseNotPermittedList');
+        const li = document.createElement('li');
+        li.textContent = value;
+        li.onclick = function() { this.remove(); saveData(); };
+        ul.appendChild(li);
+        input.value = '';
+        saveData();
+      }
+    }
+    function getAiUsePermitted() {
+      return Array.from(document.querySelectorAll('#aiUsePermittedList input')).map(input => input.value).filter(Boolean);
+    }
+    function getAiUseNotPermitted() {
+      return Array.from(document.querySelectorAll('#aiUseNotPermittedList input')).map(input => input.value).filter(Boolean);
+    }
+    function getAiUseStandard() {
+      return document.getElementById('aiUseStandard').value;
+    }
+
+    // Add JS for adding/removing rows for both permitted and not permitted
+    function addAiUsePermittedRow(value = '') {
+      const container = document.getElementById('aiUsePermittedList');
+      const row = document.createElement('div');
+      row.className = 'ai-use-row';
+      row.innerHTML = `<input type="text" name="aiUsePermitted[]" placeholder="Add example..." value="${value}"> <button type="button" class="remove-btn" onclick="removeAiUsePermittedRow(this)">❌</button>`;
+      container.appendChild(row);
+      saveData();
+    }
+    function removeAiUsePermittedRow(btn) {
+      const row = btn.closest('.ai-use-row');
+      const container = document.getElementById('aiUsePermittedList');
+      if (container.children.length > 1) {
+        row.remove();
+        saveData();
+      }
+    }
+    function addAiUseNotPermittedRow(value = '') {
+      const container = document.getElementById('aiUseNotPermittedList');
+      const row = document.createElement('div');
+      row.className = 'ai-use-row';
+      row.innerHTML = `<input type="text" name="aiUseNotPermitted[]" placeholder="Add example..." value="${value}"> <button type="button" class="remove-btn" onclick="removeAiUseNotPermittedRow(this)">❌</button>`;
+      container.appendChild(row);
+      saveData();
+    }
+    function removeAiUseNotPermittedRow(btn) {
+      const row = btn.closest('.ai-use-row');
+      const container = document.getElementById('aiUseNotPermittedList');
+      if (container.children.length > 1) {
+        row.remove();
+        saveData();
+      }
+    }
+
+    function updateAiUseVisibility() {
+      const aiUseStandard = document.getElementById('aiUseStandard').value;
+      const examplesSection = document.getElementById('aiUseExamplesSection');
+      console.log('updateAiUseVisibility called, aiUseStandard:', aiUseStandard); // DEBUG
+      if (aiUseStandard === 'green' || aiUseStandard === 'amber') {
+        examplesSection.style.display = 'block';
+      } else {
+        examplesSection.style.display = 'none';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // (Event listener now attached after loadSavedData)
+    });
+
+    function getFormJson() {
+      // Module details
+      const moduleName = document.querySelector('[name="moduleName"]').value;
+      const moduleCode = document.querySelector('[name="moduleCode"]').value;
+      const year = document.querySelector('[name="year"]').value;
+      const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
+      const cohort = document.querySelector('[name="cohort"]').value;
+      // Assessment table
+      const assessments = Array.from(document.querySelectorAll('#assessmentTableBody tr')).map((row, idx) => {
+        const cells = row.querySelectorAll('input, select');
+        // Add % if not present and not blank
+        let weighting = cells[3]?.value || '';
+        if (weighting && !weighting.trim().endsWith('%')) weighting = weighting + '%';
+        let passMark = cells[4]?.value || '';
+        if (passMark && !passMark.trim().endsWith('%')) passMark = passMark + '%';
+        return {
+          assessmentNumber: `A${idx + 1}`,
+          assessmentType: cells[0]?.value || '',
+          aiUse: cells[1]?.value ? (cells[1].value.charAt(0).toUpperCase() + cells[1].value.slice(1).toLowerCase()) : '',
+          wordCount: cells[2]?.value || '',
+          weighting,
+          passMark,
+          submissionMethod: cells[5]?.value || ''
+        };
+      });
+      // AI Use Standard
+      let aiUseStandard = document.getElementById('aiUseStandard').value;
+      let aiUsePermitted = null;
+      let aiUseNotPermitted = null;
+      if (aiUseStandard === 'green' || aiUseStandard === 'amber') {
+        aiUsePermitted = Array.from(document.querySelectorAll('#aiUsePermittedList input')).map(input => input.value).filter(Boolean);
+        aiUseNotPermitted = Array.from(document.querySelectorAll('#aiUseNotPermittedList input')).map(input => input.value).filter(Boolean);
+      }
+      if (aiUseStandard === 'red') {
+        aiUsePermitted = null;
+        aiUseNotPermitted = null;
+      }
+      // Capitalize aiUseStandard and cohort for output
+      aiUseStandard = aiUseStandard ? (aiUseStandard.charAt(0).toUpperCase() + aiUseStandard.slice(1).toLowerCase()) : '';
+      const cohortCapitalized = cohort ? (cohort.charAt(0).toUpperCase() + cohort.slice(1).toLowerCase()) : '';
+      return {
+        moduleName,
+        moduleCode,
+        year,
+        moduleLeader,
+        cohort: cohortCapitalized,
+        assessments,
+        aiUseStandard,
+        aiUsePermitted,
+        aiUseNotPermitted
+      };
+    }
+    // Removed showFormJson() function
+    // Removed closeJsonModal() function
+    // Removed copyJsonOutput() function
+
+    // Add advanced settings collapse logic like timetable/preset/new.html
+    function toggleAdvancedSettings() {
+      const content = document.getElementById('advancedContent');
+      const toggleIcon = document.querySelector('.advanced-toggle-icon');
+      if (content.classList.contains('collapsed')) {
+        content.classList.remove('collapsed');
+        toggleIcon.textContent = '▼';
+        toggleIcon.style.transform = 'rotate(0deg)';
+      } else {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize advanced settings as collapsed
+      const content = document.getElementById('advancedContent');
+      const toggleIcon = document.querySelector('.advanced-toggle-icon');
+      if (content && toggleIcon) {
+        content.classList.add('collapsed');
+        toggleIcon.textContent = '▶';
+        toggleIcon.style.transform = 'rotate(-90deg)';
+      }
+    });
+  </script>
+
+  <!-- Modal for Reset Confirmation -->
+  <div id="resetModal" class="modal-overlay">
+    <div class="modal-box">
+      <h3>Are you sure?</h3>
+      <p>This will clear all module details, tutors, and weeks. This action cannot be undone.</p>
+      <div class="modal-actions">
+        <button onclick="closeModal()" class="cancel-btn">Cancel</button>
+        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div id="toast" style="display: none;"></div>
+</body>
+</html>
