@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edit Preset | MScSimEd</title>
+  <title>Edit Assessment | MScSimEd</title>
   
   <!-- Favicon -->
   <link rel="icon" type="image/x-icon" href="../../favicon/favicon.ico">
@@ -790,17 +790,17 @@
       <div class="dropdown">
         <button class="dropdown-btn">📅 Timetable</button>
         <div class="dropdown-content">
-          <a href="../generate.html">🎯 Generate</a>
-          <a href="new.html">📄 New Preset</a>
-          <a href="edit.html">✏️ Edit Preset</a>
+          <a href="../../timetable/generate.html">🎯 Generate</a>
+          <a href="../../timetable/new.html">📄 New Preset</a>
+          <a href="../../timetable/edit.html">✏️ Edit Preset</a>
         </div>
       </div>
       <div class="dropdown">
         <button class="dropdown-btn">📅 Assessments</button>
         <div class="dropdown-content">
-          <a href="../../assessments/overview/generate.html">🎯 Generate</a>
-          <a href="../../assessments/overview/new.html">📄 New Preset</a>
-          <a href="../../assessments/overview/edit.html">✏️ Edit Preset</a>
+          <a href="generate.html">🎯 Generate</a>
+          <a href="new.html">📄 New Preset</a>
+          <a href="edit.html">✏️ Edit Preset</a>
         </div>
       </div>
       <a href="../../overview/new.html" class="navbar-link">📘 Module Overview</a>
@@ -857,85 +857,90 @@
               <option value="3">Year 3</option>
             </select></div>
           </div>
-                  <div class="form-row">
-          <div><label class="required">Module Leader</label><input type="text" name="moduleLeader" required placeholder="Enter module leader name"></div>
-          <div><label class="required">Cohort</label><select name="cohort" required>
-            <option value="">Select Cohort</option>
-            <option value="april">🌱 April Cohort</option>
-            <option value="september">🍂 September Cohort</option>
-          </select></div>
-        </div>
+          <div class="form-row">
+            <div><label class="required">Module Leader</label><input type="text" name="moduleLeader" required placeholder="Enter module leader name"></div>
+            <div><label class="required">Cohort</label><select name="cohort" required>
+              <option value="">Select Cohort</option>
+              <option value="april">🌱 April Cohort</option>
+              <option value="september">🍂 September Cohort</option>
+            </select></div>
+          </div>
         </form>
       </div>
 
       <div class="form-section">
-        <h2>Module Tutors (Optional)</h2>
-        <div id="tutorContainer">
-          <div class="form-row compact-tutor tutor-row">
-            <div><input type="text" name="tutorName" placeholder="Tutor Name" /></div>
-            <div><select name="tutorCampus">
-              <option value="">Select Campus</option>
-              <option value="London">London</option>
-              <option value="Reading">Reading</option>
-            </select></div>
-            <div class="button-placeholder"></div>
-          </div>
-        </div>
-        <button type="button" onclick="addTutor()" class="add-button">➕ Add Tutor</button>
-      </div>
-
-      <div class="form-section">
-        <h2>Weekly Breakdown</h2>
-        <table id="weekTable">
+        <h2>Assessment Table</h2>
+        <table id="assessmentTable">
           <thead>
             <tr>
-              <th>Week #</th>
-              <th><span class="required">Type</span></th>
-              <th>Highlight</th>
-              <th><span class="required">Topic</span></th>
-              <th>Action</th>
+              <th>Type of Assessment</th>
+              <th>AI Use</th>
+              <th>Word Count or Equivalent</th>
+              <th>Weighting</th>
+              <th>Pass Mark</th>
+              <th>Method of Submission</th>
+              <th>Actions</th>
             </tr>
           </thead>
-          <tbody id="weekBody">
-            <tr class="week-row">
-              <td><span class="week-number">1</span></td>
-              <td><select name="weekType" required>
-                <option value="">Select Type</option>
-                <option value="teaching">Teaching</option>
-                <option value="reading">Reading</option>
-                <option value="assessment">Assessment</option>
-                <option value="break">Break</option>
-              </select></td>
-              <td><select name="highlight">
-                <option value="no">No</option>
-                <option value="yes">Yes</option>
-              </select></td>
-              <td><input type="text" name="topic" required placeholder="Enter topic"></td>
+          <tbody id="assessmentTableBody">
+            <tr class="assessment-row">
+              <td><input type="text" name="assessmentType" required placeholder="e.g. Essay"></td>
               <td>
-                <div class="action-buttons">
-                  <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
-                  <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
-                  <button type="button" onclick="removeWeekRow(this)" title="Remove week">❌</button>
-                </div>
+                <select name="aiUse">
+                  <option value="">Select...</option>
+                  <option value="green">Green (Permitted)</option>
+                  <option value="amber">Amber (Limited)</option>
+                  <option value="red">Red (Not Permitted)</option>
+                </select>
               </td>
+              <td><input type="text" name="wordCount" placeholder="e.g. 2000"></td>
+              <td><input type="text" name="weighting" placeholder="e.g. 50%"></td>
+              <td><input type="text" name="passMark" placeholder="e.g. 40"></td>
+              <td><input type="text" name="submissionMethod" placeholder="e.g. Online"></td>
+              <td><!-- No delete button for first row --></td>
             </tr>
           </tbody>
         </table>
-        <div class="add-weeks-row">
-          <div class="add-weeks-left">
-            <button type="button" onclick="addRow()" class="add-button">➕ Add Week</button>
+        <button type="button" onclick="addAssessmentRow()" class="add-row-btn"><i class="fa fa-plus"></i> Add Assessment</button>
+      </div>
+
+      <div class="form-section">
+        <h2>AI Use in Assessment</h2>
+        <div class="ai-section">
+          <label for="aiUseStandard"><strong>Overall AI Use Standard:</strong></label>
+          <select id="aiUseStandard">
+            <option value="">Select...</option>
+            <option value="green">Green (Permitted)</option>
+            <option value="amber">Amber (Limited)</option>
+            <option value="red">Red (Not Permitted)</option>
+          </select>
+          <div style="margin-top: 18px;">
+            <strong>AI Use Permitted</strong>
+            <div id="aiUsePermittedList">
+              <div class="ai-use-row">
+                <input type="text" name="aiUsePermitted[]" placeholder="Add example..." />
+                <!-- No delete button for first row -->
+              </div>
+            </div>
+            <button type="button" onclick="addAiUsePermittedRow()">Add</button>
           </div>
-          <div class="add-weeks-right">
-            <input type="number" id="weeksToAdd" min="1" max="25" value="1" class="weeks-input">
-            <button type="button" onclick="addMultipleWeeks()" class="add-multiple-button">➕ Add Weeks</button>
+          <div style="margin-top: 18px;">
+            <h3>AI Use That Is <u>Not</u> Permitted</h3>
+            <div id="aiUseNotPermittedList">
+              <div class="ai-use-row">
+                <input type="text" name="aiUseNotPermitted[]" placeholder="Add example..." />
+                <!-- No delete button for first row -->
+              </div>
+            </div>
+            <button type="button" onclick="addAiUseNotPermittedRow()">Add</button>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="sticky-footer">
-    <button onclick="copyPresetJSON()">📋 Copy Preset JSON</button>
-    <button onclick="downloadPresetJSON()">💾 Download Preset JSON</button>
+  <div class="sticky-footer" id="stickyFooter" style="display: none;">
+    <button onclick="copyPresetJSON()" id="copyPresetBtn">📋 Copy Preset JSON</button>
+    <button onclick="downloadPresetJSON()" id="downloadPresetBtn">💾 Download Preset JSON</button>
     <button onclick="confirmReset()" class="reset-btn">🔄 Reset</button>
   </div>
 
@@ -945,7 +950,7 @@
       <h3>⚙️ Advanced Settings</h3>
       <span class="advanced-toggle-icon">▼</span>
     </div>
-    <div class="advanced-content" id="advancedContent">
+    <div class="advanced-content collapsed" id="advancedContent">
       <div class="advanced-option">
         <label class="switch" title="Export for presets.json">
           <input type="checkbox" id="exportForPresetsJson" />
@@ -979,6 +984,7 @@
     // Show edit form after successful import
     function showEditForm() {
       document.getElementById('editForm').style.display = 'block';
+      document.getElementById('stickyFooter').style.display = 'flex';
       // Close the import section
       const content = document.getElementById('importContent');
       const icon = document.getElementById('importToggleIcon');
@@ -1005,13 +1011,15 @@
       document.querySelector('[name="year"]').value = '';
       document.querySelector('[name="moduleLeader"]').value = '';
       document.querySelector('[name="cohort"]').value = '';
+      document.getElementById('aiUseStandard').value = '';
 
+      // Clear assessments (remove all rows)
+      clearAssessments();
+      // Do NOT add a default empty row
 
-      // Clear tutors (keep only one empty row)
-      clearTutors();
-
-      // Clear weeks (keep only one empty row)
-      clearWeeks();
+      // Clear AI use lists (remove all rows)
+      clearAiUseLists();
+      // Do NOT add a default empty row
 
       // Clear JSON textarea
       document.getElementById('jsonTextarea').value = '';
@@ -1024,6 +1032,7 @@
 
       // Hide the form
       document.getElementById('editForm').style.display = 'none';
+      document.getElementById('stickyFooter').style.display = 'none';
 
       // Show and expand the import section
       const content = document.getElementById('importContent');
@@ -1041,6 +1050,8 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
       showToast('🔄 Form reset successfully', 'success');
+      // Ensure form stays hidden after reset (and on refresh)
+      loadSavedData();
     }
 
     // Theme management
@@ -1153,86 +1164,159 @@
       document.querySelector('[name="moduleLeader"]').value = presetData.moduleLeader || '';
       document.querySelector('[name="cohort"]').value = presetData.cohort || '';
 
-
-      // Load tutors
-      clearTutors();
-      if (presetData.moduleTutors && Array.isArray(presetData.moduleTutors) && presetData.moduleTutors.length > 0) {
-        presetData.moduleTutors.forEach(tutor => {
-          addTutor(tutor.name || '', tutor.campus || '');
+      // Load assessments
+      clearAssessments();
+      if (presetData.assessments && Array.isArray(presetData.assessments) && presetData.assessments.length > 0) {
+        presetData.assessments.forEach(assessment => {
+          // Accept both new.html and old edit.html formats
+          addAssessmentRow({
+            assessmentType: assessment.assessmentType || '',
+            aiUse: (assessment.aiUse || '').toLowerCase(),
+            wordCount: assessment.wordCount || '',
+            weighting: (assessment.weighting || '').replace(/%$/, ''),
+            passMark: (assessment.passMark || '').replace(/%$/, ''),
+            submissionMethod: assessment.submissionMethod || ''
+          });
         });
+      } else {
+        addAssessmentRow();
       }
 
-      // Load weeks
-      clearWeeks();
-      if (presetData.weeks && Array.isArray(presetData.weeks) && presetData.weeks.length > 0) {
-        presetData.weeks.forEach(week => {
-          addWeekRow(week);
+      // Load AI use lists
+      clearAiUseLists();
+      let aiUseStandard = presetData.aiUseStandard || '';
+      // Accept both capitalized and lowercase
+      aiUseStandard = aiUseStandard.toLowerCase();
+      document.getElementById('aiUseStandard').value = aiUseStandard;
+      if ((aiUseStandard === 'green' || aiUseStandard === 'amber') && Array.isArray(presetData.aiUsePermitted)) {
+        presetData.aiUsePermitted.forEach(item => {
+          addAiUsePermittedRow(item);
         });
+      } else {
+        addAiUsePermittedRow();
+      }
+      if ((aiUseStandard === 'green' || aiUseStandard === 'amber') && Array.isArray(presetData.aiUseNotPermitted)) {
+        presetData.aiUseNotPermitted.forEach(item => {
+          addAiUseNotPermittedRow(item);
+        });
+      } else {
+        addAiUseNotPermittedRow();
       }
 
       // Clear any existing saved draft data since we're loading new data
       localStorage.removeItem('editPresetDraft');
-      
       // Show the edit form after successful import
       showEditForm();
-      
       // Update week numbers and validate data after loading
       updateWeekNumbers();
       validateTableData();
     }
 
-    function clearTutors() {
-      const container = document.getElementById('tutorContainer');
-      const rows = container.querySelectorAll('.tutor-row');
-      rows.forEach(row => row.remove());
-    }
-
-    function clearWeeks() {
-      const tbody = document.getElementById('weekBody');
+    function clearAssessments() {
+      const tbody = document.getElementById('assessmentTableBody');
       tbody.innerHTML = '';
     }
 
-    function addWeekRow(weekData) {
-      const tbody = document.getElementById('weekBody');
+    function clearAiUseLists() {
+      document.getElementById('aiUsePermittedList').innerHTML = '';
+      document.getElementById('aiUseNotPermittedList').innerHTML = '';
+    }
+
+    function addAssessmentRow(assessmentData = {}) {
+      const tbody = document.getElementById('assessmentTableBody');
       const tr = document.createElement('tr');
-      tr.className = 'week-row';
+      tr.className = 'assessment-row';
+      const isFirstRow = tbody.children.length === 0;
       tr.innerHTML = `
-        <td><span class="week-number">${weekData.week || ''}</span></td>
-        <td><select name="weekType" required>
-            <option value="">Select Type</option>
-            <option value="teaching" ${weekData.type === 'teaching' ? 'selected' : ''}>Teaching</option>
-            <option value="reading" ${weekData.type === 'reading' ? 'selected' : ''}>Reading</option>
-            <option value="assessment" ${weekData.type === 'assessment' ? 'selected' : ''}>Assessment</option>
-            <option value="break" ${weekData.type === 'break' ? 'selected' : ''}>Break</option>
-        </select></td>
-        <td><select name="highlight">
-            <option value="no" ${!weekData.highlight ? 'selected' : ''}>No</option>
-            <option value="yes" ${weekData.highlight ? 'selected' : ''}>Yes</option>
-        </select></td>
-        <td><input type="text" name="topic" value="${weekData.topic || ''}" required placeholder="Enter topic"></td>
+        <td><input type="text" name="assessmentType" value="${assessmentData.assessmentType || ''}" required placeholder="e.g. Essay"></td>
         <td>
-          <div class="action-buttons">
-            <button type="button" onclick="moveWeekUp(this)" title="Move week up">⬆️</button>
-            <button type="button" onclick="moveWeekDown(this)" title="Move week down">⬇️</button>
-            <button type="button" onclick="removeWeekRow(this)" title="Remove week">❌</button>
-          </div>
+          <select name="aiUse">
+            <option value=""${!assessmentData.aiUse ? ' selected' : ''}>Select...</option>
+            <option value="green"${assessmentData.aiUse === 'green' ? ' selected' : ''}>Green (Permitted)</option>
+            <option value="amber"${assessmentData.aiUse === 'amber' ? ' selected' : ''}>Amber (Limited)</option>
+            <option value="red"${assessmentData.aiUse === 'red' ? ' selected' : ''}>Red (Not Permitted)</option>
+          </select>
         </td>
+        <td><input type="text" name="wordCount" value="${assessmentData.wordCount || ''}" placeholder="e.g. 2000"></td>
+        <td><input type="text" name="weighting" value="${assessmentData.weighting || ''}" placeholder="e.g. 50%"></td>
+        <td><input type="text" name="passMark" value="${assessmentData.passMark || ''}" placeholder="e.g. 40"></td>
+        <td><input type="text" name="submissionMethod" value="${assessmentData.submissionMethod || ''}" placeholder="e.g. Online"></td>
+        <td>${isFirstRow ? '' : '<button type="button" onclick="removeAssessmentRow(this)" class="remove-btn">❌</button>'}</td>
       `;
       tbody.appendChild(tr);
-
-      // Add event listeners to new inputs for auto-save and highlight
+      // Add event listeners to new inputs for auto-save
       const newInputs = tr.querySelectorAll('input, select');
       newInputs.forEach(input => {
         input.addEventListener('input', saveData);
         input.addEventListener('change', saveData);
-        if (input.name === 'weekType' || input.name === 'highlight') {
-          input.addEventListener('change', function() {
-            updateRowHighlight(this.closest('.week-row'));
-          });
-        }
       });
-      // Update row highlighting for the loaded row
-      updateRowHighlight(tr);
+    }
+
+    function removeAssessmentRow(btn) {
+      const row = btn.closest('tr');
+      const tbody = document.getElementById('assessmentTableBody');
+      if (tbody.children.length > 1) {
+        row.remove();
+        saveData();
+      } else {
+        showToast('At least one assessment row is required.', 'error');
+      }
+    }
+
+    function addAiUsePermittedRow(item = '') {
+      const permittedList = document.getElementById('aiUsePermittedList');
+      const tr = document.createElement('div');
+      tr.className = 'ai-use-row';
+      tr.innerHTML = `
+        <input type="text" name="aiUsePermitted[]" value="${item}" placeholder="Add example..." />
+        <button type="button" onclick="removeAiUsePermittedRow(this)" class="remove-btn">❌</button>
+      `;
+      permittedList.appendChild(tr);
+
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+    }
+
+    function removeAiUsePermittedRow(button) {
+      const permittedList = document.getElementById('aiUsePermittedList');
+      const rows = permittedList.querySelectorAll('.ai-use-row');
+      if (rows.length > 1) {
+        button.closest('.ai-use-row').remove();
+      } else {
+        showToast("At least one AI Use Permitted example is required", "error");
+      }
+    }
+
+    function addAiUseNotPermittedRow(item = '') {
+      const notPermittedList = document.getElementById('aiUseNotPermittedList');
+      const tr = document.createElement('div');
+      tr.className = 'ai-use-row';
+      tr.innerHTML = `
+        <input type="text" name="aiUseNotPermitted[]" value="${item}" placeholder="Add example..." />
+        <button type="button" onclick="removeAiUseNotPermittedRow(this)" class="remove-btn">❌</button>
+      `;
+      notPermittedList.appendChild(tr);
+
+      // Add event listeners to new inputs for auto-save
+      const newInputs = tr.querySelectorAll('input');
+      newInputs.forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+    }
+
+    function removeAiUseNotPermittedRow(button) {
+      const notPermittedList = document.getElementById('aiUseNotPermittedList');
+      const rows = notPermittedList.querySelectorAll('.ai-use-row');
+      if (rows.length > 1) {
+        button.closest('.ai-use-row').remove();
+      } else {
+        showToast("At least one AI Use Not Permitted example is required", "error");
+      }
     }
 
     function updateTextButtons() {
@@ -1255,81 +1339,73 @@
 
 
     function getPresetData() {
+      // Module details
       const moduleName = document.querySelector('[name="moduleName"]').value;
       const moduleCode = document.querySelector('[name="moduleCode"]').value;
       const year = document.querySelector('[name="year"]').value;
       const moduleLeader = document.querySelector('[name="moduleLeader"]').value;
       const cohort = document.querySelector('[name="cohort"]').value;
-
-      const tutorElements = document.querySelectorAll('.tutor-row');
-      const moduleTutors = Array.from(tutorElements).map(row => ({
-        name: row.querySelector('[name="tutorName"]').value,
-        campus: row.querySelector('[name="tutorCampus"]').value
-      })).filter(tutor => tutor.name && tutor.campus); // Only include tutors with both name and campus
-
-      const weekElements = document.querySelectorAll('.week-row');
-      const weeks = Array.from(weekElements).map((row, index) => ({
-        week: parseInt(row.querySelector('.week-number').textContent, 10),
-        type: row.querySelector('[name="weekType"]').value,
-        highlight: row.querySelector('[name="highlight"]').value === 'yes',
-        date: '',
-        location: 'Location TBC',
-        topic: row.querySelector('[name="topic"]').value
-      })).filter(week => week.week && week.type && week.topic); // Only include weeks with required fields
-
+      // Assessment table
+      const assessments = Array.from(document.querySelectorAll('#assessmentTableBody tr')).map((row, idx) => {
+        const cells = row.querySelectorAll('input, select');
+        // Add % if not present and not blank
+        let weighting = cells[3]?.value || '';
+        if (weighting && !weighting.trim().endsWith('%')) weighting = weighting + '%';
+        let passMark = cells[4]?.value || '';
+        if (passMark && !passMark.trim().endsWith('%')) passMark = passMark + '%';
+        return {
+          assessmentNumber: `A${idx + 1}`,
+          assessmentType: cells[0]?.value || '',
+          aiUse: cells[1]?.value ? (cells[1].value.charAt(0).toUpperCase() + cells[1].value.slice(1).toLowerCase()) : '',
+          wordCount: cells[2]?.value || '',
+          weighting,
+          passMark,
+          submissionMethod: cells[5]?.value || ''
+        };
+      });
+      // AI Use Standard
+      let aiUseStandard = document.getElementById('aiUseStandard').value;
+      let aiUsePermitted = null;
+      let aiUseNotPermitted = null;
+      if (aiUseStandard === 'green' || aiUseStandard === 'amber') {
+        aiUsePermitted = Array.from(document.querySelectorAll('#aiUsePermittedList input')).map(input => input.value).filter(Boolean);
+        aiUseNotPermitted = Array.from(document.querySelectorAll('#aiUseNotPermittedList input')).map(input => input.value).filter(Boolean);
+      }
+      if (aiUseStandard === 'red') {
+        aiUsePermitted = null;
+        aiUseNotPermitted = null;
+      }
+      // Capitalize aiUseStandard for output
+      aiUseStandard = aiUseStandard ? (aiUseStandard.charAt(0).toUpperCase() + aiUseStandard.slice(1).toLowerCase()) : '';
       return {
         moduleName,
         moduleCode,
         year,
         moduleLeader,
         cohort,
-        moduleTutors,
-        weeks
+        assessments,
+        aiUseStandard,
+        aiUsePermitted,
+        aiUseNotPermitted
       };
     }
 
     function copyPresetJSON() {
-      const errors = validateTableData ? validateTableData() : [];
-      if (errors && errors.length > 0) {
-        showToast(`❌ Please fix the following errors:\n${errors.join('\n')}`, "error");
-        return;
-      }
-      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
       const data = getPresetData();
+      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
       let json;
       if (exportForPresets) {
-        if (!data.moduleCode) {
-          showToast("❌ Module Code is required for presets.json export", "error");
+        if (!data.moduleCode || !data.cohort) {
+          showToast('Module Code and Cohort are required for presets.json export', 'error');
           return;
         }
-        if (!data.cohort) {
-          showToast("❌ Cohort is required for presets.json export", "error");
-          return;
-        }
-        // Create the nested structure for presets.json
-        const presetStructure = {
+        json = JSON.stringify({
           [data.moduleCode]: {
-            [data.cohort]: {
-              cohort: data.cohort === 'april' ? 'April' : 'September',
-              moduleName: data.moduleName,
-              moduleCode: data.moduleCode,
-              year: data.year,
-              moduleLeader: data.moduleLeader,
-              firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23',
-              moduleTutors: data.moduleTutors,
-              weeks: data.weeks
-            }
+            [data.cohort]: { ...data }
           }
-        };
-        json = JSON.stringify(presetStructure, null, 2);
+        }, null, 2);
       } else {
-        // Export as single preset with cohort info
-        const singlePreset = {
-          ...data,
-          cohort: data.cohort === 'april' ? 'April' : 'September',
-          firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23'
-        };
-        json = JSON.stringify(singlePreset, null, 2);
+        json = JSON.stringify(data, null, 2);
       }
       navigator.clipboard.writeText(json).then(() => {
         showToast("✅ Preset JSON copied to clipboard!", "success");
@@ -1339,47 +1415,21 @@
     }
 
     function downloadPresetJSON() {
-      const errors = validateTableData ? validateTableData() : [];
-      if (errors && errors.length > 0) {
-        showToast(`❌ Please fix the following errors:\n${errors.join('\n')}`, "error");
-        return;
-      }
-      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
       const data = getPresetData();
+      const exportForPresets = document.getElementById('exportForPresetsJson').checked;
       let json;
       if (exportForPresets) {
-        if (!data.moduleCode) {
-          showToast("❌ Module Code is required for presets.json export", "error");
+        if (!data.moduleCode || !data.cohort) {
+          showToast('Module Code and Cohort are required for presets.json export', 'error');
           return;
         }
-        if (!data.cohort) {
-          showToast("❌ Cohort is required for presets.json export", "error");
-          return;
-        }
-        // Create the nested structure for presets.json
-        const presetStructure = {
+        json = JSON.stringify({
           [data.moduleCode]: {
-            [data.cohort]: {
-              cohort: data.cohort === 'april' ? 'April' : 'September',
-              moduleName: data.moduleName,
-              moduleCode: data.moduleCode,
-              year: data.year,
-              moduleLeader: data.moduleLeader,
-              firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23',
-              moduleTutors: data.moduleTutors,
-              weeks: data.weeks
-            }
+            [data.cohort]: { ...data }
           }
-        };
-        json = JSON.stringify(presetStructure, null, 2);
+        }, null, 2);
       } else {
-        // Export as single preset with cohort info
-        const singlePreset = {
-          ...data,
-          cohort: data.cohort === 'april' ? 'April' : 'September',
-          firstTeachingDate: data.cohort === 'april' ? '2025-04-23' : '2025-09-23'
-        };
-        json = JSON.stringify(singlePreset, null, 2);
+        json = JSON.stringify(data, null, 2);
       }
       const blob = new Blob([json], { type: "application/json" });
       const link = document.createElement("a");
@@ -1390,43 +1440,6 @@
       document.body.removeChild(link);
     }
       
-    function addTutor(name = '', campus = '') {
-      const container = document.getElementById('tutorContainer');
-      const row = document.createElement('div');
-      row.className = 'form-row compact-tutor tutor-row';
-
-      row.innerHTML = `
-        <div><input type="text" name="tutorName" placeholder="Tutor Name" value="${name}" /></div>
-        <div><select name="tutorCampus">
-          <option value="">Select Campus</option>
-          <option value="London" ${campus === 'London' ? 'selected' : ''}>London</option>
-          <option value="Reading" ${campus === 'Reading' ? 'selected' : ''}>Reading</option>
-        </select></div>
-        <div><button type="button" onclick="removeTutor(this)" class="remove-btn">❌</button></div>
-      `;
-
-      container.appendChild(row);
-      
-      // Add event listeners to new inputs for auto-save
-      const newInputs = row.querySelectorAll('input, select');
-      newInputs.forEach(input => {
-        input.addEventListener('input', saveData);
-        input.addEventListener('change', saveData);
-      });
-    }
-
-    function removeTutor(button) {
-      const container = document.getElementById('tutorContainer');
-      const rows = container.querySelectorAll('.tutor-row');
-      if (rows.length > 1) {
-        button.closest('.tutor-row').remove();
-      } else {
-        showToast("At least one tutor row is required", "error");
-      }
-    }
-
-
-
     function addRow() {
       const tbody = document.getElementById("weekBody");
       const tr = document.createElement("tr");
@@ -1628,11 +1641,27 @@
         year: document.querySelector('[name="year"]').value,
         moduleLeader: document.querySelector('[name="moduleLeader"]').value,
         cohort: document.querySelector('[name="cohort"]').value,
-        tutors: getTutorsData(),
-        weeks: getWeeksData()
+        assessments: getAssessmentsData(),
+        aiUseStandard: document.getElementById('aiUseStandard').value,
+        aiUsePermitted: Array.from(document.querySelectorAll('[name="aiUsePermitted[]"]')).map(input => input.value),
+        aiUseNotPermitted: Array.from(document.querySelectorAll('[name="aiUseNotPermitted[]"]')).map(input => input.value)
       };
-      console.log('Saving data:', data);
-      localStorage.setItem('editPresetDraft', JSON.stringify(data));
+      // Only save if there is meaningful data
+      const hasAnyData =
+        data.moduleName ||
+        data.moduleCode ||
+        data.year ||
+        data.moduleLeader ||
+        data.cohort ||
+        (Array.isArray(data.assessments) && data.assessments.some(a => a.assessmentType || a.aiUse || a.wordCount || a.weighting || a.passMark || a.submissionMethod)) ||
+        data.aiUseStandard ||
+        (Array.isArray(data.aiUsePermitted) && data.aiUsePermitted.some(v => v)) ||
+        (Array.isArray(data.aiUseNotPermitted) && data.aiUseNotPermitted.some(v => v));
+      if (hasAnyData) {
+        localStorage.setItem('editPresetDraft', JSON.stringify(data));
+      } else {
+        localStorage.removeItem('editPresetDraft');
+      }
     }
 
     function loadSavedData() {
@@ -1640,15 +1669,10 @@
       if (savedData) {
         try {
           const data = JSON.parse(savedData);
-          console.log('Loading saved data:', data);
-          
           // Check if there's any meaningful data before loading
           const hasAnyData = data.moduleName || data.moduleCode || data.moduleLeader || 
-                            (data.tutors && data.tutors.length > 0) || 
-                            (data.weeks && data.weeks.length > 0);
-          
-          console.log('Has any data:', hasAnyData);
-          
+                            (data.assessments && data.assessments.length > 0 && data.assessments.some(a => a.assessmentType || a.aiUse || a.wordCount || a.weighting || a.passMark || a.submissionMethod)) || 
+                            data.aiUseStandard || (data.aiUsePermitted && data.aiUsePermitted.length > 0 && data.aiUsePermitted.some(v => v)) || (data.aiUseNotPermitted && data.aiUseNotPermitted.length > 0 && data.aiUseNotPermitted.some(v => v));
           if (hasAnyData) {
             // Load module details
             if (data.moduleName) document.querySelector('[name="moduleName"]').value = data.moduleName;
@@ -1657,50 +1681,95 @@
             if (data.moduleLeader) document.querySelector('[name="moduleLeader"]').value = data.moduleLeader;
             if (data.cohort) document.querySelector('[name="cohort"]').value = data.cohort;
 
-
-            // Load tutors
-            if (data.tutors && data.tutors.length > 0) {
-              loadTutorsData(data.tutors);
+            // Load assessments
+            if (data.assessments && data.assessments.length > 0) {
+              loadAssessmentsData(data.assessments);
             }
 
-            // Load weeks
-            if (data.weeks && data.weeks.length > 0) {
-              loadWeeksData(data.weeks);
+            // Load AI use lists
+            if (data.aiUseStandard) document.getElementById('aiUseStandard').value = data.aiUseStandard;
+            if (data.aiUsePermitted && data.aiUsePermitted.length > 0) {
+              loadAiUsePermittedData(data.aiUsePermitted);
+            }
+            if (data.aiUseNotPermitted && data.aiUseNotPermitted.length > 0) {
+              loadAiUseNotPermittedData(data.aiUseNotPermitted);
             }
 
-            // Show the form
+            // Show the form and sticky footer, hide import section
             showEditForm();
             showToast("📝 Draft restored from previous session", "info");
+            // Collapse import section
+            const content = document.getElementById('importContent');
+            const icon = document.getElementById('importToggleIcon');
+            if (content && icon) {
+              content.style.display = 'none';
+              icon.textContent = '▼';
+            }
           } else {
             // Clear empty saved data
             localStorage.removeItem('editPresetDraft');
+            // Hide the form and sticky footer, show expanded import section
+            document.getElementById('editForm').style.display = 'none';
+            document.getElementById('stickyFooter').style.display = 'none';
+            const content = document.getElementById('importContent');
+            const icon = document.getElementById('importToggleIcon');
+            if (content && icon) {
+              content.style.display = 'block';
+              icon.textContent = '▲';
+            }
+            // Also clear any assessment/AI use rows
+            clearAssessments();
+            clearAiUseLists();
           }
         } catch (error) {
           console.error('Error loading saved data:', error);
           // Clear corrupted data
           localStorage.removeItem('editPresetDraft');
+          // Hide the form and sticky footer, show expanded import section
+          document.getElementById('editForm').style.display = 'none';
+          document.getElementById('stickyFooter').style.display = 'none';
+          const content = document.getElementById('importContent');
+          const icon = document.getElementById('importToggleIcon');
+          if (content && icon) {
+            content.style.display = 'block';
+            icon.textContent = '▲';
+          }
+          clearAssessments();
+          clearAiUseLists();
         }
+      } else {
+        // No saved data: hide the form and sticky footer, show expanded import section
+        document.getElementById('editForm').style.display = 'none';
+        document.getElementById('stickyFooter').style.display = 'none';
+        const content = document.getElementById('importContent');
+        const icon = document.getElementById('importToggleIcon');
+        if (content && icon) {
+          content.style.display = 'block';
+          icon.textContent = '▲';
+        }
+        clearAssessments();
+        clearAiUseLists();
       }
     }
 
-    function getTutorsData() {
-      const tutorElements = document.querySelectorAll('.tutor-row');
-      return Array.from(tutorElements).map(row => ({
-        name: row.querySelector('[name="tutorName"]').value,
-        campus: row.querySelector('[name="tutorCampus"]').value
+    function getAssessmentsData() {
+      const assessmentElements = document.querySelectorAll('.assessment-row');
+      return Array.from(assessmentElements).map(row => ({
+        assessmentType: row.querySelector('[name="assessmentType"]').value,
+        aiUse: row.querySelector('[name="aiUse"]').value,
+        wordCount: row.querySelector('[name="wordCount"]').value,
+        weighting: row.querySelector('[name="weighting"]').value,
+        passMark: row.querySelector('[name="passMark"]').value,
+        submissionMethod: row.querySelector('[name="submissionMethod"]').value
       }));
     }
 
-    function getWeeksData() {
-      const weekElements = document.querySelectorAll('.week-row');
-      return Array.from(weekElements).map((row, index) => ({
-        week: (index + 1).toString(),
-        type: row.querySelector('[name="weekType"]').value,
-        highlight: row.querySelector('[name="highlight"]').value,
-        date: '',
-        location: 'Location TBC',
-        topic: row.querySelector('[name="topic"]').value
-      }));
+    function getAiUsePermittedData() {
+      return Array.from(document.querySelectorAll('[name="aiUsePermitted[]"]')).map(input => input.value);
+    }
+
+    function getAiUseNotPermittedData() {
+      return Array.from(document.querySelectorAll('[name="aiUseNotPermitted[]"]')).map(input => input.value);
     }
 
     function setupAutoSave() {
@@ -1711,72 +1780,84 @@
         input.addEventListener('change', saveData);
       });
 
-      // Auto-save when tutors or weeks are added/removed
+      // Auto-save when assessments or AI use lists are added/removed
       const observer = new MutationObserver(saveData);
-      observer.observe(document.getElementById('tutorContainer'), { childList: true, subtree: true });
-      observer.observe(document.getElementById('weekBody'), { childList: true, subtree: true });
+      observer.observe(document.getElementById('assessmentTableBody'), { childList: true, subtree: true });
+      observer.observe(document.getElementById('aiUsePermittedList'), { childList: true, subtree: true });
+      observer.observe(document.getElementById('aiUseNotPermittedList'), { childList: true, subtree: true });
     }
 
-    function loadTutorsData(tutors) {
-      const container = document.getElementById('tutorContainer');
-      // Remove all existing tutor rows
-      const existingRows = container.querySelectorAll('.tutor-row');
-      existingRows.forEach(row => row.remove());
-      
-      // Add tutor rows with saved data
-      if (tutors && tutors.length > 0) {
-        tutors.forEach(tutor => {
-          addTutor(tutor.name, tutor.campus);
+    function loadAssessmentsData(assessments) {
+      const tbody = document.getElementById('assessmentTableBody');
+      tbody.innerHTML = '';
+      if (assessments && assessments.length > 0) {
+        assessments.forEach(assessment => {
+          addAssessmentRow(assessment);
+        });
+      }
+    }
+
+    function loadAiUsePermittedData(items) {
+      const permittedList = document.getElementById('aiUsePermittedList');
+      permittedList.innerHTML = ''; // Clear existing rows
+      if (items && items.length > 0) {
+        items.forEach(item => {
+          addAiUsePermittedRow(item);
         });
       } else {
-        // If no tutors, add one empty row
-        addTutor();
+        addAiUsePermittedRow(); // Add one empty row if no items
       }
     }
 
-    function loadWeeksData(weeks) {
-      const tbody = document.getElementById('weekBody');
-      tbody.innerHTML = '';
-      if (weeks && weeks.length > 0) {
-        weeks.forEach(week => {
-          addWeekRow(week);
+    function loadAiUseNotPermittedData(items) {
+      const notPermittedList = document.getElementById('aiUseNotPermittedList');
+      notPermittedList.innerHTML = ''; // Clear existing rows
+      if (items && items.length > 0) {
+        items.forEach(item => {
+          addAiUseNotPermittedRow(item);
         });
+      } else {
+        addAiUseNotPermittedRow(); // Add one empty row if no items
       }
-      updateWeekNumbers();
     }
 
     // Hide sticky footer by default
     window.addEventListener('DOMContentLoaded', function() {
       validateTableData();
+      // On page load, ensure correct section is shown based on data
+      loadSavedData();
     });
 
     function validateTableData() {
-      const weekRows = document.querySelectorAll('.week-row');
+      const assessmentRows = document.querySelectorAll('.assessment-row');
       let valid = true;
-      weekRows.forEach(row => {
-        const weekType = row.querySelector('[name="weekType"]').value;
-        const topic = row.querySelector('[name="topic"]').value.trim();
-        if (!weekType || !topic) {
+      assessmentRows.forEach(row => {
+        const typeInput = row.querySelector('[name="assessmentType"]');
+        const aiUseSelect = row.querySelector('[name="aiUse"]');
+        const wordCountInput = row.querySelector('[name="wordCount"]');
+        const weightingInput = row.querySelector('[name="weighting"]');
+        const passMarkInput = row.querySelector('[name="passMark"]');
+        const submissionMethodInput = row.querySelector('[name="submissionMethod"]');
+
+        if (!typeInput.value || !aiUseSelect.value || !wordCountInput.value || !weightingInput.value || !passMarkInput.value || !submissionMethodInput.value) {
           valid = false;
         }
       });
       // Always show the sticky footer
       document.querySelector('.sticky-footer').style.display = 'flex';
       // Disable/enable buttons based on validity
-      const copyBtn = document.querySelector('button[onclick="copyPresetJSON()"]');
-      const downloadBtn = document.querySelector('button[onclick="downloadPresetJSON()"]');
+      const copyBtn = document.getElementById('copyPresetBtn');
+      const downloadBtn = document.getElementById('downloadPresetBtn');
       if (copyBtn) {
-        if (!valid) copyBtn.setAttribute('disabled', 'disabled');
-        else copyBtn.removeAttribute('disabled');
+        copyBtn.removeAttribute('disabled');
       }
       if (downloadBtn) {
-        if (!valid) downloadBtn.setAttribute('disabled', 'disabled');
-        else downloadBtn.removeAttribute('disabled');
+        downloadBtn.removeAttribute('disabled');
       }
       // Never disable the reset button
       const resetBtn = document.querySelector('button[onclick="confirmReset()"]');
       if (resetBtn) resetBtn.removeAttribute('disabled');
-      return valid ? [] : ["Please fill in all required fields in the weekly breakdown."];
+      return valid ? [] : ["Please fill in all required fields in the assessment table."];
     }
 
     // Patch addRow to call validation
@@ -1813,7 +1894,6 @@
     function toggleAdvancedSettings() {
       const content = document.getElementById('advancedContent');
       const toggleIcon = document.querySelector('.advanced-toggle-icon');
-      
       if (content.classList.contains('collapsed')) {
         content.classList.remove('collapsed');
         toggleIcon.textContent = '▼';
@@ -1824,17 +1904,6 @@
         toggleIcon.style.transform = 'rotate(-90deg)';
       }
     }
-
-    // Initialize advanced settings as collapsed
-    document.addEventListener('DOMContentLoaded', function() {
-      const content = document.getElementById('advancedContent');
-      const toggleIcon = document.querySelector('.advanced-toggle-icon');
-      if (content && toggleIcon) {
-        content.classList.add('collapsed');
-        toggleIcon.textContent = '▶';
-        toggleIcon.style.transform = 'rotate(-90deg)';
-      }
-    });
   </script>
   <!-- Modal for Reset Confirmation -->
   <div id="resetModal" class="modal-overlay">

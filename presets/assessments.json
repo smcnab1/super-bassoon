@@ -1,0 +1,146 @@
+{
+  "aiUseDescriptions": {
+    "GREEN": "<strong>GREEN</strong>: Using Generative AI tools effectively is part of this assessment. You may use them in the following ways when preparing:",
+    "AMBER": "<strong>AMBER</strong>: We encourage you to use the following Generative AI tools to help you with preparing this assessment, in the following way:",
+    "RED": "<strong>RED</strong>. The use of Gen AI tools (e.g. ChatGPT, DeepSeek, etc) is not permitted. The purpose and format of the assessments makes it inappropriate or impractical for AI tools to be used."
+  },
+  "ED70013X": {
+    "april": {
+      "moduleName": "Digital Technologies in Education",
+      "moduleCode": "ED70013X",
+      "year": "2",
+      "moduleLeader": "Sam McNab",
+      "cohort": "April",
+      "assessments": [
+        {
+          "assessmentType": "A1 - Practical",
+          "aiUse": "GREEN",
+          "wordCount": "30-minute immersive event",
+          "weighting": "60%",
+          "passMark": "50%",
+          "submissionMethod": "In-Person",
+          "submissionDate": "",
+          "feedbackDate": ""
+        },
+        {
+          "assessmentType": "A2 - Practical",
+          "aiUse": "GREEN",
+          "wordCount": "15-minute debriefing session",
+          "weighting": "40%",
+          "passMark": "50%",
+          "submissionMethod": "In-Person",
+          "submissionDate": "",
+          "feedbackDate": ""
+        }
+      ],
+      "aiUseStandard": "GREEN",
+      "aiUsePermitted": [
+        "Generating ideas for immersive scenarios aligned to learning outcomes (A1)",
+        "Drafting simulated event plans, session objectives, or risk considerations",
+        "Creating a mock debrief structure with prompts based on a clinical simulation (A2)",
+        "Improving clarity and flow in reflective commentary or preparatory notes",
+        "Summarising evidence-based debriefing models to inform your structure or approach",
+        "Drafting a facilitation checklist or timeline (then critically reviewing and adapting it)"
+      ],
+      "aiUseNotPermitted": [
+        "Submitting AI-generated scripts, plans, or debriefs without meaningful modification",
+        "Using AI to fabricate references or evidence",
+        "Presenting AI content as your original clinical judgement or facilitation skill",
+        "Using AI during the in-person assessments unless approved as a reasonable adjustment",
+        "Relying solely on AI without applying your own critical thinking or judgement"
+      ]
+    },
+    "september": {
+      "moduleName": "Digital Technologies in Education",
+      "moduleCode": "ED70013X",
+      "year": "2",
+      "moduleLeader": "Sam McNab",
+      "cohort": "September",
+      "assessments": [
+        {
+          "assessmentType": "A1 - Practical",
+          "aiUse": "GREEN",
+          "wordCount": "30-minute immersive event",
+          "weighting": "60%",
+          "passMark": "50%",
+          "submissionMethod": "In-Person",
+          "submissionDate": "",
+          "feedbackDate": ""
+        },
+        {
+          "assessmentType": "A2 - Practical",
+          "aiUse": "GREEN",
+          "wordCount": "15-minute debriefing session",
+          "weighting": "40%",
+          "passMark": "50%",
+          "submissionMethod": "In-Person",
+          "submissionDate": "",
+          "feedbackDate": ""
+        }
+      ],
+      "aiUseStandard": "GREEN",
+      "aiUsePermitted": [
+        "Generating ideas for immersive scenarios aligned to learning outcomes (A1)",
+        "Drafting simulated event plans, session objectives, or risk considerations",
+        "Creating a mock debrief structure with prompts based on a clinical simulation (A2)",
+        "Improving clarity and flow in reflective commentary or preparatory notes",
+        "Summarising evidence-based debriefing models to inform your structure or approach",
+        "Drafting a facilitation checklist or timeline (then critically reviewing and adapting it)"
+      ],
+      "aiUseNotPermitted": [
+        "Submitting AI-generated scripts, plans, or debriefs without meaningful modification",
+        "Using AI to fabricate references or evidence",
+        "Presenting AI content as your original clinical judgement or facilitation skill",
+        "Using AI during the in-person assessments unless approved as a reasonable adjustment",
+        "Relying solely on AI without applying your own critical thinking or judgement"
+      ]
+    }
+  },
+  "ED70011X": {
+    "april": {
+      "moduleName": "Foundation of Simulation Education",
+      "moduleCode": "ED70011X",
+      "year": "1",
+      "moduleLeader": "Anita Sudhagar",
+      "cohort": "April",
+      "assessments": [
+        {
+          "assessmentType": "A1 - Practical",
+          "aiUse": "GREEN",
+          "wordCount": "30-minute immersive event",
+          "weighting": "60%",
+          "passMark": "50%",
+          "submissionMethod": "In-Person",
+          "submissionDate": "",
+          "feedbackDate": ""
+        },
+        {
+          "assessmentType": "A2 - Practical",
+          "aiUse": "GREEN",
+          "wordCount": "15-minute debriefing session",
+          "weighting": "40%",
+          "passMark": "50%",
+          "submissionMethod": "In-Person",
+          "submissionDate": "",
+          "feedbackDate": ""
+        }
+      ],
+      "aiUseStandard": "GREEN",
+      "aiUsePermitted": [
+        "Generating ideas for immersive scenarios aligned to learning outcomes (A1)",
+        "Drafting simulated event plans, session objectives, or risk considerations",
+        "Creating a mock debrief structure with prompts based on a clinical simulation (A2)",
+        "Improving clarity and flow in reflective commentary or preparatory notes",
+        "Summarising evidence-based debriefing models to inform your structure or approach",
+        "Drafting a facilitation checklist or timeline (then critically reviewing and adapting it)"
+      ],
+      "aiUseNotPermitted": [
+        "Submitting AI-generated scripts, plans, or debriefs without meaningful modification",
+        "Using AI to fabricate references or evidence",
+        "Presenting AI content as your original clinical judgement or facilitation skill",
+        "Using AI during the in-person assessments unless approved as a reasonable adjustment",
+        "Relying solely on AI without applying your own critical thinking or judgement"
+      ]
+    }
+  }
+}
