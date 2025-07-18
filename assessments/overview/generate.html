@@ -371,6 +371,55 @@
       background: #f8fafc;
     }
 
+    .formative-block {
+      background: #f4f4f4;
+      border: 1px solid #bbb;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+    }
+    .formative-header {
+      padding: 16px 20px;
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: #444;
+      background: #e0e0e0;
+      border-bottom: 1px solid #bbb;
+      border-radius: 8px 8px 0 0;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .formative-content {
+      padding: 18px 20px;
+      transition: max-height 0.3s ease, opacity 0.3s ease;
+    }
+    .formative-content.collapsed {
+      max-height: 0;
+      opacity: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+      overflow: hidden;
+    }
+    .formative-content label {
+      display: block;
+      margin-bottom: 10px;
+      color: #333;
+      font-weight: 400;
+    }
+    .formative-content input[type="text"],
+    .formative-content input[type="datetime-local"] {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #bbb;
+      border-radius: 5px;
+      font-size: 1rem;
+      margin-top: 3px;
+      margin-bottom: 8px;
+      background: #fafafa;
+    }
+
   </style>
 </head>
 <body>
@@ -492,7 +541,10 @@
     <p><strong>AI Use Standard:</strong> <span id="modAIUseStandard">Not Defined</span></p>
   </div>
 
-  <!-- Collapsible Assessments Section (now above AI Use) -->
+  <!-- Formative Assessments Section (above Summative) -->
+  <div id="formativeBlocksContainer" style="display:none;"></div>
+  <!-- Summative Assessments Header and Section -->
+  <h2 id="summativeHeader">Summative Assessments</h2>
   <div id="assessmentBlocksContainer"></div>
     
   <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
@@ -746,7 +798,7 @@
       document.getElementById("modYear").textContent = data.year || 'Not Defined';
       document.getElementById("modLeader").textContent = data.moduleLeader || 'Not Defined';
       document.getElementById("modCohort").textContent = data.cohort ? (data.cohort.charAt(0).toUpperCase() + data.cohort.slice(1).toLowerCase()) : 'Not Defined';
-      document.getElementById("modAIUseStandard").textContent = data.aiUseStandard || 'Not Defined';
+      document.getElementById("modAIUseStandard").textContent = data.aiUseStandard ? (data.aiUseStandard.charAt(0).toUpperCase() + data.aiUseStandard.slice(1).toLowerCase()) : 'Not Defined';
 
       // Remove timetable/weeks logic
       // Clear and render only assessments
@@ -757,6 +809,12 @@
       document.getElementById("openTabBtn").disabled = false;
       document.getElementById("copyBtn").disabled = false;
       document.getElementById("resetBtn").disabled = false;
+
+      // --- ADD THIS: Update formative section after manual import ---
+      extractFormativeAssessments();
+      renderFormativeBlocks();
+      // Ensure formative section is rendered immediately after import
+      setTimeout(() => { extractFormativeAssessments(); renderFormativeBlocks(); }, 0);
     }
 
     // Initialize JSON import section as collapsed
@@ -844,7 +902,7 @@
       document.getElementById("modYear").textContent = presetData.year || 'Not Defined';
       document.getElementById("modLeader").textContent = presetData.moduleLeader || 'Not Defined';
       document.getElementById("modCohort").textContent = presetData.cohort ? (presetData.cohort.charAt(0).toUpperCase() + presetData.cohort.slice(1).toLowerCase()) : 'Not Defined';
-      document.getElementById("modAIUseStandard").textContent = presetData.aiUseStandard || 'Not Defined';
+      document.getElementById("modAIUseStandard").textContent = presetData.aiUseStandard ? (presetData.aiUseStandard.charAt(0).toUpperCase() + presetData.aiUseStandard.slice(1).toLowerCase()) : 'Not Defined';
 
 
       // Enable buttons
@@ -920,6 +978,7 @@
 
     // - copyFullHTML
     function copyFullHTML() {
+      if (typeof persistFormativeBlocks === 'function') persistFormativeBlocks();
       const fullHTML = generateFullHTML();
 
       const temp = document.createElement('textarea');
@@ -1031,6 +1090,100 @@
         return email + '@uwl.ac.uk';
       }
       const moduleLeaderEmail = makeLeaderEmail(moduleLeader);
+
+      // Get formative assessments from the loaded preset (if available)
+      let formativeAssessments = [];
+      let includeFormative = false;
+      let data = null;
+      if (sharedPresets && selectedPresetKey) {
+        const preset = sharedPresets[selectedPresetKey];
+        const cohort = selectedCohort || (preset.april ? 'april' : 'september');
+        data = (preset[cohort] || preset) || {};
+      } else {
+        // Try to get from localStorage/manualJsonContent if available
+        try {
+          const manualJsonContent = localStorage.getItem('manualJsonContent');
+          if (manualJsonContent) {
+            data = JSON.parse(manualJsonContent);
+          }
+        } catch (e) {}
+      }
+      if (data && typeof data.includeFormative === 'string' && data.includeFormative.trim().toLowerCase() === 'yes') {
+        includeFormative = true;
+      }
+      if (data && Array.isArray(data.formativeAssessments)) {
+        formativeAssessments = data.formativeAssessments;
+      }
+      // Build the formative table rows only if includeFormative is yes
+      let formativeTable = '';
+      if (includeFormative && Array.isArray(formativeAssessments) && formativeAssessments.length > 0) {
+        // Try to get current values from localStorage (formativeBlocksData)
+        let formativeBlocksData = {};
+        try {
+          formativeBlocksData = JSON.parse(localStorage.getItem('formativeBlocksData')) || {};
+        } catch (e) { formativeBlocksData = {}; }
+        const formativeRows = formativeAssessments.map((fa, idx) => {
+          const formativeNumber = fa.formativeNumber || `FA${idx + 1}`;
+          const formativeType = (formativeBlocksData[formativeNumber]?.formativeType !== undefined) ? formativeBlocksData[formativeNumber].formativeType : (fa.formativeType || '');
+          const formativeTask = (formativeBlocksData[formativeNumber]?.formativeTask !== undefined) ? formativeBlocksData[formativeNumber].formativeTask : (fa.formativeTask || '');
+          const submissionDate = formativeBlocksData[formativeNumber]?.submissionDate || fa.submissionDate || '';
+          const feedbackDate = formativeBlocksData[formativeNumber]?.feedbackDate || fa.deadlineDate || '';
+          // Format dates for display
+          let submissionDateStr = '';
+          if (typeof submissionDate === 'string' && submissionDate.trim() !== '') {
+            const d = new Date(submissionDate);
+            if (!isNaN(d)) {
+              submissionDateStr = d.toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+            } else {
+              submissionDateStr = submissionDate;
+            }
+          } else {
+            submissionDateStr = '';
+          }
+          let feedbackDateStr = '';
+          if (typeof feedbackDate === 'string' && feedbackDate.trim() !== '') {
+            const d = new Date(feedbackDate);
+            if (!isNaN(d)) {
+              feedbackDateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+            } else {
+              feedbackDateStr = feedbackDate;
+            }
+          } else {
+            feedbackDateStr = '';
+          }
+          return `
+            <tr>
+              <td>${formativeNumber}: ${formativeType}</td>
+              <td>${formativeTask}</td>
+              <td>${submissionDateStr}</td>
+              <td>${feedbackDateStr}</td>
+            </tr>
+          `;
+        }).join('');
+        formativeTable = `
+          <h2>Formative Assessment Table</h2>
+          <table>
+            <thead>
+              <tr>
+                <th>Type of Assessment</th>
+                <th>Task Details</th>
+                <th>Submission Date</th>
+                <th>Date of Feedback</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${formativeRows}
+            </tbody>
+          </table>
+        `;
+      }
+
+      // Build the formative blocks section (editable)
+      let formativeBlocksSection = '';
+      if (Array.isArray(formativeAssessments) && formativeAssessments.length > 0) {
+        formativeBlocksSection = `<h2>Formative Assessments</h2><div id="formativeBlocksContainer"></div>`;
+      }
+
       return `
 <!DOCTYPE html>
 <html lang="en">
@@ -1058,11 +1211,21 @@
     a { color: #0073e6; text-decoration: none; }
     a:hover { text-decoration: underline; }
     @media (max-width: 768px) { table, th, td { font-size: 0.9rem; } h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; } }
+    .assessment-block, .formative-block { background: #f8fbff; border: 1px solid #cce0ff; border-radius: 8px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .assessment-header, .formative-header { padding: 16px 20px; border-bottom: 1px solid #cce0ff; font-weight: 600; font-size: 1.1rem; background: #e6f0fa; border-radius: 8px 8px 0 0; display: flex; align-items: center; justify-content: space-between; }
+    .assessment-content, .formative-content { padding: 20px; }
+    .form-row { display: flex; gap: 24px; margin-bottom: 16px; }
+    .form-row > div { flex: 1; }
+    .display-field { background: #f4f8ff; border: 1px solid #cce0ff; border-radius: 6px; padding: 10px; color: #333; font-size: 1rem; min-height: 20px; display: flex; align-items: center; }
+    input[type="datetime-local"] { width: 100%; padding: 10px; border: 1px solid #cce0ff; border-radius: 6px; background: #fff; color: #333; font-size: 1rem; }
+    input[type="datetime-local"]:focus { outline: none; border-color: #4a90e2; box-shadow: 0 0 0 2px #b3d1ff; }
+    @media (max-width: 768px) { .form-row { flex-direction: column; gap: 10px; } }
   </style>
 </head>
 <body>
   <div class="container">
     <h1><i class="fa-solid fa-clipboard-check"></i> Module Assessments</h1>
+    ${formativeTable}
     <h2>Summative Assessment Table</h2>
     <table>
       <thead>
@@ -1161,12 +1324,24 @@
 
     // - previewTimetable
     function previewTimetable() {
+      if (typeof persistFormativeBlocks === 'function') persistFormativeBlocks();
       const iframe = document.getElementById('previewFrame');
       const doc = iframe.contentDocument || iframe.contentWindow.document;
-      
       doc.open();
       doc.write(generateFullHTML());
       doc.close();
+      // Ensure iframe is visible and styled
+      iframe.style.display = 'block';
+      iframe.style.width = '100%';
+      iframe.style.height = '80vh';
+      iframe.style.border = '1px solid #ccc';
+      iframe.style.marginTop = '20px';
+      // Scroll to the preview iframe
+      setTimeout(() => {
+        iframe.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
+      // Show toast notification
+      showToast('🔍 Preview generated below!', 'success');
     }
 
     // - showToast
@@ -1190,6 +1365,7 @@
 
     // - openPreviewInNewTab
     function openPreviewInNewTab() {
+      if (typeof persistFormativeBlocks === 'function') persistFormativeBlocks();
       // Use the same HTML as generateFullHTML, reflecting current state
       const fullHTML = generateFullHTML();
       const blob = new Blob([fullHTML], { type: 'text/html' });
@@ -1277,6 +1453,7 @@
       localStorage.removeItem('assessmentBlocksData'); // Clear assessment blocks data
       localStorage.removeItem('aiUsePermitted'); // Clear AI use lists
       localStorage.removeItem('aiUseNotPermitted'); // Clear AI use lists
+      localStorage.removeItem('formativeBlocksData'); // Clear formative blocks data
 
       // Hide module details
       document.getElementById("moduleDetails").style.display = "none";
@@ -1294,9 +1471,18 @@
       const ab = document.getElementById("assessmentBlocksContainer");
       if (ab) ab.innerHTML = "";
 
+      // Hide and clear formative blocks
+      const fb = document.getElementById("formativeBlocksContainer");
+      if (fb) { fb.innerHTML = ""; fb.style.display = "none"; }
+      // Hide headings
+      const summativeHeader = document.getElementById("summativeHeader");
+      if (summativeHeader) summativeHeader.style.display = "none";
+
       // Clear AI use fields
-      document.getElementById('aiPermittedEdit').value = '';
-      document.getElementById('aiNotPermittedEdit').value = '';
+      var aiPermittedEdit = document.getElementById('aiPermittedEdit');
+      if (aiPermittedEdit) aiPermittedEdit.value = '';
+      var aiNotPermittedEdit = document.getElementById('aiNotPermittedEdit');
+      if (aiNotPermittedEdit) aiNotPermittedEdit.value = '';
 
       // Clear JSON textarea
       document.getElementById("jsonTextarea").value = "";
@@ -1410,6 +1596,7 @@
       }
       assessments.forEach((a, i) => {
         const assessmentNumber = a.assessmentNumber || (i + 1);
+        const assessmentNumberDisplay = `A${assessmentNumber}`;
         const assessmentType = a.assessmentType || '';
         const assessmentDetails = a.assessmentDetails || '';
         const aiUse = (a.aiUse || aiUseStandard || '').toLowerCase();
@@ -1438,10 +1625,17 @@
           }
         }
 
+        // Ensure weighting always shows % symbol
+        let weightingDisplay = '';
+        if (weighting) {
+          weightingDisplay = weighting.toString().trim().endsWith('%') ? weighting.toString().trim() : weighting.toString().trim() + '%';
+        }
+
         container.innerHTML += `
+        
           <div class="assessment-block" id="${id}">
             <div class="assessment-header" onclick="this.nextElementSibling.classList.toggle('collapsed'); this.querySelector('.toggle-icon') ? this.querySelector('.toggle-icon').textContent = this.nextElementSibling.classList.contains('collapsed') ? '▶' : '▼' : null;" style="background: ${headerBg};">
-              <span class="assessment-title">${assessmentNumber}: ${assessmentType} ${assessmentDetails ? '[' + assessmentDetails + ']' : ''}${dueDateStr ? ' [' + dueDateStr + ' | ' + weighting + '] ' : ''}</span>
+              <span class="assessment-title">${assessmentNumberDisplay}: ${assessmentType} ${dueDateStr ? ' [' + dueDateStr + ']' : ''}${weightingDisplay ? ' [' + weightingDisplay + ' Weighting]' : ''}</span>
               <span class="assessment-summary">Click to edit</span>
               <span class="toggle-icon">▼</span>
             </div>
@@ -1449,13 +1643,16 @@
               <div class="form-row">
                 <div>
                   <label>Assessment Number</label>
-                  <div class="display-field">${assessmentNumber}</div>
-                  <input type="hidden" name="assessmentNumber" value="${assessmentNumber}">
+                  <div class="display-field">${assessmentNumberDisplay}</div>
+                  <input type="hidden" name="assessmentNumber" value="${assessmentNumberDisplay}">
                 </div>
                 <div>
                   <label>Assessment Type</label>
-                  <div class="display-field">${assessmentType}</div>
-                  <input type="hidden" name="type" value="${assessmentType}">
+                  <input type="text" name="type" value="${assessmentType}">
+                </div>
+                <div>
+                  <label>Assessment Details</label>
+                  <input type="text" name="assessmentDetails" value="${assessmentDetails}">
                 </div>
                 <div>
                   <label>AI Usage</label>
@@ -1474,7 +1671,7 @@
                 </div>
                 <div>
                   <label>Weighting</label>
-                  <input type="text" name="weighting" value="${weighting}" required>
+                  <input type="text" name="weighting" value="${weightingDisplay}" required>
                 </div>
                 <div>
                   <label>Pass Mark</label>
@@ -1516,6 +1713,40 @@
             input.addEventListener('change', persistAssessmentBlocks);
             input.addEventListener('input', persistAssessmentBlocks);
           });
+          // Update header live when submission date, weighting, type, or details change
+          const submissionInput = block.querySelector('input[name="submissionDate"]');
+          const typeInput = block.querySelector('input[name="type"]');
+          const weightingInput = block.querySelector('input[name="weighting"]');
+          const detailsInput = block.querySelector('input[name="assessmentDetails"]');
+          const updateHeader = () => {
+            const header = block.querySelector('.assessment-title');
+            let newDueDate = '';
+            if (submissionInput && submissionInput.value) {
+              const d = new Date(submissionInput.value);
+              if (!isNaN(d)) {
+                newDueDate = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+              } else {
+                newDueDate = submissionInput.value;
+              }
+            }
+            let newWeighting = '';
+            if (weightingInput && weightingInput.value) {
+              let val = weightingInput.value.trim();
+              if (!val.endsWith('%')) val += '%';
+              newWeighting = `${val} Weighting`;
+              // Also update the input value to always show %
+              weightingInput.value = val;
+            }
+            let headerText = `${assessmentNumberDisplay}: ${typeInput ? typeInput.value : assessmentType}`;
+            if (detailsInput && detailsInput.value) headerText += ` [${detailsInput.value}]`;
+            if (newDueDate) headerText += ` [${newDueDate}]`;
+            if (newWeighting) headerText += ` [${newWeighting}]`;
+            header.textContent = headerText;
+          };
+          if (submissionInput) submissionInput.addEventListener('input', updateHeader);
+          if (typeInput) typeInput.addEventListener('input', updateHeader);
+          if (weightingInput) weightingInput.addEventListener('input', updateHeader);
+          if (detailsInput) detailsInput.addEventListener('input', updateHeader);
         }
       });
       // Collapse all but the first by default
@@ -1544,6 +1775,239 @@
       });
       localStorage.setItem('assessmentBlocksData', JSON.stringify(data));
     }
+
+    // --- FORMATIVE BLOCKS LOGIC ---
+    let formativeAssessments = [];
+
+    function extractFormativeAssessments() {
+      // Try to get from loaded preset or manualJsonContent
+      let data = null;
+      if (window.sharedPresets && window.selectedPresetKey) {
+        const preset = window.sharedPresets[window.selectedPresetKey];
+        const cohort = window.selectedCohort || (preset.april ? 'april' : 'september');
+        data = (preset[cohort] || preset) || {};
+      } else {
+        try {
+          const manualJsonContent = localStorage.getItem('manualJsonContent');
+          if (manualJsonContent) {
+            data = JSON.parse(manualJsonContent);
+          }
+        } catch (e) {}
+      }
+      if (data && Array.isArray(data.formativeAssessments)) {
+        formativeAssessments = data.formativeAssessments;
+      } else {
+        formativeAssessments = [];
+      }
+    }
+
+    function renderFormativeBlocks() {
+      const container = document.getElementById('formativeBlocksContainer');
+      if (!container) return;
+      // Check includeFormative flag from loaded data
+      let includeFormative = false;
+      let data = null;
+      if (window.sharedPresets && window.selectedPresetKey) {
+        const preset = window.sharedPresets[window.selectedPresetKey];
+        const cohort = window.selectedCohort || (preset.april ? 'april' : 'september');
+        data = (preset[cohort] || preset) || {};
+      } else {
+        try {
+          const manualJsonContent = localStorage.getItem('manualJsonContent');
+          if (manualJsonContent) {
+            data = JSON.parse(manualJsonContent);
+          }
+        } catch (e) {}
+      }
+      if (data && typeof data.includeFormative === 'string' && data.includeFormative.trim().toLowerCase() === 'yes') {
+        includeFormative = true;
+      }
+      if (!includeFormative || !Array.isArray(formativeAssessments) || formativeAssessments.length === 0) {
+        container.innerHTML = '';
+        container.style.display = 'none';
+        return;
+      }
+      // Try to load from localStorage
+      let stored = localStorage.getItem('formativeBlocksData');
+      let saved = {};
+      if (stored) {
+        try { saved = JSON.parse(stored) || {}; } catch (e) { saved = {}; }
+      }
+      container.innerHTML = '<h2 id="formativeHeader">Formative Assessments</h2>';
+      container.style.display = 'block';
+      formativeAssessments.forEach((fa, i) => {
+        const formativeNumber = fa.formativeNumber || `FA${i + 1}`;
+        const formativeType = saved[formativeNumber]?.formativeType || fa.formativeType || '';
+        const formativeTask = saved[formativeNumber]?.formativeTask || fa.formativeTask || '';
+        const submissionDate = saved[formativeNumber]?.submissionDate || fa.submissionDate || '';
+        const feedbackDate = saved[formativeNumber]?.feedbackDate || fa.deadlineDate || '';
+        const id = `formative-${formativeNumber}`;
+        // Collapsible logic: same as assessment-block
+        let dueDateStr = '';
+        if (submissionDate) {
+          const d = new Date(submissionDate);
+          if (!isNaN(d)) {
+            dueDateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+          } else {
+            dueDateStr = submissionDate;
+          }
+        }
+        container.innerHTML += `
+          <div class="formative-block" id="${id}">
+            <div class="formative-header" onclick="this.nextElementSibling.classList.toggle('collapsed'); this.querySelector('.toggle-icon') ? this.querySelector('.toggle-icon').textContent = this.nextElementSibling.classList.contains('collapsed') ? '▶' : '▼' : null;">
+              <span class="formative-title">${formativeNumber}: ${formativeType}${dueDateStr ? ' [' + dueDateStr + ']' : ''}</span>
+              <span class="formative-summary">Click to edit</span>
+              <span class="toggle-icon">▼</span>
+            </div>
+            <div class="formative-content">
+              <div class="form-row">
+                <div>
+                  <label>Formative Number</label>
+                  <div class="display-field">${formativeNumber}</div>
+                </div>
+                <div>
+                  <label>Type of Assessment</label>
+                  <input type="text" name="formativeType" value="${formativeType}">
+                </div>
+                <div>
+                  <label>Task Details</label>
+                  <input type="text" name="formativeTask" value="${formativeTask}">
+                </div>
+              </div>
+              <div class="form-row">
+                <div>
+                  <label>Submission Date & Time</label>
+                  <input type="datetime-local" name="formativeSubmissionDate" value="${submissionDate}">
+                </div>
+                <div>
+                  <label>Feedback Date</label>
+                  <input type="datetime-local" name="formativeFeedbackDate" value="${feedbackDate}">
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+      // Attach auto-calc and persistence logic
+      formativeAssessments.forEach((fa, i) => {
+        const formativeNumber = fa.formativeNumber || `FA${i + 1}`;
+        const id = `formative-${formativeNumber}`;
+        const block = document.getElementById(id);
+        if (block) {
+          const submissionInput = block.querySelector('input[name="formativeSubmissionDate"]');
+          const feedbackInput = block.querySelector('input[name="formativeFeedbackDate"]');
+          const typeInput = block.querySelector('input[name="formativeType"]');
+          // Remove taskInput from header logic
+          let userEdited = false;
+          if (submissionInput && feedbackInput) {
+            feedbackInput.addEventListener('input', function() { userEdited = true; persistFormativeBlocks(); });
+            submissionInput.addEventListener('change', async function() {
+              if (!bankHolidaysLoaded) await fetchBankHolidays();
+              if (!submissionInput.value) return;
+              if (!userEdited || !feedbackInput.value) {
+                const feedbackDate = addWorkingDays(submissionInput.value, 15);
+                const pad = n => n.toString().padStart(2, '0');
+                const y = feedbackDate.getFullYear();
+                const m = pad(feedbackDate.getMonth() + 1);
+                const d = pad(feedbackDate.getDate());
+                const h = pad(feedbackDate.getHours());
+                const min = pad(feedbackDate.getMinutes());
+                feedbackInput.value = `${y}-${m}-${d}T${h}:${min}`;
+                userEdited = false;
+              }
+              // Update due date in header live
+              const header = block.querySelector('.formative-title');
+              let newDueDate = '';
+              if (submissionInput.value) {
+                const d = new Date(submissionInput.value);
+                if (!isNaN(d)) {
+                  newDueDate = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+                } else {
+                  newDueDate = submissionInput.value;
+                }
+              }
+              // Update header text (keep number, type, and update due date in brackets)
+              let headerText = `${formativeNumber}: ${typeInput ? typeInput.value : ''}`;
+              if (newDueDate) headerText += ` [${newDueDate}]`;
+              header.textContent = headerText;
+              persistFormativeBlocks();
+            });
+            submissionInput.addEventListener('input', persistFormativeBlocks);
+            feedbackInput.addEventListener('change', persistFormativeBlocks);
+          }
+          // Update header live when type changes (not task)
+          const updateHeader = () => {
+            const header = block.querySelector('.formative-title');
+            let newDueDate = '';
+            if (submissionInput && submissionInput.value) {
+              const d = new Date(submissionInput.value);
+              if (!isNaN(d)) {
+                newDueDate = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+              } else {
+                newDueDate = submissionInput.value;
+              }
+            }
+            let headerText = `${formativeNumber}: ${typeInput ? typeInput.value : ''}`;
+            if (newDueDate) headerText += ` [${newDueDate}]`;
+            header.textContent = headerText;
+          };
+          if (typeInput) typeInput.addEventListener('input', () => { persistFormativeBlocks(); updateHeader(); });
+          if (submissionInput) submissionInput.addEventListener('input', updateHeader);
+        }
+      });
+      // Collapse all but the first by default
+      const allFormativeContents = container.querySelectorAll('.formative-content');
+      allFormativeContents.forEach((el, idx) => {
+        if (idx > 0) el.classList.add('collapsed');
+      });
+    }
+    function persistFormativeBlocks() {
+      const blocks = document.querySelectorAll('.formative-block');
+      const data = {};
+      blocks.forEach(block => {
+        const formativeNumber = block.querySelector('.display-field').textContent.trim();
+        const formativeType = block.querySelector('input[name="formativeType"]')?.value || '';
+        const formativeTask = block.querySelector('input[name="formativeTask"]')?.value || '';
+        const submissionDate = block.querySelector('input[name="formativeSubmissionDate"]')?.value || '';
+        const feedbackDate = block.querySelector('input[name="formativeFeedbackDate"]')?.value || '';
+        data[formativeNumber] = { formativeType, formativeTask, submissionDate, feedbackDate };
+      });
+      localStorage.setItem('formativeBlocksData', JSON.stringify(data));
+    }
+
+    // --- DEFAULT TIME FOR DATETIME-LOCAL FIELDS ---
+    function attachDefaultTimeToDateTimeFields() {
+      document.querySelectorAll('input[type="datetime-local"]').forEach(input => {
+        // Avoid attaching multiple listeners
+        if (input._defaultTimeAttached) return;
+        input._defaultTimeAttached = true;
+        input.addEventListener('change', function(e) {
+          // Only set default time if the user just picked a date (time is 00:00 or missing)
+          if (input.value && input.value.endsWith('T00:00')) {
+            input.value = input.value.replace('T00:00', 'T16:00');
+            // Trigger input event so any listeners update
+            input.dispatchEvent(new Event('input', { bubbles: true }));
+          }
+        });
+      });
+    }
+    // Attach on DOMContentLoaded and after rendering blocks
+    document.addEventListener('DOMContentLoaded', function() {
+      extractFormativeAssessments();
+      renderFormativeBlocks();
+      attachDefaultTimeToDateTimeFields();
+    });
+    // Patch renderAssessmentBlocks and renderFormativeBlocks to call this after rendering
+    const _renderAssessmentBlocks = renderAssessmentBlocks;
+    renderAssessmentBlocks = function() {
+      _renderAssessmentBlocks.apply(this, arguments);
+      attachDefaultTimeToDateTimeFields();
+    };
+    const _renderFormativeBlocks = renderFormativeBlocks;
+    renderFormativeBlocks = function() {
+      _renderFormativeBlocks.apply(this, arguments);
+      attachDefaultTimeToDateTimeFields();
+    };
 
   </script>
 
@@ -1577,6 +2041,9 @@
 
   <!-- Toast Notifications -->
   <div id="toast" style="display: none;"></div>
+
+</body>
+</html>
 
 </body>
 </html>

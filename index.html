@@ -77,7 +77,15 @@
             <a href="timetable/preset/edit.html" role="menuitem">✏️ Edit Preset</a>
           </div>
         </div>
-        <a href="overview/new.html" class="navbar-link">📘 Module Overview</a>
+        <div class="dropdown">
+          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📝 Assessment Overview</button>
+          <div class="dropdown-content" role="menu">
+            <a href="assessments/overview/generate.html" role="menuitem">🎯 Generate</a>
+            <a href="assessments/overview/new.html" role="menuitem">📄 New</a>
+            <a href="assessments/overview/edit.html" role="menuitem">✏️ Edit</a>
+          </div>
+        </div>
+        <a href="overview/generate.html" class="navbar-link">📘 Module Overview</a>
         <a href="team/generate.html" class="navbar-link">👥 Module Team</a>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
         <button class="logout-btn" onclick="logout()" aria-label="Logout from application">🚪</button>

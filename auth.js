@@ -21,6 +21,8 @@ function getIndexPath() {
     return '../../index.html';
   } else if (currentPath.includes('/timetable/')) {
     return '../index.html';
+  } else if (currentPath.includes('/assessments/overview/')) {
+    return '../../index.html';
   } else {
     return 'index.html';
   }
