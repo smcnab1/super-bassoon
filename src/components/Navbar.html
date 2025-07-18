@@ -1,0 +1,55 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" role="navigation" aria-label="Main navigation">
+  <div class="container-fluid">
+    <a class="navbar-brand d-flex align-items-center" href="../../pages/index.html" aria-label="ModuMate Home">
+      <img src="../../public/images/logo.png" alt="ModuMate Logo" width="32" height="32" class="d-inline-block align-text-top me-2">
+      <strong>ModuMate</strong>
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="timetableDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            📅 Timetable
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="timetableDropdown">
+            <li><a class="dropdown-item" href="timetable/generate.html">🎯 Generate</a></li>
+            <li><a class="dropdown-item" href="timetable/preset/new.html">📄 New Preset</a></li>
+            <li><a class="dropdown-item" href="timetable/preset/edit.html">✏️ Edit Preset</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="briefDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            📝 Assessment Brief
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="briefDropdown">
+            <li><a class="dropdown-item" href="assessments/individual/generate.html">🎯 Generate</a></li>
+            <li><a class="dropdown-item" href="assessments/individual/edit.html">✏️ Edit</a></li>
+            <li><a class="dropdown-item" href="assessments/individual/new.html">📄 New</a></li>
+          </ul>
+        </li>
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="assessmentsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+            📝 Assessments
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="assessmentsDropdown">
+            <li><a class="dropdown-item" href="assessments/overview/generate.html">🎯 Generate Overview</a></li>
+            <li><a class="dropdown-item" href="assessments/overview/new.html">📄 New Preset</a></li>
+            <li><a class="dropdown-item" href="assessments/overview/edit.html">✏️ Edit Preset</a></li>
+          </ul>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="overview/generate.html">📘 Module Overview</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="team/generate.html">👥 Module Team</a>
+        </li>
+        <li class="nav-item d-flex align-items-center gap-2 ms-3">
+          <button class="btn btn-outline-light" type="button" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
+          <button class="btn btn-outline-light" type="button" onclick="logout()" aria-label="Logout from application">🔓</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav> 

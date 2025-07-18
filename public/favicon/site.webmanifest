@@ -1,7 +1,7 @@
 {
-  "name": "MScSimEd Timetable Tools",
-  "short_name": "MScSimEd",
-  "description": "Timetable generator for MSc Simulated Practice Education",
+  "name": "ModuMate | LMS Template Generator",
+  "short_name": "ModuMate",
+  "description": "LMS Template Generator",
   "icons": [
     {
       "src": "web-app-manifest-192x192.png",
