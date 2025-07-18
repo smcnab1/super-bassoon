@@ -549,7 +549,7 @@
     
   <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
   <div class="sticky-footer" role="toolbar" aria-label="Assessment overview actions">
-    <button id="previewBtn" onclick="previewTimetable()" aria-label="Preview assessment overview">🔍 Preview</button>
+    <button id="previewBtn" onclick="previewAssessment()" aria-label="Preview assessment overview">🔍 Preview</button>
     <button id="openTabBtn" onclick="openPreviewInNewTab()" aria-label="Open preview in new tab">🧾 New Tab</button>
     <button id="copyBtn" onclick="copyFullHTML()" aria-label="Copy assessment overview HTML">📋 Copy</button>
     <button class="reset-btn" id="resetBtn" onclick="confirmReset()" aria-label="Reset all changes">🔄 Reset</button>
@@ -1322,8 +1322,8 @@
       header.style.background = headerBg;
     }
 
-    // - previewTimetable
-    function previewTimetable() {
+    // - previewAssessment
+    function previewAssessment() {
       if (typeof persistFormativeBlocks === 'function') persistFormativeBlocks();
       const iframe = document.getElementById('previewFrame');
       const doc = iframe.contentDocument || iframe.contentWindow.document;

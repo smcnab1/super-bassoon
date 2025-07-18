@@ -23,6 +23,8 @@ function getIndexPath() {
     return '../index.html';
   } else if (currentPath.includes('/assessments/overview/')) {
     return '../../index.html';
+  } else if (currentPath.includes('/assessments/individual/')) {
+    return '../../index.html';
   } else {
     return 'index.html';
   }

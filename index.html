@@ -78,17 +78,25 @@
           </div>
         </div>
         <div class="dropdown">
-          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📝 Assessment Overview</button>
+          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📝 Assessment Brief</button>
           <div class="dropdown-content" role="menu">
-            <a href="assessments/overview/generate.html" role="menuitem">🎯 Generate</a>
-            <a href="assessments/overview/new.html" role="menuitem">📄 New</a>
-            <a href="assessments/overview/edit.html" role="menuitem">✏️ Edit</a>
+            <a href="assessments/individual/generate.html" role="menuitem">🎯 Generate</a>
+            <a href="assessments/individual/edit.html" role="menuitem">✏️ Edit</a>
+            <a href="assessments/individual/new.html" role="menuitem">📄 New</a>
+          </div>
+        </div>
+        <div class="dropdown">
+          <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📝 Assessments</button>
+          <div class="dropdown-content" role="menu">
+            <a href="assessments/overview/generate.html" role="menuitem">🎯 Generate Overview</a>
+            <a href="assessments/overview/new.html" role="menuitem">📄 New Preset</a>
+            <a href="assessments/overview/edit.html" role="menuitem">✏️ Edit Preset</a>
           </div>
         </div>
         <a href="overview/generate.html" class="navbar-link">📘 Module Overview</a>
         <a href="team/generate.html" class="navbar-link">👥 Module Team</a>
         <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
-        <button class="logout-btn" onclick="logout()" aria-label="Logout from application">🚪</button>
+        <button class="logout-btn" onclick="logout()" aria-label="Logout from application">🔓</button>
       </div>
     </nav>
     
@@ -96,18 +104,6 @@
       <h1 style="font-size:2.5rem; font-weight:700; margin-bottom: 12px; letter-spacing: -1px; color: var(--text-primary);">Welcome to MScSimEd Tools</h1>
       <p style="font-size:1.2rem; color: var(--text-secondary); max-width: 600px; margin: 0 auto 32px auto;">Easily generate, preview, and manage aspects of the MSc Simulated Practice Education programme. Start by generating a timetable or creating a new preset for your modules.</p>
       <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px; margin-top: 32px;">
-        <a href="timetable/generate.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; min-height: 44px;" aria-label="Go to timetable generator">
-          📅 Timetable
-        </a>
-        <a href="overview/new.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; min-height: 44px;" aria-label="Go to overview generator">
-          📘 Overview
-        </a>
-        <a href="team/generate.html" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-primary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; min-height: 44px;" aria-label="Go to overview generator">
-          👥 Team
-        </a>
-        <a href="#" style="padding: 20px 40px; font-size: 1.2rem; font-weight: 600; border-radius: 12px; background: var(--button-secondary); color: white; text-decoration: none; box-shadow: 0 4px 16px var(--shadow-color); transition: background 0.3s ease; display: flex; align-items: center; gap: 12px; opacity: 0.6; cursor: not-allowed; min-height: 44px;" aria-label="Coming soon feature" aria-disabled="true">
-          🚧 Coming Soon
-        </a>
       </div>
     </main>
   </div>
