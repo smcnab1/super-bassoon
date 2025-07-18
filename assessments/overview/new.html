@@ -771,6 +771,46 @@
       padding: 6px 8px;
       font-size: 0.8rem;
     }
+    #formativeTable {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      background: var(--bg-secondary);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px var(--shadow-color-light);
+      margin-bottom: 16px;
+    }
+    #formativeTable th {
+      background: var(--navbar-bg);
+      color: white;
+      padding: 10px 12px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    #formativeTable td {
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--border-color);
+      vertical-align: middle;
+    }
+    #formativeTable tr:last-child td {
+      border-bottom: none;
+    }
+    #formativeTable input {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.9rem;
+      background: var(--input-bg);
+      color: var(--text-primary);
+    }
+    #formativeTable input:focus {
+      outline: none;
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 2px var(--input-focus-shadow);
+    }
   </style>
 </head>
 <body>
@@ -914,6 +954,33 @@
             <button type="button" onclick="addAiUseNotPermittedRow()">Add</button>
           </div>
         </div>
+        <div style="margin-top: 32px;">
+          <label for="includeFormativeDropdown"><strong>Include Formative Assessments?</strong></label>
+          <select id="includeFormativeDropdown">
+            <option value="no" selected>No</option>
+            <option value="yes">Yes</option>
+          </select>
+        </div>
+        <div id="formativeSection" style="display: none; margin-top: 24px;">
+          <h3>Formative Assessment Table</h3>
+          <table id="formativeTable">
+            <thead>
+              <tr>
+                <th>Type of Assessment</th>
+                <th>Task Details</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="formativeTableBody">
+              <tr class="formative-row">
+                <td><input type="text" name="formativeType" placeholder="e.g. Quiz, Practice Essay"></td>
+                <td><input type="text" name="formativeTask" placeholder="Describe the task"></td>
+                <td></td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" onclick="addFormativeRow()" class="add-row-btn"><i class="fa fa-plus"></i> Add Formative Assessment</button>
+        </div>
       </div>
     </div>
 
@@ -1040,6 +1107,10 @@
     if (aiUseStandardSelect) {
       aiUseStandardSelect.addEventListener('change', updateAiUseVisibility);
     }
+    var includeFormativeDropdown = document.getElementById('includeFormativeDropdown');
+    if (includeFormativeDropdown) {
+      includeFormativeDropdown.addEventListener('change', updateFormativeVisibility);
+    }
     // Ensure AI Use visibility matches loaded data
     updateAiUseVisibility();
 
@@ -1131,7 +1202,7 @@
     }
 
     function copyPresetJSON() {
-      const data = getFormJson();
+      const data = getPresetData();
       const json = JSON.stringify(data, null, 2);
       navigator.clipboard.writeText(json).then(() => {
         showToast("✅ Preset JSON copied to clipboard!", "success");
@@ -1141,7 +1212,7 @@
     }
 
     function downloadPresetJSON() {
-      const data = getFormJson();
+      const data = getPresetData();
       const json = JSON.stringify(data, null, 2);
       const blob = new Blob([json], { type: "application/json" });
       const link = document.createElement("a");
@@ -1417,6 +1488,15 @@
       // Close the reset modal
       closeModal();
       showToast("🔄 All fields reset successfully!", "success");
+
+      // Reset Include Formative dropdown to 'No' and hide the table
+      var formativeDropdown = document.getElementById('includeFormativeDropdown');
+      formativeDropdown.value = 'no';
+      formativeDropdown.dispatchEvent(new Event('change'));
+      // Clear formative assessments (remove all rows, add one empty row)
+      var formativeTbody = document.getElementById('formativeTableBody');
+      formativeTbody.innerHTML = '';
+      addFormativeRow();
     }
 
     function clearWeeks() {
@@ -1438,7 +1518,9 @@
         assessments: getAssessmentsData(),
         aiUseStandard: getAiUseStandard(),
         aiUsePermitted: getAiUsePermitted(),
-        aiUseNotPermitted: getAiUseNotPermitted()
+        aiUseNotPermitted: getAiUseNotPermitted(),
+        includeFormative: document.getElementById('includeFormativeDropdown').value,
+        formativeAssessments: getFormativeData()
       };
       localStorage.setItem('newAssessmentOverviewDraft', JSON.stringify(data));
     }
@@ -1717,7 +1799,29 @@
       // (Event listener now attached after loadSavedData)
     });
 
-    function getFormJson() {
+    function updateFormativeVisibility() {
+      const includeFormative = document.getElementById('includeFormativeDropdown').value;
+      const formativeSection = document.getElementById('formativeSection');
+      console.log('updateFormativeVisibility called, includeFormative:', includeFormative); // DEBUG
+      if (includeFormative === 'yes') {
+        formativeSection.style.display = 'block';
+      } else {
+        formativeSection.style.display = 'none';
+      }
+    }
+    document.addEventListener('DOMContentLoaded', function() {
+      // (Event listener now attached after loadSavedData)
+    });
+
+    function getFormativeData() {
+      const rows = document.querySelectorAll('.formative-row');
+      return Array.from(rows).map((row, idx) => ({
+        formativeNumber: `FA${idx + 1}`,
+        formativeType: row.querySelector('[name="formativeType"]').value,
+        formativeTask: row.querySelector('[name="formativeTask"]').value,
+      })).filter(row => row.formativeType || row.formativeTask);
+    }
+    function getPresetData() {
       // Module details
       const moduleName = document.querySelector('[name="moduleName"]').value;
       const moduleCode = document.querySelector('[name="moduleCode"]').value;
@@ -1797,6 +1901,113 @@
         toggleIcon.style.transform = 'rotate(-90deg)';
       }
     });
+
+    // --- Formative Assessment Logic ---
+    function addFormativeRow(rowData = {}) {
+      const tbody = document.getElementById('formativeTableBody');
+      const isFirstRow = tbody.children.length === 0;
+      const tr = document.createElement('tr');
+      tr.className = 'formative-row';
+      tr.innerHTML = `
+        <td><input type="text" name="formativeType" value="${rowData.formativeType || ''}" placeholder="e.g. Quiz, Practice Essay"></td>
+        <td><input type="text" name="formativeTask" value="${rowData.formativeTask || ''}" placeholder="Describe the task"></td>
+        <td>${isFirstRow ? '' : '<button type="button" onclick="removeFormativeRow(this)" class="remove-btn">❌</button>'}</td>
+      `;
+      tbody.appendChild(tr);
+      // Add event listeners for persistence
+      tr.querySelectorAll('input').forEach(input => {
+        input.addEventListener('input', saveData);
+        input.addEventListener('change', saveData);
+      });
+      saveData();
+    }
+    function removeFormativeRow(btn) {
+      const row = btn.closest('tr');
+      const tbody = document.getElementById('formativeTableBody');
+      if (tbody.children.length > 1) {
+        row.remove();
+        saveData();
+      } else {
+        showToast('At least one formative row is required.', 'error');
+      }
+    }
+    function getFormativeData() {
+      const rows = document.querySelectorAll('.formative-row');
+      return Array.from(rows).map((row, idx) => ({
+        formativeNumber: `FA${idx + 1}`,
+        formativeType: row.querySelector('[name="formativeType"]').value,
+        formativeTask: row.querySelector('[name="formativeTask"]').value,
+      })).filter(row => row.formativeType || row.formativeTask);
+    }
+    // --- Persistence for Formative Table and Dropdown ---
+    function saveData() {
+      // ... existing saveData code ...
+      const data = {
+        moduleName: document.querySelector('[name="moduleName"]').value,
+        moduleCode: document.querySelector('[name="moduleCode"]').value,
+        year: document.querySelector('[name="year"]').value,
+        moduleLeader: document.querySelector('[name="moduleLeader"]').value,
+        cohort: document.querySelector('[name="cohort"]').value,
+        assessments: getAssessmentsData(),
+        aiUseStandard: getAiUseStandard(),
+        aiUsePermitted: getAiUsePermitted(),
+        aiUseNotPermitted: getAiUseNotPermitted(),
+        includeFormative: document.getElementById('includeFormativeDropdown').value,
+        formativeAssessments: getFormativeData()
+      };
+      localStorage.setItem('newAssessmentOverviewDraft', JSON.stringify(data));
+    }
+    function loadSavedData() {
+      // ... existing loadSavedData code ...
+      const savedData = localStorage.getItem('newAssessmentOverviewDraft');
+      if (savedData) {
+        try {
+          const data = JSON.parse(savedData);
+          // ... existing restore code ...
+          if (data.includeFormative) document.getElementById('includeFormativeDropdown').value = data.includeFormative;
+          if (data.includeFormative === 'yes') {
+            document.getElementById('formativeSection').style.display = 'block';
+            if (data.formativeAssessments && data.formativeAssessments.length > 0) {
+              const tbody = document.getElementById('formativeTableBody');
+              tbody.innerHTML = '';
+              data.formativeAssessments.forEach(row => addFormativeRow(row));
+            }
+          } else {
+            document.getElementById('formativeSection').style.display = 'none';
+          }
+        } catch (error) { /* fallback: hide formative */ document.getElementById('formativeSection').style.display = 'none'; }
+      } else {
+        document.getElementById('formativeSection').style.display = 'none';
+      }
+    }
+    document.getElementById('includeFormativeDropdown').addEventListener('change', function() {
+      if (this.value === 'yes') {
+        document.getElementById('formativeSection').style.display = 'block';
+        if (document.querySelectorAll('.formative-row').length === 0) addFormativeRow();
+      } else {
+        document.getElementById('formativeSection').style.display = 'none';
+      }
+      saveData();
+    });
+    // --- JSON Export ---
+    function getPresetData() {
+      // ... existing code ...
+      const data = {
+        moduleName: document.querySelector('[name="moduleName"]').value,
+        moduleCode: document.querySelector('[name="moduleCode"]').value,
+        year: document.querySelector('[name="year"]').value,
+        moduleLeader: document.querySelector('[name="moduleLeader"]').value,
+        cohort: document.querySelector('[name="cohort"]').value,
+        assessments: getAssessmentsData(),
+        aiUseStandard: getAiUseStandard(),
+        aiUsePermitted: getAiUsePermitted(),
+        aiUseNotPermitted: getAiUseNotPermitted(),
+        includeFormative: document.getElementById('includeFormativeDropdown').value,
+        formativeAssessments: document.getElementById('includeFormativeDropdown').value === 'yes' ? getFormativeData() : []
+      };
+      return data;
+    }
+    // ... existing code ...
   </script>
 
   <!-- Modal for Reset Confirmation -->
