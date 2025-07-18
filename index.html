@@ -63,11 +63,6 @@
         <span class="title-separator">|</span>
         <div class="title-subtitle">🏠 Home</div>
       </div>
-      <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
       <div class="navbar-links">
         <div class="dropdown">
           <button class="dropdown-btn" aria-haspopup="true" aria-expanded="false">📅 Timetable</button>
@@ -209,26 +204,6 @@
         themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
       }
     }
-    
-    // Mobile menu functionality
-    function toggleMobileMenu() {
-      const hamburger = document.querySelector('.hamburger-menu');
-      const navbarLinks = document.querySelector('.navbar-links');
-      
-      hamburger.classList.toggle('active');
-      navbarLinks.classList.toggle('active');
-    }
-    
-    // Close mobile menu when clicking outside
-    document.addEventListener('click', function(event) {
-      const hamburger = document.querySelector('.hamburger-menu');
-      const navbarLinks = document.querySelector('.navbar-links');
-      
-      if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
-        hamburger.classList.remove('active');
-        navbarLinks.classList.remove('active');
-      }
-    });
     
     // Initialize on page load
     document.addEventListener('DOMContentLoaded', function() {
