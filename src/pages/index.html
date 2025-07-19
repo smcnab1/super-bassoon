@@ -38,19 +38,14 @@
     })();
   </script>
 </head>
-<body>
+<body class="no-scroll">
   <!-- Loading Overlay (injected before any content for instant feedback) -->
   <script>
-    // Inject loading overlay HTML synchronously for instant feedback
+    // Inject loading overlay container synchronously for instant feedback
     (function() {
-      var xhr = new XMLHttpRequest();
-      xhr.open('GET', '../components/LoadingOverlay.html', false);
-      xhr.send(null);
-      if (xhr.status === 200) {
-        var temp = document.createElement('div');
-        temp.innerHTML = xhr.responseText;
-        document.body.insertBefore(temp.firstElementChild, document.body.firstChild);
-      }
+      var loadingOverlay = document.createElement('div');
+      loadingOverlay.id = 'loadingOverlay';
+      document.body.insertBefore(loadingOverlay, document.body.firstChild);
     })();
   </script>
   <script src="../scripts/components/loadingOverlay.js"></script>
@@ -106,21 +101,13 @@
   <script>
     // Navbar and Footer dynamic loading for accessibility and performance
     function loadNavbar() {
-      const navbarContainer = document.getElementById('navbar-container');
-      if (navbarContainer) {
-        fetch('../components/Navbar.html')
-          .then(response => response.text())
-          .then(html => {
-            navbarContainer.innerHTML = html;
-            // Dynamically load Navbar JS if needed
-            const script = document.createElement('script');
-            script.src = '../scripts/components/Navbar.js';
-            script.onload = function() {
-              if (window.initNavbar) window.initNavbar();
-            };
-            document.body.appendChild(script);
-          });
-      }
+      // Load the navbar script and initialize it
+      const script = document.createElement('script');
+      script.src = '../scripts/components/Navbar.js';
+      script.onload = function() {
+        if (window.initNavbar) window.initNavbar();
+      };
+      document.body.appendChild(script);
     }
     function loadFooter() {
       const footerContainer = document.getElementById('footer-container');

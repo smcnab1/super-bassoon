@@ -1,0 +1,27 @@
+<div class="json-import-section">
+  <div class="section-header" onclick="toggleJsonImport()">
+    <h3>📄 Import Custom JSON</h3>
+    <span class="toggle-icon">▼</span>
+  </div>
+  <div class="section-content" id="jsonImportContent">
+    <div class="import-tabs">
+      <button class="tab-btn active" onclick="switchTab('paste')">📋 Paste JSON</button>
+      <button class="tab-btn" onclick="switchTab('file')">📁 Upload File</button>
+    </div>
+    <div id="pasteTab" class="tab-content active">
+      <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON preset here..." oninput="updateTextButtons()"></textarea>
+      <div class="text-buttons">
+        <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>📥 Import JSON</button>
+        <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>🗑️ Clear</button>
+      </div>
+    </div>
+    <div id="fileTab" class="tab-content">
+      <div class="file-upload-area">
+        <input type="file" id="jsonFileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
+        <button class="file-select-btn" onclick="document.getElementById('jsonFileInput').click()">📁 Choose JSON File</button>
+        <span id="selectedFileName" class="selected-file">No file selected</span>
+      </div>
+      <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>📥 Import File</button>
+    </div>
+  </div>
+</div> 

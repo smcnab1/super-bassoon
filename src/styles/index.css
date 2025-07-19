@@ -1,8 +1,12 @@
+body.no-scroll {
+  overflow: hidden;
+}
+
 .hero {
-  height: 100vh;
+  /* height: 100vh; */
   padding: 0;
   text-align: center;
-  background: var(--bg-secondary);
+  background: transparent !important;
   display: flex;
   flex-direction: column;
   justify-content: center;

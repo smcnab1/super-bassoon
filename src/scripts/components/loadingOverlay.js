@@ -22,7 +22,7 @@ function showLoadingOverlay() {
   if (!overlay) {
     // Re-inject the overlay HTML synchronously
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', '../components/LoadingOverlay.html', false);
+    xhr.open('GET', '../../components/LoadingOverlay.html', false);
     xhr.send(null);
     if (xhr.status === 200) {
       var temp = document.createElement('div');
@@ -40,4 +40,34 @@ function showLoadingOverlay() {
 }
 window.showLoadingOverlay = showLoadingOverlay;
 
-// (Removed automatic hiding on window load) 
+// Dynamic Loading Overlay Component
+function initLoadingOverlay() {
+  // Get the current page path to determine relative paths
+  const currentPath = window.location.pathname;
+  const pathSegments = currentPath.split('/').filter(segment => segment !== '');
+  
+  // Use absolute path from root for logo
+  const logoPath = '/public/';
+
+  // Update the loading overlay HTML with correct path
+  const loadingOverlay = document.getElementById('loadingOverlay');
+  if (loadingOverlay) {
+    loadingOverlay.innerHTML = `
+      <div style="display: flex; flex-direction: column; align-items: center; gap: 12px;">
+        <img src="${logoPath}images/logo.png" alt="ModuMate Logo" style="width: 64px; height: 64px; object-fit: contain;" />
+        <div style="font-size: 1.4rem; font-weight: 700; color: #4a90e2; letter-spacing: -1px;">ModuMate</div>
+        <div class="loader"></div>
+      </div>
+    `;
+  }
+}
+
+// Initialize loading overlay when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+  initLoadingOverlay();
+});
+
+// Export for use in other scripts
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = { initLoadingOverlay };
+} 

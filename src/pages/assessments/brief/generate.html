@@ -3,1211 +3,175 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Individual Assessment Generator | MScSimEd</title>
-  <!-- Favicon -->
-  <link rel="icon" type="image/x-icon" href="../../favicon/favicon.ico">
-  <link rel="icon" type="image/svg+xml" href="../../favicon/favicon.svg">
-  <link rel="icon" type="image/png" sizes="96x96" href="../../favicon/favicon-96x96.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="../../favicon/apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="../../favicon/web-app-manifest-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="../../favicon/web-app-manifest-512x512.png">
-  <link rel="manifest" href="../../favicon/site.webmanifest">
+  <title>Generate | Assessment Brief</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Favicon and Manifest -->
+  <link rel="shortcut icon" href="../../../../public/favicon/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../../../../public/favicon/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../../../public/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="../../../../public/favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../../../public/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../../../public/favicon/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../../../public/favicon/web-app-manifest-512x512.png">
+  <link rel="manifest" href="../../../../public/favicon/site.webmanifest">
   <meta name="theme-color" content="#4a90e2">
-  <link rel="stylesheet" href="../../styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="../../auth.js"></script>
-  <style>
-    .first-teaching-date-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      margin: 20px 0;
-      box-shadow: 0 2px 4px var(--shadow-color);
-      overflow: hidden;
-    }
-
-    .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 20px;
-      cursor: pointer;
-      background: var(--card-bg);
-      border-bottom: 1px solid var(--border-color);
-      transition: background-color 0.2s ease;
-    }
-
-    .section-header:hover {
-      background: var(--hover-bg);
-    }
-
-    .section-header h3 {
-      margin: 0;
-      color: var(--text-primary);
-      font-size: 1.2rem;
-    }
-
-    .toggle-icon {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      transition: transform 0.3s ease;
-    }
-
-    .section-content {
-      padding: 20px;
-      transition: max-height 0.3s ease, opacity 0.3s ease;
-      overflow: hidden;
-    }
-
-    .section-content.collapsed {
-      max-height: 0;
-      opacity: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-    }
-
-    .first-teaching-date-section .form-row {
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 15px;
-      align-items: end;
-    }
-
-    .first-teaching-date-section label {
-      display: block;
-      margin-bottom: 5px;
-      color: var(--text-primary);
-      font-weight: 500;
-    }
-
-    .first-teaching-date-section input[type="date"] {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--input-bg);
-      color: var(--text-primary);
-      font-size: 1rem;
-    }
-
-    .first-teaching-date-section input[type="date"]:focus {
-      outline: none;
-      border-color: var(--input-focus);
-      box-shadow: 0 0 0 2px var(--input-focus-shadow);
-    }
-
-    .calculate-dates-btn {
-      background: var(--button-primary);
-      color: white;
-      border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font-size: 0.95rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      white-space: nowrap;
-    }
-
-    .calculate-dates-btn:hover {
-      background: var(--button-primary-hover);
-      transform: translateY(-1px);
-    }
-
-    .display-field {
-      background: var(--input-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      padding: 10px;
-      color: var(--text-secondary);
-      font-size: 1rem;
-      min-height: 20px;
-      display: flex;
-      align-items: center;
-    }
-
-    @media (max-width: 768px) {
-      .first-teaching-date-section .form-row {
-        grid-template-columns: 1fr;
-        gap: 10px;
-      }
-      
-      .calculate-dates-btn {
-        width: 100%;
-      }
-    }
-
-    /* JSON Import Section Styles */
-    .json-import-section {
-      background: var(--card-bg);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      margin: 20px 0;
-      box-shadow: 0 2px 4px var(--shadow-color);
-      overflow: hidden;
-    }
-
-    .import-tabs {
-      display: flex;
-      border-bottom: 1px solid var(--border-color);
-      margin-bottom: 20px;
-    }
-
-    .tab-btn {
-      flex: 1;
-      padding: 12px 16px;
-      background: var(--bg-secondary);
-      border: none;
-      border-bottom: 2px solid transparent;
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .tab-btn:hover {
-      background: var(--hover-bg);
-      color: var(--text-primary);
-    }
-
-    .tab-btn.active {
-      background: var(--card-bg);
-      color: var(--text-primary);
-      border-bottom-color: var(--button-primary);
-    }
-
-    .tab-content {
-      display: none;
-      padding: 0 20px 20px;
-    }
-
-    .tab-content.active {
-      display: block;
-    }
-
-    .json-textarea {
-      width: 100%;
-      min-height: 150px;
-      padding: 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--input-bg);
-      color: var(--text-primary);
-      font-family: 'Courier New', monospace;
-      font-size: 0.9rem;
-      resize: vertical;
-      margin-bottom: 12px;
-    }
-
-    .json-textarea:focus {
-      outline: none;
-      border-color: var(--input-focus);
-      box-shadow: 0 0 0 2px var(--input-focus-shadow);
-    }
-
-    .text-buttons {
-      display: flex;
-      gap: 12px;
-      justify-content: flex-end;
-    }
-
-    .import-btn, .clear-btn {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .import-btn {
-      background: var(--button-primary);
-      color: white;
-    }
-
-    .import-btn:hover:not(:disabled) {
-      background: var(--button-primary-hover);
-      transform: translateY(-1px);
-    }
-
-    .import-btn:disabled {
-      background: var(--border-color);
-      color: var(--text-secondary);
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .clear-btn {
-      background: #dc3545;
-      color: white;
-    }
-
-    .clear-btn:hover:not(:disabled) {
-      background: #c82333;
-      transform: translateY(-1px);
-    }
-
-    .clear-btn:disabled {
-      background: var(--border-color);
-      color: var(--text-secondary);
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    .file-upload-area {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 16px;
-    }
-
-    .file-select-btn {
-      padding: 10px 16px;
-      background: var(--button-secondary);
-      color: var(--text-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      font-size: 0.9rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-
-    .file-select-btn:hover {
-      background: var(--button-secondary-hover);
-      transform: translateY(-1px);
-    }
-
-    .selected-file {
-      color: var(--text-secondary);
-      font-size: 0.9rem;
-    }
-
-    /* Cohort Modal Styles */
-    .cohort-options {
-      display: flex;
-      gap: 16px;
-      margin: 20px 0;
-      justify-content: center;
-    }
-
-    .cohort-btn {
-      padding: 16px 24px;
-      border: 2px solid var(--border-color);
-      border-radius: 8px;
-      background: var(--card-bg);
-      color: var(--text-primary);
-      font-size: 1rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      min-width: 160px;
-    }
-
-    .cohort-btn:hover {
-      background: var(--button-primary);
-      color: white;
-      border-color: var(--button-primary);
-      transform: translateY(-2px);
-    }
-
-    .cohort-btn:active {
-      transform: translateY(0);
-    }
-
-    .assessment-block {
-      background: #fff;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-    }
-    .assessment-header {
-      padding: 16px 20px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #004080;
-      background: #e6f0fa;
-      border-bottom: 1px solid #ccc;
-      border-radius: 8px 8px 0 0;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .assessment-content {
-      padding: 18px 20px;
-      transition: max-height 0.3s ease, opacity 0.3s ease;
-    }
-    .assessment-content.collapsed {
-      max-height: 0;
-      opacity: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-      overflow: hidden;
-    }
-    .assessment-content label {
-      display: block;
-      margin-bottom: 10px;
-      color: #333;
-      font-weight: 400;
-    }
-    .assessment-content input[type="text"],
-    .assessment-content input[type="datetime-local"],
-    .assessment-content input[type="date"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #bbb;
-      border-radius: 5px;
-      font-size: 1rem;
-      margin-top: 3px;
-      margin-bottom: 8px;
-      background: #f8fafc;
-    }
-
-    .formative-block {
-      background: #f4f4f4;
-      border: 1px solid #bbb;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-    }
-    .formative-header {
-      padding: 16px 20px;
-      font-size: 1.1rem;
-      font-weight: 500;
-      color: #444;
-      background: #e0e0e0;
-      border-bottom: 1px solid #bbb;
-      border-radius: 8px 8px 0 0;
-      cursor: pointer;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .formative-content {
-      padding: 18px 20px;
-      transition: max-height 0.3s ease, opacity 0.3s ease;
-    }
-    .formative-content.collapsed {
-      max-height: 0;
-      opacity: 0;
-      padding-top: 0;
-      padding-bottom: 0;
-      overflow: hidden;
-    }
-    .formative-content label {
-      display: block;
-      margin-bottom: 10px;
-      color: #333;
-      font-weight: 400;
-    }
-    .formative-content input[type="text"],
-    .formative-content input[type="datetime-local"] {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #bbb;
-      border-radius: 5px;
-      font-size: 1rem;
-      margin-top: 3px;
-      margin-bottom: 8px;
-      background: #fafafa;
-    }
-    .review-card {
-      background: var(--card-bg, #f8f8f8);
-      border: 1px solid var(--border-color, #ccc);
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      margin-bottom: 24px;
-      padding: 0;
-      overflow: hidden;
-    }
-    .review-collapsible {
-      border-bottom: 1px solid var(--border-color, #ccc);
-    }
-    .review-collapsible:last-child {
-      border-bottom: none;
-    }
-    .review-collapsible-header {
-      background: var(--card-bg, #f8f8f8);
-      padding: 16px 20px;
-      font-weight: 600;
-      font-size: 1.05rem;
-      color: #004080;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      user-select: none;
-      transition: background 0.2s;
-    }
-    .review-collapsible-header:hover {
-      background: var(--hover-bg, #e6f0fa);
-    }
-    .review-collapsible-content {
-      padding: 0 20px 16px 20px;
-      display: block;
-      transition: max-height 0.3s ease, opacity 0.3s ease;
-      max-height: 1000px;
-      opacity: 1;
-    }
-    .review-collapsible-content.collapsed {
-      max-height: 0;
-      opacity: 0;
-      padding-bottom: 0;
-      overflow: hidden;
-    }
-    .review-label {
-      font-weight: bold;
-      color: #004080;
-    }
-    .review-list {
-      margin: 0 0 0 18px;
-      padding: 0;
-      list-style: disc inside;
-    }
-    .review-section {
-      margin-bottom: 0;
-    }
-    .review-title {
-      font-size: 1.2rem;
-      font-weight: 700;
-      color: #004080;
-      margin: 0 0 8px 0;
-      padding: 20px 20px 0 20px;
-    }
-    .review-collapsible-toggle {
-      font-size: 1.1em;
-      margin-left: 8px;
-      color: #888;
-      transition: transform 0.2s;
-    }
-    .review-collapsible-header.collapsed .review-collapsible-toggle {
-      transform: rotate(-90deg);
-    }
-  </style>
+  <meta name="msapplication-TileColor" content="#4a90e2">
+  <meta name="msapplication-TileImage" content="../../../../public/favicon/web-app-manifest-192x192.png">
+  
+  <!-- Main Stylesheets -->
+  <link rel="stylesheet" href="../../../styles/main.css">
+  <link rel="stylesheet" href="../../../styles/navbar.css">
+  <link rel="stylesheet" href="../../../styles/login.css">
+  <link rel="stylesheet" href="../../../styles/footer.css">
+  <link rel="stylesheet" href="../../../styles/loading.css">
+  <link rel="stylesheet" href="../../../styles/assessment-brief.css">
+  <link rel="stylesheet" href="../../../styles/importJSON.css">
+  <link rel="stylesheet" href="../../../styles/pageTools.css">
+  <link rel="stylesheet" href="../../../styles/presetButtons.css">
+  <link rel="stylesheet" href="../../../styles/assessmentSelectModal.css">
+  <link rel="stylesheet" href="../../../styles/toast.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Theme Script (loads early for no-flash) -->
+  <script src="../../../scripts/theme/index.js"></script>
+  <script>
+    // Set theme before page renders to avoid flash
+    (function() {
+      var theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="main-navbar" role="navigation" aria-label="Main navigation">
-    <div class="navbar-title">
-      <a href="../../index.html" style="text-decoration: none; color: inherit;" aria-label="MScSimEd Home">
-        <div class="title-main">
-          <img src="../../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
-          MScSimEd
-        </div>
-      </a>
-      <span class="title-separator">|</span>
-      <div class="title-subtitle">🎯 Generate Individual Assessment</div>
-    </div>
-    <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="navbar-links">
-      <div class="dropdown">
-        <button class="dropdown-btn">📅 Timetable</button>
-        <div class="dropdown-content">
-          <a href="../../timetable/generate.html">🎯 Generate</a>
-          <a href="../../timetable/new.html">📄 New Preset</a>
-          <a href="../../timetable/edit.html">✏️ Edit Preset</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropdown-btn">📝 Assessment Brief</button>
-        <div class="dropdown-content">
-          <a href="generate.html">🎯 Generate</a>
-          <a href="edit.html">✏️ Edit</a>
-          <a href="new.html">📄 New</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropdown-btn">📝 Assessments</button>
-        <div class="dropdown-content">
-          <a href="../overview/generate.html">🎯 Generate Overview</a>
-          <a href="../overview/new.html">📄 New Preset</a>
-          <a href="../overview/edit.html">✏️ Edit Preset</a>
-        </div>
-      </div>
-      <a href="../../overview/generate.html" class="navbar-link">📘 Module Overview</a>
-      <a href="../../team/generate.html" class="navbar-link">👥 Module Team</a>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle" aria-label="Toggle dark mode">🌙</button>
-    </div>
-  </nav>
+  <!-- Loading Overlay (injected before any content for instant feedback) -->
+  <script>
+    // Inject loading overlay container synchronously for instant feedback
+    (function() {
+      var loadingOverlay = document.createElement('div');
+      loadingOverlay.id = 'loadingOverlay';
+      loadingOverlay.innerHTML = '<div class="loader"></div>';
+      document.body.insertBefore(loadingOverlay, document.body.firstChild);
+    })();
+    // Remove overlay when DOM is interactive
+    // document.addEventListener('DOMContentLoaded', function() {
+    //   var overlay = document.getElementById('loadingOverlay');
+    //   if (overlay) {
+    //     overlay.classList.add('fade-out');
+    //     setTimeout(function() { overlay.remove(); }, 600);
+    //   }
+    // });
+  </script>
+  <script src="../../../scripts/components/loadingOverlay.js"></script>
 
+  <!-- Hide loading overlay after DOM is ready -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof window.hideLoadingOverlay === 'function') window.hideLoadingOverlay();
+    });
+  </script>
+
+  <!-- Skip to main content link for accessibility -->
+  <a href="#mainContentContainer" class="skip-link">Skip to main content</a>
+  <!-- Navbar will be loaded here -->
+  <div id="navbar-container"></div>
+  
   <!-- Preset Buttons -->
-  <div id="presetButtons" class="preset-container" role="group" aria-label="Individual assessment presets"></div>
-
-  <!-- Assessment Selection Modal -->
-  <div id="assessmentSelectModal" class="modal-overlay" style="display:none;">
-    <div class="modal-box">
-      <h3>Select Assessment</h3>
-      <div id="assessmentOptions"></div>
-      <div class="modal-actions">
-        <button onclick="closeAssessmentSelectModal()" class="cancel-btn">Cancel</button>
-      </div>
-    </div>
-  </div>
+  <div id="presetButtonsContainer"></div>
 
   <!-- JSON Import Section -->
-  <div class="json-import-section">
-    <div class="section-header" onclick="toggleJsonImport()">
-      <h3>📄 Import Custom JSON</h3>
-      <span class="toggle-icon">▼</span>
-    </div>
-    <div class="section-content" id="jsonImportContent">
-      <div class="import-tabs">
-        <button class="tab-btn active" onclick="switchTab('paste')">📋 Paste JSON</button>
-        <button class="tab-btn" onclick="switchTab('file')">📁 Upload File</button>
-      </div>
-      
-      <div id="pasteTab" class="tab-content active">
-        <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON preset here..." oninput="updateTextButtons()"></textarea>
-        <div class="text-buttons">
-          <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>📥 Import JSON</button>
-          <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>🗑️ Clear</button>
-        </div>
-      </div>
-      
-      <div id="fileTab" class="tab-content">
-        <div class="file-upload-area">
-          <input type="file" id="jsonFileInput" accept=".json" onchange="handleFileSelect(event)" style="display: none;">
-          <button class="file-select-btn" onclick="document.getElementById('jsonFileInput').click()">📁 Choose JSON File</button>
-          <span id="selectedFileName" class="selected-file">No file selected</span>
-        </div>
-        <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>📥 Import File</button>
-      </div>
-    </div>
-  </div>
+  <div id="importJsonContainer"></div>
 
-  <!-- Reset Confirmation Modal -->
-  <div id="resetModal" class="modal-overlay" style="display:none;">
-    <div class="modal-box">
-      <h3>Are you sure?</h3>
-      <p>This will remove all current data from the individual assessment generator.</p>
-      <div class="modal-actions">
-        <button onclick="closeResetModal()" class="cancel-btn">Cancel</button>
-        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
-      </div>
-    </div>
-  </div>
+  <!-- Toast Component -->
+  <script type="module">
+    import { loadToast } from '../../../scripts/components/toast.js';
+    loadToast();
+  </script>
 
-  <div class="container" id="mainContentContainer">
-    <h1><i class="fa-solid fa-vr-cardboard"></i> Generate Individual Assessment</h1>
+  <!-- Page Tools Component -->
+  <div id="pageToolsContainer"></div>
+  <script type="module">
+    import { loadPageTools } from '../../../scripts/components/pageTools.js';
+    loadPageTools();
+  </script>
+
+  <div class="container" id="mainContentContainer" role="main">
+    <h1><i class="fa-solid fa-vr-cardboard"></i> Generate Assessment Brief</h1>
     <div class="review-section">
-      <label class="review-label">Submission Date:</label>
-      <input type="datetime-local" id="submissionDate" />
+      <label class="review-label required">Submission Date:</label>
+      <input type="datetime-local" id="submissionDate" required />
     </div>
     <div id="review"></div>
   </div>
-  <!-- Preview Controls: Preview, Open Tab, Copy HTML -->
-  <div class="sticky-footer" id="stickyFooter" role="toolbar" aria-label="Assessment overview actions">
-    <button id="previewBtn" onclick="previewAssessment()" aria-label="Preview assessment overview">🔍 Preview</button>
-    <button id="openTabBtn" onclick="openPreviewInNewTab()" aria-label="Open preview in new tab">🧾 New Tab</button>
-    <button id="copyBtn" onclick="copyHtml()" aria-label="Copy assessment overview HTML">📋 Copy</button>
-    <button class="reset-btn" id="resetBtn" onclick="showResetModal()" aria-label="Reset all changes">🔄 Reset</button>
-  </div>
   <!-- iFrame Preview -->
   <iframe id="previewFrame" style="display:none;"></iframe>
+
+  <!-- Config, Auth, and App Scripts (defer for performance) -->
+  <script src="../../../scripts/config/index.js" defer></script>
+  <script src="../../../scripts/auth/index.js" defer></script>
+  <script src="../../../scripts/components/componentLoader.js" defer></script>
+  <script src="../../../scripts/pages/assessment-brief-generate.js" defer></script>
   <script>
-// --- THEME MANAGEMENT ---
-function initTheme() {
-  const savedTheme = localStorage.getItem('theme') || 'light';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  updateThemeIcon(savedTheme);
-}
-function toggleTheme() {
-  const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-  document.documentElement.setAttribute('data-theme', newTheme);
-  localStorage.setItem('theme', newTheme);
-  updateThemeIcon(newTheme);
-}
-function updateThemeIcon(theme) {
-  const themeToggle = document.getElementById('themeToggle');
-  if (themeToggle) {
-    themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
-  }
-}
-initTheme();
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize theme for accessibility
+      if (typeof window.initTheme === 'function') window.initTheme();
+      // Load components
+      if (typeof loadToast === 'function') loadToast();
+      if (typeof loadNavbar === 'function') loadNavbar();
+      if (typeof loadFooter === 'function') loadFooter();
+          });
+  </script>
 
-// --- NAVBAR MOBILE MENU ---
-function toggleMobileMenu() {
-  const hamburger = document.querySelector('.hamburger-menu');
-  const navbarLinks = document.querySelector('.navbar-links');
-  hamburger.classList.toggle('active');
-  navbarLinks.classList.toggle('active');
-}
-document.addEventListener('click', function(event) {
-  const hamburger = document.querySelector('.hamburger-menu');
-  const navbarLinks = document.querySelector('.navbar-links');
-  if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
-    hamburger.classList.remove('active');
-    navbarLinks.classList.remove('active');
-  }
-});
-
-// --- PRESET LOGIC ---
-const allModules = [
-  { code: 'ED70011X', name: 'Foundations of Simulation Education', year: 1 },
-  { code: 'ED70012X', name: 'Simulation Delivery & Leadership', year: 1 },
-  { code: 'ED70013X', name: 'Digital Technologies in Education', year: 2 },
-  { code: 'ED70014X', name: 'Current Issues & Policies in Simulation Education', year: 2 },
-  { code: 'ED70015X', name: 'Simulation in Innovative Practice', year: 2 },
-  { code: 'ED70016X', name: 'Quality Improvement & Demonstrative Simulation', year: 3 },
-];
-
-function renderPresetButtons() {
-  fetch('../../presets/individual-assessments.json')
-    .then(response => response.ok ? response.json() : {})
-    .then(data => {
-      const container = document.getElementById('presetButtons');
-      container.innerHTML = '';
-      allModules.forEach(mod => {
-        const hasData = !!data[mod.code];
-        const btn = document.createElement('button');
-        btn.className = 'preset-btn';
-        btn.innerHTML = `
-          <strong>${mod.name}</strong>
-          <span class="module-code">${mod.code}</span>
-          <span class="year-tag year-${mod.year}">Year ${mod.year}</span>
-        `;
-        btn.setAttribute('aria-label', hasData
-          ? `Load ${mod.name} preset`
-          : `${mod.name} preset (not available)`);
-        if (hasData) {
-          btn.onclick = () => loadPreset(mod.code);
-        } else {
-          btn.disabled = true;
+  <div id="footer-container"></div>
+  
+  <!-- Dynamically load the ImportJSON.html component and script -->
+  <script type="module">
+    import { loadImportJSON } from '../../../scripts/components/importJSON.js';
+    loadImportJSON();
+    // After loading, collapse the import section if data is present
+    setTimeout(() => {
+      let data = null;
+      try {
+        const draft = localStorage.getItem('individualAssessmentDraft');
+        if (draft) data = JSON.parse(draft);
+      } catch (e) {}
+      if (data && (data.assessmentTitle || data.assessmentKey)) {
+        const content = document.getElementById('jsonImportContent');
+        const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
+        if (content && toggleIcon) {
+          content.classList.add('collapsed');
+          toggleIcon.textContent = '\u25b6';
+          toggleIcon.style.transform = 'rotate(-90deg)';
         }
-        container.appendChild(btn);
-      });
-    })
-    .catch(() => {
-      // fallback: render all as disabled
-      const container = document.getElementById('presetButtons');
-      container.innerHTML = '';
-      allModules.forEach(mod => {
-        const btn = document.createElement('button');
-        btn.className = 'preset-btn';
-        btn.disabled = true;
-        btn.innerHTML = `
-          <strong>${mod.name}</strong>
-          <span class="module-code">${mod.code}</span>
-          <span class="year-tag year-${mod.year}">Year ${mod.year}</span>
-        `;
-        btn.setAttribute('aria-label', `${mod.name} preset (not available)`);
-        container.appendChild(btn);
-      });
-    });
-}
-
-// Call this on page load
-window.addEventListener('DOMContentLoaded', renderPresetButtons);
-
-function loadPreset(moduleCode) {
-  fetch('../../presets/individual-assessments.json')
-    .then(response => {
-      if (!response.ok) throw new Error('Failed to load presets');
-      return response.json();
-    })
-    .then(data => {
+      }
+    }, 300);
+  </script>
+  <!-- Dynamically load the PresetButtons.html component and script -->
+  <script type="module">
+    import { loadPresetButtons } from '../../../scripts/components/presetButtons.js';
+    loadPresetButtons(undefined, function(moduleCode, data) {
       const modulePresets = data[moduleCode];
       if (!modulePresets) {
-        showToast('No preset found for this module', 'error');
+        if (typeof showToast === 'function') showToast('No preset found for this module', 'error');
         return;
       }
-      const assessmentKeys = Object.keys(modulePresets);
-      if (assessmentKeys.length === 1) {
-        // Only one assessment, load directly
-        const key = assessmentKeys[0];
-        const preset = modulePresets[key];
-        const presetWithKey = { ...preset, assessmentKey: key };
-        localStorage.setItem('individualAssessmentDraft', JSON.stringify(presetWithKey));
-        localStorage.removeItem('individualAssessmentEdit');
-        closeJsonImport();
-        loadData();
-        generateHtml();
-        showToast('✅ Preset loaded!', 'success');
-      } else {
-        // Multiple assessments, show modal for selection
+      // Always show the modal, even if only one assessment
+      if (typeof showAssessmentSelectModal === 'function') {
         showAssessmentSelectModal(modulePresets);
       }
-    })
-    .catch(() => {
-      showToast('Failed to load presets', 'error');
     });
-}
-
-function showAssessmentSelectModal(modulePresets) {
-  const modal = document.getElementById('assessmentSelectModal');
-  const optionsDiv = document.getElementById('assessmentOptions');
-  optionsDiv.innerHTML = '';
-  Object.entries(modulePresets).forEach(([key, preset]) => {
-    const btn = document.createElement('button');
-    btn.className = 'cohort-btn';
-    btn.textContent = `${key}: ${preset.assessmentTitle || ''}`;
-    btn.onclick = function() {
-      const presetWithKey = { ...preset, assessmentKey: key };
-      localStorage.setItem('individualAssessmentDraft', JSON.stringify(presetWithKey));
-      localStorage.removeItem('individualAssessmentEdit');
-      closeAssessmentSelectModal();
-      closeJsonImport();
-      loadData();
-      generateHtml();
-      showToast('✅ Preset loaded!', 'success');
-    };
-    optionsDiv.appendChild(btn);
-  });
-  modal.style.display = 'flex';
-}
-function closeAssessmentSelectModal() {
-  document.getElementById('assessmentSelectModal').style.display = 'none';
-}
-
-// --- JSON IMPORT LOGIC ---
-let selectedFile = null;
-function toggleJsonImport() {
-  const content = document.getElementById('jsonImportContent');
-  const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
-  if (content.classList.contains('collapsed')) {
-    content.classList.remove('collapsed');
-    toggleIcon.textContent = '▼';
-    toggleIcon.style.transform = 'rotate(0deg)';
-  } else {
-    content.classList.add('collapsed');
-    toggleIcon.textContent = '▶';
-    toggleIcon.style.transform = 'rotate(-90deg)';
-  }
-}
-function switchTab(tabName) {
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-  document.getElementById(tabName + 'Tab').classList.add('active');
-  // --- Fix for file import button ---
-  if (tabName === 'file') {
-    // If a file is already selected, enable the import button
-    const fileInput = document.getElementById('jsonFileInput');
-    const importBtn = document.getElementById('importFromFile');
-    if (fileInput && fileInput.files && fileInput.files[0]) {
-      importBtn.disabled = false;
-      document.getElementById('selectedFileName').textContent = fileInput.files[0].name;
-      selectedFile = fileInput.files[0];
-    } else {
-      importBtn.disabled = true;
-      document.getElementById('selectedFileName').textContent = 'No file selected';
-      selectedFile = null;
-    }
-  } else {
-    // If leaving the file tab, clear the file input and disable the button
-    const fileInput = document.getElementById('jsonFileInput');
-    const importBtn = document.getElementById('importFromFile');
-    if (fileInput) fileInput.value = '';
-    if (importBtn) importBtn.disabled = true;
-    document.getElementById('selectedFileName').textContent = 'No file selected';
-    selectedFile = null;
-  }
-}
-function updateTextButtons() {
-  const textarea = document.getElementById('jsonTextarea');
-  const importBtn = document.getElementById('importFromText');
-  const clearBtn = document.getElementById('clearTextBtn');
-  const hasContent = textarea.value.trim().length > 0;
-  importBtn.disabled = !hasContent;
-  clearBtn.disabled = !hasContent;
-  if (hasContent) {
-    localStorage.setItem('manualJsonContent', textarea.value);
-  } else {
-    localStorage.removeItem('manualJsonContent');
-  }
-}
-function clearTextarea() {
-  document.getElementById('jsonTextarea').value = '';
-  localStorage.removeItem('manualJsonContent');
-  updateTextButtons();
-  showToast('Text area cleared', 'success');
-}
-function handleFileSelect(event) {
-  const file = event.target.files[0];
-  if (file) {
-    selectedFile = file;
-    document.getElementById('importFromFile').disabled = false;
-    document.getElementById('selectedFileName').textContent = file.name;
-    showToast(`📁 File selected: ${file.name}`, 'success');
-  }
-}
-
-// --- TOAST NOTIFICATIONS ---
-function showToast(message, type = 'info') {
-  let toast = document.getElementById('toast');
-  if (!toast) {
-    toast = document.createElement('div');
-    toast.id = 'toast';
-    document.body.appendChild(toast);
-  }
-  toast.className = '';
-  toast.classList.add('show', `toast-${type}`);
-  toast.textContent = message;
-  setTimeout(() => {
-    toast.classList.remove('show');
-    setTimeout(() => {
-      toast.style.display = 'none';
-      toast.className = '';
-    }, 500);
-  }, 3000);
-  toast.style.display = 'block';
-}
-
-// --- RESET MODAL LOGIC ---
-function showResetModal() {
-  document.getElementById('resetModal').style.display = 'flex';
-}
-function closeResetModal() {
-  document.getElementById('resetModal').style.display = 'none';
-}
-function performReset() {
-  localStorage.removeItem('individualAssessmentDraft');
-  localStorage.removeItem('individualAssessmentEdit');
-  localStorage.removeItem('manualJsonContent');
-  closeResetModal();
-  window.location.reload();
-}
-
-// --- REVIEW RENDERING ---
-    let assessmentData = null;
-    function loadData() {
-      const draft = localStorage.getItem('individualAssessmentDraft');
-      const edit = localStorage.getItem('individualAssessmentEdit');
-      let data = null;
-      if (edit) { try { data = JSON.parse(edit); } catch (e) {} }
-      if (!data && draft) { try { data = JSON.parse(draft); } catch (e) {} }
-      assessmentData = data;
-  // Collapse JSON import section if data is present
-  const content = document.getElementById('jsonImportContent');
-  const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
-  const mainContent = document.getElementById('mainContentContainer');
-  const stickyFooter = document.getElementById('stickyFooter');
-  const previewFrame = document.getElementById('previewFrame');
-  if (data && content && toggleIcon) {
-    content.classList.add('collapsed');
-    toggleIcon.textContent = '▶';
-    toggleIcon.style.transform = 'rotate(-90deg)';
-    if (mainContent) mainContent.style.display = '';
-    if (stickyFooter) stickyFooter.style.display = '';
-    if (previewFrame) previewFrame.style.display = 'none';
-  } else {
-    if (content && toggleIcon) {
-      content.classList.remove('collapsed');
-      toggleIcon.textContent = '▼';
-      toggleIcon.style.transform = 'rotate(0deg)';
-    }
-    if (mainContent) mainContent.style.display = 'none';
-    if (stickyFooter) stickyFooter.style.display = 'none';
-    if (previewFrame) previewFrame.style.display = 'none';
-    document.getElementById('review').innerHTML = '<p style="color:red;">No assessment data found. Please create or edit an assessment first.</p>';
-    return;
-  }
-  // Render review with collapsibles
-      let html = '';
-  html += `<div class='review-card'>`;
-  const prefix = data.assessmentKey ? `${escapeHtml(data.assessmentKey)}: ` : '';
-  html += `<div class='review-title'>${prefix}${escapeHtml(data.assessmentTitle)}</div>`;
-  html += renderCollapsible('Overview', escapeHtml(data.overview));
-  html += renderCollapsible('Requirements', `<ul class='review-list'>${(data.requirements||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-  html += renderCollapsible('Assessment Criteria', `<ul class='review-list'>${(data.criteria||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-  html += renderCollapsible('Example Tools', `<ul class='review-list'>${(data.tools||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-  html += renderCollapsible('How to Prepare', `<ul class='review-list'>${(data.prepare||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-  html += renderCollapsible('Important Note', escapeHtml(data.importantNote));
-  html += `</div>`;
-      document.getElementById('review').innerHTML = html;
-  // Attach collapsible logic
-  document.querySelectorAll('.review-collapsible-header').forEach(header => {
-    header.addEventListener('click', function() {
-      const content = this.nextElementSibling;
-      const icon = this.querySelector('.review-collapsible-toggle');
-      content.classList.toggle('collapsed');
-      this.classList.toggle('collapsed');
-      if (icon) icon.textContent = content.classList.contains('collapsed') ? '▶' : '▼';
-    });
-  });
-    }
-    function escapeHtml(str) {
-      if (!str) return '';
-      return str.replace(/[&<>"']/g, function(tag) {
-        const charsToReplace = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-        return charsToReplace[tag] || tag;
-      });
-    }
-function renderCollapsible(title, contentHtml) {
-  return `
-    <div class='review-collapsible'>
-      <div class='review-collapsible-header collapsed'>${title}<span class='review-collapsible-toggle'>▶</span></div>
-      <div class='review-collapsible-content collapsed'>${contentHtml}</div>
-    </div>
-  `;
-}
-
-// --- GENERATE HTML, PREVIEW, COPY, RESET ---
-    function generateHtml() {
-      if (!assessmentData) return;
-      const submissionDate = document.getElementById('submissionDate').value;
-      const dateStr = submissionDate ? new Date(submissionDate).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-  const html = `<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n  <meta charset=\"UTF-8\" />\n  <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\"/>\n  <title>${escapeHtml(assessmentData.assessmentTitle)}</title>\n  <link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css\">\n  <style>body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #333; } .container { max-width: 1100px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 30px; } h1, h2, h3 { color: #004080; margin-bottom: 10px; } h1 { font-size: 2rem; } h2 { margin-top: 40px; font-size: 1.5rem; } table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 30px; background: #fff; } th, td { padding: 12px 16px; border: 1px solid #ccc; text-align: left; } th { background-color: #e6f0fa; font-weight: bold; } .badge-green { background-color: #28a745; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; } .ai-section, .info-section { background: #eef6ff; border-left: 6px solid #0073e6; padding: 20px; border-radius: 8px; margin-bottom: 30px; } .important-note { background: #fffbe6; border-left: 6px solid #ffc107; padding: 16px; border-radius: 8px; margin-top: 20px; } ul { padding-left: 20px; } li { margin-bottom: 8px; } a { color: #0073e6; text-decoration: none; } a:hover { text-decoration: underline; } @media (max-width: 768px) { table, th, td { font-size: 0.9rem; } h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; } } </style>\n</head>\n<body>\n  <div class=\"container\">\n    <h1><i class=\"fa-solid fa-vr-cardboard\"></i> ${escapeHtml(assessmentData.assessmentTitle)}</h1>\n    <h2>🗓 Submission Details</h2>\n    <p><strong>Submission Date:</strong> ${dateStr}<br>\n       <strong>Format:</strong> <span id=\"format\">30-minute immersive simulation event (Practical)</span><br>\n       <strong>Weighting:</strong> <span id=\"weighting\">60%</span><br>\n       <strong>Submission Method:</strong> <span id=\"submissionMethod\">In-Person</span></p>\n    <h2>🎯 Assessment Overview</h2>\n    <div class=\"info-section\">\n      <p>${escapeHtml(assessmentData.overview)}</p>\n    </div>\n    <h2>📋 Requirements</h2>\n    <ul>${(assessmentData.requirements||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>\n    <h2>📌 Assessment Criteria (Linked to Learning Outcomes)</h2>\n    <ul>${(assessmentData.criteria||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>\n    <h2>🧪 Example Tools You Can Use</h2>\n    <ul>${(assessmentData.tools||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>\n    <h2>✅ How to Prepare</h2>\n    <ul>${(assessmentData.prepare||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>\n    <div class=\"important-note\">\n      <strong>Note:</strong><br>\n      ${escapeHtml(assessmentData.importantNote)}\n    </div>\n  </div>\n</html>`;
-  document.getElementById('outputHtml').value = html;
-}
-function getExportHtml() {
-  if (!assessmentData) return '';
-  const submissionDate = document.getElementById('submissionDate').value;
-  const dateStr = submissionDate ? new Date(submissionDate).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-  return `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>${escapeHtml(assessmentData.assessmentTitle)}</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #333; }
-    .container { max-width: 1100px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 30px; }
-    h1, h2, h3 { color: #004080; margin-bottom: 10px; }
-    h1 { font-size: 2rem; }
-    h2 { margin-top: 40px; font-size: 1.5rem; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 30px; background: #fff; }
-    th, td { padding: 12px 16px; border: 1px solid #ccc; text-align: left; }
-    th { background-color: #e6f0fa; font-weight: bold; }
-    .badge-green { background-color: #28a745; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; }
-    .ai-section, .info-section { background: #eef6ff; border-left: 6px solid #0073e6; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-    .important-note { background: #fffbe6; border-left: 6px solid #ffc107; padding: 16px; border-radius: 8px; margin-top: 20px; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 8px; }
-    a { color: #0073e6; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    @media (max-width: 768px) { table, th, td { font-size: 0.9rem; } h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; } }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1><i class="fa-solid fa-vr-cardboard"></i> ${escapeHtml(assessmentData.assessmentKey)}: ${escapeHtml(assessmentData.assessmentTitle)}</h1>
-    <h2>🗓 Submission Details</h2>
-    <p><strong>Submission Date:</strong> ${dateStr}<br>
-       <strong>Format:</strong> <span id="format">${escapeHtml(assessmentData.format || '30-minute immersive simulation event (Practical)')}</span><br>
-       <strong>Weighting:</strong> <span id="weighting">${escapeHtml(assessmentData.weighting || '60%')}</span><br>
-       <strong>Submission Method:</strong> <span id="submissionMethod">${escapeHtml(assessmentData.submissionMethod || 'In-Person')}</span></p>
-    <h2>🎯 Assessment Overview</h2>
-    <div class="info-section">
-      <p>${escapeHtml(assessmentData.overview)}</p>
-    </div>
-    <h2>📋 Requirements</h2>
-    <ul>${(assessmentData.requirements||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
-    <h2>📌 Assessment Criteria (Linked to Learning Outcomes)</h2>
-    <ul>${(assessmentData.criteria||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
-    ${(assessmentData.tools && assessmentData.tools.length > 0) ? `
-    <h2>🧪 Example Tools You Can Use</h2>
-    <ul>${assessmentData.tools.map(x=>`<li>${escapeHtml(x)}`).join('')}</ul>
-    ` : ''}
-    ${(assessmentData.prepare && assessmentData.prepare.length > 0) ? `
-    <h2>✅ How to Prepare</h2>
-    <ul>${assessmentData.prepare.map(x=>`<li>${escapeHtml(x)}`).join('')}</ul>
-    ` : ''}
-    <div class="important-note">
-      <strong>Note:</strong><br>
-      ${escapeHtml(assessmentData.importantNote)}
-    </div>
-  </div>
-</html>`;
-}
-
-function previewAssessment() {
-  if (!assessmentData) {
-    showToast('No assessment data to preview!', 'error');
-    return;
-  }
-  const iframe = document.getElementById('previewFrame');
-  iframe.style.display = 'block';
-  iframe.style.width = '100%';
-  iframe.style.height = '80vh';
-  iframe.style.border = '1px solid #ccc';
-  iframe.style.marginTop = '32px';
-  iframe.srcdoc = getExportHtml();
-  // Scroll to the preview iframe
-  setTimeout(() => {
-    iframe.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }, 100);
-}
-
-function openPreviewInNewTab() {
-  if (!assessmentData) {
-    showToast('No assessment data to preview!', 'error');
-    return;
-  }
-  const html = getExportHtml();
-  const newWindow = window.open();
-  newWindow.document.write(html);
-  newWindow.document.close();
-    }
-    function copyHtml() {
-  if (!assessmentData) {
-    showToast('No assessment data to copy!', 'error');
-    return;
-  }
-  const submissionDate = document.getElementById('submissionDate').value;
-  const dateStr = submissionDate ? new Date(submissionDate).toLocaleString('en-GB', { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '';
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>${escapeHtml(assessmentData.assessmentTitle)}</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #333; }
-    .container { max-width: 1100px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 30px; }
-    h1, h2, h3 { color: #004080; margin-bottom: 10px; }
-    h1 { font-size: 2rem; }
-    h2 { margin-top: 40px; font-size: 1.5rem; }
-    table { width: 100%; border-collapse: collapse; margin-top: 20px; margin-bottom: 30px; background: #fff; }
-    th, td { padding: 12px 16px; border: 1px solid #ccc; text-align: left; }
-    th { background-color: #e6f0fa; font-weight: bold; }
-    .badge-green { background-color: #28a745; color: white; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; }
-    .ai-section, .info-section { background: #eef6ff; border-left: 6px solid #0073e6; padding: 20px; border-radius: 8px; margin-bottom: 30px; }
-    .important-note { background: #fffbe6; border-left: 6px solid #ffc107; padding: 16px; border-radius: 8px; margin-top: 20px; }
-    ul { padding-left: 20px; }
-    li { margin-bottom: 8px; }
-    a { color: #0073e6; text-decoration: none; }
-    a:hover { text-decoration: underline; }
-    @media (max-width: 768px) { table, th, td { font-size: 0.9rem; } h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; } }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <h1><i class="fa-solid fa-vr-cardboard"></i> ${escapeHtml(assessmentData.assessmentKey)}: ${escapeHtml(assessmentData.assessmentTitle)}</h1>
-    <h2>🗓 Submission Details</h2>
-    <p><strong>Submission Date:</strong> ${dateStr}<br>
-       <strong>Format:</strong> <span id="format">${escapeHtml(assessmentData.format || '30-minute immersive simulation event (Practical)')}</span><br>
-       <strong>Weighting:</strong> <span id="weighting">${escapeHtml(assessmentData.weighting || '60%')}</span><br>
-       <strong>Submission Method:</strong> <span id="submissionMethod">${escapeHtml(assessmentData.submissionMethod || 'In-Person')}</span></p>
-    <h2>🎯 Assessment Overview</h2>
-    <div class="info-section">
-      <p>${escapeHtml(assessmentData.overview)}</p>
-    </div>
-    <h2>📋 Requirements</h2>
-    <ul>${(assessmentData.requirements||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
-    <h2>📌 Assessment Criteria (Linked to Learning Outcomes)</h2>
-    <ul>${(assessmentData.criteria||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>
-    ${(assessmentData.tools && assessmentData.tools.length > 0) ? `
-    <h2>🧪 Example Tools You Can Use</h2>
-    <ul>${assessmentData.tools.map(x=>`<li>${escapeHtml(x)}`).join('')}</ul>
-    ` : ''}
-    ${(assessmentData.prepare && assessmentData.prepare.length > 0) ? `
-    <h2>✅ How to Prepare</h2>
-    <ul>${assessmentData.prepare.map(x=>`<li>${escapeHtml(x)}`).join('')}</ul>
-    ` : ''}
-    <div class="important-note">
-      <strong>Note:</strong><br>
-      ${escapeHtml(assessmentData.importantNote)}
-    </div>
-  </div>
-</html>`;
-      navigator.clipboard.writeText(html);
-  showToast('HTML copied to clipboard!', 'success');
-}
-function confirmReset() {
-  if (confirm('Are you sure you want to reset all assessment data? This cannot be undone.')) {
-    localStorage.removeItem('individualAssessmentDraft');
-    localStorage.removeItem('individualAssessmentEdit');
-    localStorage.removeItem('manualJsonContent');
-    window.location.reload();
-  }
-}
-
-    // - previewAssessment
-    // function previewAssessment() {
-    //   if (typeof persistFormativeBlocks === 'function') persistFormativeBlocks();
-    //   const iframe = document.getElementById('previewFrame');
-    //   const doc = iframe.contentDocument || iframe.contentWindow.document;
-    //   doc.open();
-    //   doc.write(generateFullHTML());
-    //   doc.close();
-    //   // Ensure iframe is visible and styled
-    //   iframe.style.display = 'block';
-    //   iframe.style.width = '100%';
-    //   iframe.style.height = '80vh';
-    //   iframe.style.border = '1px solid #ccc';
-    //   iframe.style.marginTop = '20px';
-    //   // Scroll to the preview iframe
-    //   setTimeout(() => {
-    //     iframe.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    //   }, 100);
-    //   // Show toast notification
-    //   showToast('🔍 Preview generated below!', 'success');
-    // }
-
-function closeJsonImport() {
-  const content = document.getElementById('jsonImportContent');
-  const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
-  if (content && toggleIcon) {
-    content.classList.add('collapsed');
-    toggleIcon.textContent = '▶';
-    toggleIcon.style.transform = 'rotate(-90deg)';
-  }
-  // Show main content and sticky footer
-  const mainContent = document.getElementById('mainContentContainer');
-  const stickyFooter = document.getElementById('stickyFooter');
-  const previewFrame = document.getElementById('previewFrame');
-  if (mainContent) mainContent.style.display = '';
-  if (stickyFooter) stickyFooter.style.display = '';
-  if (previewFrame) previewFrame.style.display = 'none';
-}
-
-function importFromText() {
-  const textarea = document.getElementById('jsonTextarea');
-  const jsonText = textarea.value.trim();
-  if (!jsonText) {
-    showToast('Please enter JSON text to import', 'error');
-    return;
-  }
-  try {
-    const presetData = JSON.parse(jsonText);
-    localStorage.setItem('individualAssessmentDraft', JSON.stringify(presetData));
-    localStorage.removeItem('individualAssessmentEdit');
-    localStorage.setItem('manualJsonContent', jsonText);
-    closeJsonImport();
-    setTimeout(() => {
-      loadData();
-      generateHtml();
-      showToast('✅ JSON preset imported successfully!', 'success');
-    }, 100);
-  } catch (error) {
-    showToast('Invalid JSON format', 'error');
-  }
-}
-function importFromFile() {
-  if (!selectedFile) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const presetData = JSON.parse(e.target.result);
-      localStorage.setItem('individualAssessmentDraft', JSON.stringify(presetData));
-      localStorage.removeItem('individualAssessmentEdit');
-      closeJsonImport();
-      setTimeout(() => {
-        loadData();
-        generateHtml();
-        showToast('✅ JSON file imported successfully!', 'success');
-      }, 100);
-    } catch (error) {
-      showToast('Invalid JSON file', 'error');
-    }
-  };
-  reader.readAsText(selectedFile);
-}
-
-    document.getElementById('submissionDate').addEventListener('input', generateHtml);
-    window.onload = function() { loadData(); generateHtml(); };
+  </script>
+  <!-- Dynamically load the AssessmentSelectModal.html component -->
+  <script type="module">
+    import { loadAssessmentSelectModal } from '../../../scripts/components/assessmentSelectModal.js';
+    loadAssessmentSelectModal();
+  </script>
+  <!-- Dynamically load the ResetModal.html component -->
+  <script type="module">
+    import { loadResetModal } from '../../../scripts/components/resetModal.js';
+    loadResetModal();
   </script>
 </body>
+<!-- Bootstrap 5 JS Bundle (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </html> 

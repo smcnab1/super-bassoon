@@ -59,5 +59,39 @@
             ],
             "importantNote": "The emphasis is on educational value, learner engagement, and inclusive design — not technical perfection. You are encouraged to creatively adapt tools to fit your context."
         }
+    },
+        "ED70012X": {
+            "A1": {
+                "assessmentTitle": "Immersive Simulation Event",
+                "format": "30-minute immersive simulation event (Practical)",
+                "weighting": "60%",
+                "submissionMethod": "In-Person",
+                "overview": "Design and deliver a 30-minute immersive simulation-based learning event using one or more digital technologies (e.g. VR, 360° video, interactive branching platforms, or AI). This can be done individually or in a small group.\n\nYour event should have a clear learning objective, structured interaction, and demonstrate purposeful, creative use of technology.",
+                "requirements": [
+                "A defined learner profile and scenario context",
+                "Clear, relevant learning objectives",
+                "Demonstration of selected platform/tool",
+                "Interactive elements (e.g. branching, feedback, choice points)",
+                "Brief introduction and reflective close"
+                ],
+                "criteria": [
+                "LO1: Apply simulation technologies to enhance learning",
+                "LO2: Evaluate digital tool impact on engagement/outcomes",
+                "LO3: Design inclusive, creative digital learning experiences"
+                ],
+                "tools": [
+                "Bodyswaps, SimVox",
+                "360° interactive video",
+                "Virtual Case Creator, BranchTrack, custom-designed tools",
+                "AR/VR hardware, wearables, or mobile-based immersive apps"
+                ],
+                "prepare": [
+                "Engage fully in weekly Apply sessions and Investigate tasks",
+                "Use peer feedback in Week 8 to refine your concept",
+                "Practise your scenario in Week 9–11 rehearsal windows",
+                "Review the rubric and checklist in Blackboard before delivery"
+                ],
+                "importantNote": "The emphasis is on educational value, learner engagement, and inclusive design — not technical perfection. You are encouraged to creatively adapt tools to fit your context."
+            }
+        }
     }
-}

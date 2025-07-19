@@ -1,0 +1,26 @@
+<div id="assessmentSelectModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <h3>Select Assessment</h3>
+    <div id="assessmentOptions"></div>
+    <div class="modal-actions">
+      <button onclick="closeAssessmentSelectModal()" class="cancel-btn">Cancel</button>
+    </div>
+  </div>
+</div>
+<script>
+// Ensure modal functions are available
+if (typeof window.closeAssessmentSelectModal === 'undefined') {
+  window.closeAssessmentSelectModal = function() {
+    console.log('closeAssessmentSelectModal called from modal component');
+    const modal = document.getElementById('assessmentSelectModal');
+    console.log('Modal element found:', modal);
+    if (modal) {
+      console.log('Setting modal display to none');
+      modal.style.display = 'none';
+      console.log('Modal display set to:', modal.style.display);
+    } else {
+      console.error('Modal element not found!');
+    }
+  };
+}
+</script> 

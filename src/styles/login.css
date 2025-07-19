@@ -137,7 +137,8 @@
   min-height: 100vh;
 }
 
-body {
+/* Only apply overflow hidden to login pages */
+.login-screen body {
   overflow: hidden;
   margin: 0;
   padding: 0;

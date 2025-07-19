@@ -1,0 +1,164 @@
+/* PageTools Component Styles */
+
+/* Modern Page Tools Component */
+.page-tools {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  box-shadow: 0 4px 16px var(--shadow-color-light);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  max-width: 90vw;
+  min-width: 300px;
+  flex-wrap: wrap;
+}
+
+.page-tools.sticky {
+  position: fixed;
+  bottom: 40px; /* Even closer to footer */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 999;
+  width: auto;
+  max-width: 800px;
+}
+
+.page-tools.inline {
+  margin: 24px auto;
+  max-width: 800px;
+}
+
+.page-tools.floating {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 999;
+  max-width: 400px;
+}
+
+.page-tools button {
+  padding: 6px 16px;
+  border: none;
+  border-radius: 8px;
+  background: var(--button-primary);
+  color: white;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  white-space: nowrap;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  flex: 1;
+  min-width: 120px;
+}
+
+.page-tools button:hover {
+  background: var(--button-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.page-tools button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.page-tools button:disabled,
+.page-tools button.disabled {
+  background: var(--bg-primary, #f8f9fa);
+  color: var(--text-muted, #6c757d);
+  cursor: not-allowed;
+  opacity: 0.8;
+  transform: none;
+  box-shadow: none;
+  border: 1px solid var(--border-color, #dee2e6);
+  position: relative;
+}
+
+.page-tools button:disabled:hover,
+.page-tools button.disabled:hover {
+  background: var(--bg-primary, #f8f9fa);
+  color: var(--text-muted, #6c757d);
+  transform: none;
+  box-shadow: none;
+  border-color: var(--border-color, #dee2e6);
+}
+
+.page-tools button:disabled:active,
+.page-tools button.disabled:active {
+  transform: none;
+  box-shadow: none;
+  background: var(--bg-primary, #f8f9fa);
+}
+
+/* Dark theme disabled button styles */
+[data-theme="dark"] .page-tools button:disabled,
+[data-theme="dark"] .page-tools button.disabled {
+  background: var(--bg-primary, #1a1a1a);
+  color: var(--text-muted, #adb5bd);
+  border-color: var(--border-color, #444);
+  opacity: 0.8;
+}
+
+[data-theme="dark"] .page-tools button:disabled:hover,
+[data-theme="dark"] .page-tools button.disabled:hover {
+  background: var(--bg-primary, #1a1a1a);
+  color: var(--text-muted, #adb5bd);
+  border-color: var(--border-color, #444);
+}
+
+[data-theme="dark"] .page-tools button:disabled:active,
+[data-theme="dark"] .page-tools button.disabled:active {
+  background: var(--bg-primary, #1a1a1a);
+}
+
+.page-tools .btn-secondary {
+  background: var(--button-secondary);
+}
+
+.page-tools .btn-secondary:hover {
+  background: var(--button-secondary-hover);
+}
+
+/* Responsive design for PageTools */
+@media (max-width: 768px) {
+  .page-tools {
+    padding: 6px 12px;
+    gap: 6px;
+    border-radius: 10px;
+    min-width: 280px;
+  }
+  
+  .page-tools.sticky {
+    bottom: 30px;
+    left: 16px;
+    right: 16px;
+    transform: none;
+    width: auto;
+    max-width: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-tools {
+    padding: 4px 8px;
+    gap: 4px;
+    min-width: 260px;
+  }
+  
+  .page-tools.sticky {
+    bottom: 20px;
+    left: 8px;
+    right: 8px;
+  }
+} 

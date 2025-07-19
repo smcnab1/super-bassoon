@@ -1,0 +1,477 @@
+/* Assessment Brief Page Specific Styles */
+
+/* First Teaching Date Section */
+.first-teaching-date-section {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  margin: 20px 0;
+  box-shadow: 0 2px 4px var(--shadow-color);
+  overflow: hidden;
+}
+
+
+
+.calculate-dates-btn {
+  background: var(--button-primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.calculate-dates-btn:hover {
+  background: var(--button-primary-hover);
+  transform: translateY(-1px);
+}
+
+.display-field {
+  background: var(--input-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px;
+  color: var(--text-secondary);
+  font-size: 1rem;
+  min-height: 20px;
+  display: flex;
+  align-items: center;
+}
+
+
+
+/* Cohort Modal Styles */
+.cohort-options {
+  display: flex;
+  gap: 16px;
+  margin: 20px 0;
+  justify-content: center;
+}
+
+.cohort-btn {
+  padding: 16px 24px;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-primary);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 160px;
+}
+
+.cohort-btn:hover {
+  background: var(--button-primary);
+  color: white;
+  border-color: var(--button-primary);
+  transform: translateY(-2px);
+}
+
+.cohort-btn:active {
+  transform: translateY(0);
+}
+
+/* Assessment Block Styles */
+.assessment-block {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e0e3e7);
+  border-radius: 8px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s ease;
+}
+
+.assessment-block:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.assessment-header {
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary, #333);
+  background: var(--bg-primary, #f8f9fa);
+  border-bottom: 1px solid var(--border-color, #e0e3e7);
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.assessment-header:hover {
+  background: var(--hover-bg, #e9ecef);
+}
+
+.assessment-header:focus {
+  outline: none;
+  background: var(--hover-bg, #e9ecef);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.assessment-header:focus-visible {
+  outline: 2px solid var(--button-secondary, #007bff);
+  outline-offset: 2px;
+}
+
+.assessment-content {
+  padding: 18px 20px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.assessment-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.assessment-content label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-primary, #333);
+  font-weight: 500;
+}
+
+.assessment-content input[type="text"],
+.assessment-content input[type="datetime-local"],
+.assessment-content input[type="date"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e0e3e7);
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 3px;
+  margin-bottom: 8px;
+  background: var(--bg-secondary, #ffffff);
+  color: var(--text-primary, #333);
+  transition: all 0.2s ease;
+}
+
+.assessment-content input[type="text"]:focus,
+.assessment-content input[type="datetime-local"]:focus,
+.assessment-content input[type="date"]:focus {
+  outline: none;
+  border-color: var(--button-secondary, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Formative Block Styles */
+.formative-block {
+  background: var(--bg-secondary, #ffffff);
+  border: 1px solid var(--border-color, #e0e3e7);
+  border-radius: 8px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  transition: all 0.2s ease;
+}
+
+.formative-block:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.formative-header {
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--text-primary, #333);
+  background: var(--bg-primary, #f8f9fa);
+  border-bottom: 1px solid var(--border-color, #e0e3e7);
+  border-radius: 8px 8px 0 0;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: background 0.2s ease;
+}
+
+.formative-header:hover {
+  background: var(--hover-bg, #e9ecef);
+}
+
+.formative-header:focus {
+  outline: none;
+  background: var(--hover-bg, #e9ecef);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.formative-header:focus-visible {
+  outline: 2px solid var(--button-secondary, #007bff);
+  outline-offset: 2px;
+}
+
+.formative-content {
+  padding: 18px 20px;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+.formative-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.formative-content label {
+  display: block;
+  margin-bottom: 10px;
+  color: var(--text-primary, #333);
+  font-weight: 500;
+}
+
+.formative-content input[type="text"],
+.formative-content input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e0e3e7);
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-top: 3px;
+  margin-bottom: 8px;
+  background: var(--bg-secondary, #ffffff);
+  color: var(--text-primary, #333);
+  transition: all 0.2s ease;
+}
+
+.formative-content input[type="text"]:focus,
+.formative-content input[type="datetime-local"]:focus {
+  outline: none;
+  border-color: var(--button-secondary, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+/* Review Card Styles */
+.review-card {
+  background: var(--card-bg, #f8f8f8);
+  border: 1px solid var(--border-color, #ccc);
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  margin-bottom: 24px;
+  padding: 0;
+  overflow: hidden;
+}
+
+.review-collapsible {
+  border-bottom: 1px solid var(--border-color, #ccc);
+}
+
+.review-collapsible:last-child {
+  border-bottom: none;
+}
+
+.review-collapsible-header {
+  background: var(--card-bg, #f8f8f8);
+  padding: 16px 20px;
+  font-weight: 600;
+  font-size: 1.05rem;
+  color: var(--text-primary, #333);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.review-collapsible-header:hover {
+  background: var(--hover-bg, #e9ecef);
+}
+
+.review-collapsible-header:focus {
+  outline: none;
+  background: var(--hover-bg, #e9ecef);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.review-collapsible-header:focus-visible {
+  outline: 2px solid var(--button-secondary, #007bff);
+  outline-offset: 2px;
+}
+
+.review-collapsible-content {
+  padding: 0 20px 16px 20px;
+  display: block;
+  transition: max-height 0.3s ease, opacity 0.3s ease;
+  max-height: 1000px;
+  opacity: 1;
+}
+
+.review-collapsible-content.collapsed {
+  max-height: 0;
+  opacity: 0;
+  padding-bottom: 0;
+  overflow: hidden;
+}
+
+.review-label {
+  font-weight: bold;
+  color: var(--text-primary, #333);
+}
+
+.review-list {
+  margin: 0 0 0 18px;
+  padding: 0;
+  list-style: disc inside;
+  color: var(--text-primary, #333);
+}
+
+.review-section {
+  margin-bottom: 0;
+}
+
+/* Validation styles for required fields */
+.review-section input:invalid,
+.review-section input.required-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.1) !important;
+  background-color: rgba(220, 53, 69, 0.05) !important;
+}
+
+.review-section input:invalid:focus,
+.review-section input.required-error:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+}
+
+/* Dark theme validation styles */
+[data-theme="dark"] .review-section input:invalid,
+[data-theme="dark"] .review-section input.required-error {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2) !important;
+  background-color: rgba(220, 53, 69, 0.1) !important;
+}
+
+[data-theme="dark"] .review-section input:invalid:focus,
+[data-theme="dark"] .review-section input.required-error:focus {
+  border-color: #dc3545 !important;
+  box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.3) !important;
+}
+
+.review-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-primary, #333);
+  margin: 0 0 8px 0;
+  padding: 20px 20px 0 20px;
+}
+
+.review-collapsible-toggle {
+  font-size: 1.1em;
+  margin-left: 8px;
+  color: var(--text-secondary, #666);
+  transition: transform 0.2s ease;
+}
+
+.review-collapsible-header.collapsed .review-collapsible-toggle {
+  transform: rotate(-90deg);
+}
+
+/* Dark theme support */
+[data-theme="dark"] .assessment-block {
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--border-color, #444);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .assessment-block:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .assessment-header {
+  background: var(--bg-primary, #1a1a1a);
+  color: var(--text-primary, #ffffff);
+  border-bottom-color: var(--border-color, #444);
+}
+
+[data-theme="dark"] .assessment-header:hover {
+  background: var(--hover-bg, #333);
+}
+
+[data-theme="dark"] .assessment-content input[type="text"],
+[data-theme="dark"] .assessment-content input[type="datetime-local"],
+[data-theme="dark"] .assessment-content input[type="date"] {
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--border-color, #444);
+  color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .formative-block {
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--border-color, #444);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+[data-theme="dark"] .formative-block:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .formative-header {
+  background: var(--bg-primary, #1a1a1a);
+  color: var(--text-primary, #ffffff);
+  border-bottom-color: var(--border-color, #444);
+}
+
+[data-theme="dark"] .formative-header:hover {
+  background: var(--hover-bg, #333);
+}
+
+[data-theme="dark"] .formative-content input[type="text"],
+[data-theme="dark"] .formative-content input[type="datetime-local"] {
+  background: var(--bg-secondary, #2d2d2d);
+  border-color: var(--border-color, #444);
+  color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .review-collapsible-header {
+  background: var(--card-bg, #2d2d2d);
+  color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .review-collapsible-header:hover {
+  background: var(--hover-bg, #333);
+}
+
+[data-theme="dark"] .review-label {
+  color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .review-list {
+  color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .review-title {
+  color: var(--text-primary, #ffffff);
+}
+
+[data-theme="dark"] .review-collapsible-toggle {
+  color: var(--text-secondary, #ccc);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .first-teaching-date-section .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .calculate-dates-btn {
+    width: 100%;
+  }
+  
+  .cohort-options {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cohort-btn {
+    min-width: 200px;
+  }
+} 

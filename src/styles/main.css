@@ -3,6 +3,7 @@
   /* Light theme colors - WCAG 2.1 AA compliant */
   --bg-primary: #eef2f5;
   --bg-secondary: #ffffff;
+  --card-bg: #ffffff;
   --text-primary: #1a1a1a; /* Improved contrast */
   --text-secondary: #2d2d2d; /* Improved contrast */
   --text-muted: #4a4a4a; /* Improved contrast */
@@ -42,6 +43,7 @@
 [data-theme="dark"] {
   --bg-primary: #1a1a1a;
   --bg-secondary: #2d2d2d;
+  --card-bg: #2d2d2d;
   --text-primary: #ffffff;
   --text-secondary: #e5e7eb; /* Improved contrast */
   --text-muted: #d1d5db; /* Improved contrast */
@@ -74,11 +76,6 @@
   
   /* Dark theme hover backgrounds */
   --hover-bg: rgba(255, 255, 255, 0.1);
-  
-  /* Dark theme skip link styles */
-  --skip-link-bg: #0073e6;
-  --skip-link-color: #ffffff;
-  --skip-link-hover-bg: #0056b3;
 }
 
 [data-theme="dark"] .dropdown-content {
@@ -324,11 +321,12 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 #previewFrame {
   width: 100%;
   height: 600px;
-  border: 1px solid var(--border-color);
+  border: none;
   background: var(--bg-secondary);
-  border-radius: 8px;
-  box-shadow: 0 2px 8px var(--shadow-color);
-  margin-top: 20px;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
 }
 
 .week-header.teaching { 
@@ -582,38 +580,7 @@ button:active {
   color: var(--text-primary);
 }
 
-#toast {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  padding: 12px 20px;
-  border-radius: 8px;
-  font-size: 14px;
-  color: white;
-  z-index: 9999;
-  opacity: 0;
-  display: none;
-  transition: opacity 0.5s ease-in-out;
-  background-color: var(--toast-bg);
-}
 
-#toast.show {
-  display: block;
-  opacity: 1;
-}
-
-.toast-success { 
-  background-color: #28a745; 
-}
-.toast-info    { 
-  background-color: #007bff; 
-}
-.toast-error   { 
-  background-color: #dc3545; 
-}
-.toast-warning { 
-  background-color: #ffc107; color: #000; 
-}
 
 .modal-overlay {
   position: fixed;
@@ -627,30 +594,37 @@ button:active {
 }
 
 .modal-box {
-  background: var(--modal-bg);
-  padding: 24px 32px;
+  background: none;
+  padding: 0;
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0,0,0,0.2);
   text-align: center;
   max-width: 360px;
+  overflow: hidden;
 }
 
 .modal-box h3 {
   margin-top: 0;
   font-size: 1.3rem;
   color: var(--text-primary);
+  background: var(--modal-bg);
+  padding: 32px 32px 16px 32px;
 }
 
 .modal-box p {
   font-size: 0.95rem;
-  margin: 10px 0 20px;
+  margin: 0 0 20px 0;
   color: var(--text-secondary);
+  background: var(--modal-bg);
+  padding: 0 32px 24px 32px;
 }
 
 .modal-actions {
   display: flex;
   justify-content: space-between;
   gap: 12px;
+  background: var(--modal-bg);
+  padding: 24px 32px;
 }
 
 .cancel-btn,
@@ -690,7 +664,7 @@ button:disabled {
 .container {
   max-width: 950px;
   margin: 32px auto 32px auto;
-  padding: 32px 24px 24px 24px;
+  padding: 16px 24px 24px 24px;
   background: var(--bg-secondary);
   border-radius: 16px;
   box-shadow: 0 4px 24px var(--shadow-color);
@@ -836,6 +810,8 @@ button:disabled {
   gap: 10px;
   flex-wrap: wrap;
 }
+
+
 
 .add-preset-btn {
   padding: 10px 24px;
@@ -1249,38 +1225,3 @@ main.hero {
   /* Remove transform if present */
 }
 
-#loadingOverlay {
-  position: fixed;
-  z-index: 9999;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background: var(--bg-secondary, #f3f4f6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.5s;
-  opacity: 1;
-  pointer-events: all;
-}
-#loadingOverlay.fade-out {
-  opacity: 0;
-  pointer-events: none;
-}
-.loader {
-  border: 4px solid #e0e0e0;
-  border-top: 4px solid #4a90e2;
-  border-radius: 50%;
-  width: 48px;
-  height: 48px;
-  animation: spin 1s linear infinite;
-}
-@keyframes spin {
-  0% { transform: rotate(0deg);}
-  100% { transform: rotate(360deg);}
-}
-[data-theme="dark"] #loadingOverlay {
-  background: #181c20;
-}
-[data-theme="dark"] .loader {
-  border: 4px solid #23272b;
-  border-top: 4px solid #6cb6ff;
-}
