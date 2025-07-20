@@ -12,4 +12,4 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci --omit=optional
-      - run: npx prettier --check .
+      - run: npx prettier --check --write .
