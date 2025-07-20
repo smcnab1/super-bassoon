@@ -13,13 +13,13 @@
 <br />
 <div align="center">
   <a href="https://github.com/smcnab1/super-bassoon">
-    <img src="images/avatar.png" alt="MScSimEd Logo" width="80" height="80">
+    <img src="images/logo.png" alt="ModuMate Logo" width="80" height="80">
   </a>
 
-<h3 align="center">MScSimEd Timetable Generator</h3>
+<h3 align="center">ModuMate</h3>
 
   <p align="center">
-    A comprehensive web suite of tools for the MSc Simulated Practice Education programme. 🎓📅
+    A comprehensive web suite of tools to generate LMS Templates. 🎓📅
     <br />
     <a href="https://smcnab1.github.io/super-bassoon/"><strong>View Live Demo »</strong></a>
     <br />
@@ -69,7 +69,7 @@
   </a>
 </div>
 
-The MScSimEd Timetable Generator is a modern, accessible web application designed specifically for managing timetables in the **MSc Simulated Practice Education** programme. It provides an intuitive interface for creating, editing, and exporting timetables with support for multiple cohorts, various export formats, and comprehensive accessibility features.
+ModuMate LMS Template Generator is a modern, accessible web application designed specifically for managing and generating LMS HTML Templates. It provides an intuitive interface for creating, editing, and exporting timetables with support for multiple cohorts, various export formats, and comprehensive accessibility features.
 
 ### Key Features
 
