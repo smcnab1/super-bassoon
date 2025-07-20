@@ -38,18 +38,9 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create deploy directory and copy files
-        run: |
-          mkdir temp-deploy
-          rsync -av --exclude='temp-deploy' --exclude='.git' ./ temp-deploy/
-          cp -r docs temp-deploy/docs/
-
-      - name: Add .nojekyll
-        run: touch temp-deploy/.nojekyll
-
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GH_RELEASE_TOKEN }}
-          publish_dir: ./temp-deploy
-          enable_jekyll: true
+          publish_dir: ./
+          enable_jekyll: false
