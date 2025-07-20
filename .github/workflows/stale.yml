@@ -1,0 +1,18 @@
+# .github/workflows/stale.yml
+name: Close Stale Issues and PRs
+
+on:
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v9
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          days-before-stale: 30
+          days-before-close: 7
+          stale-issue-message: 'This issue is stale. Please update if still relevant.'
+          stale-pr-message: 'This PR is stale. Please update if still relevant.'

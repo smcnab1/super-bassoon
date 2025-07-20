@@ -1,0 +1,19 @@
+# .github/workflows/image-optimize.yml
+name: Optimize Images
+
+on:
+  pull_request:
+    paths:
+      - '**.png'
+      - '**.jpg'
+      - '**.jpeg'
+      - '**.svg'
+
+jobs:
+  img-opt:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: calibreapp/image-actions@v1.1.1
+        with:
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
