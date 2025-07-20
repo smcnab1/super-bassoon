@@ -29,10 +29,6 @@ jobs:
       - name: Run tests (non-blocking)
         run: npm test || echo "No tests defined"
 
-      - name: Disable GitHub Jekyll Processing
-        run: touch temp-deploy/.nojekyll
-
-
   deploy:
     needs: lint-and-test
     runs-on: ubuntu-latest
@@ -42,11 +38,15 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Prepare deploy folder
+      - name: Create temp-deploy and copy site
         run: |
           mkdir temp-deploy
+          shopt -s dotglob
           cp -r ./* temp-deploy/
           cp -r docs temp-deploy/docs/
+
+      - name: Disable GitHub Jekyll processing
+        run: touch temp-deploy/.nojekyll
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
@@ -54,3 +54,4 @@ jobs:
           github_token: ${{ secrets.GH_RELEASE_TOKEN }}
           publish_dir: ./temp-deploy
           enable_jekyll: true
+
