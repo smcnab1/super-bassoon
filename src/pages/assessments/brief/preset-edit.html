@@ -3,404 +3,246 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Edit Individual Assessment</title>
-  <link rel="stylesheet" href="../../styles.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-  <script src="../../auth.js"></script>
-  <style>
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; padding: 0; color: #333; }
-    .container { max-width: 1100px; margin: 40px auto; background: #fff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05); padding: 30px; }
-    h1, h2, h3 { color: #004080; margin-bottom: 10px; }
-    h1 { font-size: 2rem; }
-    h2 { margin-top: 40px; font-size: 1.5rem; }
-    .form-section { margin-bottom: 32px; }
-    .multi-row-list { margin-bottom: 12px; }
-    .multi-row-list input { width: 90%; margin-bottom: 6px; padding: 8px; border-radius: 6px; border: 1px solid #ccc; }
-    .multi-row-list button { margin-left: 8px; }
-    .form-row { display: flex; gap: 24px; margin-bottom: 16px; }
-    .form-row > div { flex: 1; display: flex; flex-direction: column; }
-    .sticky-footer { position: fixed; bottom: 0; left: 0; right: 0; background: #e6f0fa; padding: 16px 20px; border-top: 1px solid #ccc; display: flex; gap: 12px; justify-content: center; z-index: 100; }
-    .sticky-footer button { padding: 12px 20px; border-radius: 8px; font-size: 0.95rem; font-weight: 500; border: none; cursor: pointer; transition: all 0.2s ease; min-width: 140px; }
-    .sticky-footer button:disabled { opacity: 0.5; cursor: not-allowed; }
-    .import-section { background: #eef6ff; border-radius: 8px; padding: 20px; margin-bottom: 30px; border: 2px dashed #b3d1ff; }
-    .import-section h2 { margin-top: 0; color: #004080; cursor:pointer; user-select:none; display:flex; align-items:center; justify-content:space-between; }
-    .json-textarea { width: 100%; min-height: 120px; padding: 10px; border-radius: 6px; border: 1px solid #ccc; font-family: 'Courier New', monospace; font-size: 0.95rem; margin-bottom: 10px; }
-    .file-input { margin-bottom: 10px; }
-    .modal-overlay { display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;z-index:200; }
-    .modal-box { background:#fff;padding:32px 24px;border-radius:12px;max-width:350px;width:90%;box-shadow:0 4px 24px rgba(0,0,0,0.15);text-align:center; }
-    .modal-actions { margin-top:24px;display:flex;gap:16px;justify-content:center; }
-    .cancel-btn { background:#eee;color:#333;padding:10px 18px;border-radius:8px;border:none; }
-    .confirm-btn { background:#dc3545;color:#fff;padding:10px 18px;border-radius:8px;border:none; }
-    @media (max-width: 768px) { .container { padding: 16px; } h1 { font-size: 1.6rem; } h2 { font-size: 1.2rem; } .form-row { flex-direction: column; gap: 10px; } }
-  </style>
+  <title>Edit | Assessment Brief</title>
+
+  <!-- Bootstrap 5 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Favicon and Manifest -->
+  <link rel="shortcut icon" href="../../../../public/favicon/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../../../../public/favicon/favicon.ico">
+  <link rel="icon" type="image/svg+xml" href="../../../../public/favicon/favicon.svg">
+  <link rel="icon" type="image/png" sizes="96x96" href="../../../../public/favicon/favicon-96x96.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="../../../../public/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="../../../../public/favicon/web-app-manifest-192x192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="../../../../public/favicon/web-app-manifest-512x512.png">
+  <link rel="manifest" href="../../../../public/favicon/site.webmanifest">
+  <meta name="theme-color" content="#4a90e2">
+  <meta name="msapplication-TileColor" content="#4a90e2">
+  <meta name="msapplication-TileImage" content="../../../../public/favicon/web-app-manifest-192x192.png">
+
+  <!-- Main Stylesheets -->
+  <link rel="stylesheet" href="../../../styles/main.css">
+  <link rel="stylesheet" href="../../../styles/navbar.css">
+  <link rel="stylesheet" href="../../../styles/login.css">
+  <link rel="stylesheet" href="../../../styles/footer.css">
+  <link rel="stylesheet" href="../../../styles/loading.css">
+  <link rel="stylesheet" href="../../../styles/assessment-brief.css">
+  <link rel="stylesheet" href="../../../styles/importJSON.css">
+  <link rel="stylesheet" href="../../../styles/pageTools.css">
+  <link rel="stylesheet" href="../../../styles/presetButtons.css">
+  <link rel="stylesheet" href="../../../styles/assessmentSelectModal.css">
+  <link rel="stylesheet" href="../../../styles/toast.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Theme Script (loads early for no-flash) -->
+  <script src="../../../scripts/theme/index.js"></script>
+  <script>
+    // Set theme before page renders to avoid flash
+    (function() {
+      var theme = localStorage.getItem('theme') || 'light';
+      document.documentElement.setAttribute('data-theme', theme);
+    })();
+  </script>
 </head>
 <body>
-  <!-- Navbar -->
-  <nav class="main-navbar">
-    <div class="navbar-title">
-      <a href="../../index.html" style="text-decoration: none; color: inherit;">
-        <div class="title-main">
-          <img src="../../images/logo.png" alt="MScSimEd Logo" style="width: 32px; height: 32px; object-fit: contain; margin-right: 8px; vertical-align: middle;">
-          MScSimEd
-        </div>
-      </a>
-      <span class="title-separator">|</span>
-      <div class="title-subtitle">✏️ Edit Individual Assessment</div>
-    </div>
-    <button class="hamburger-menu" onclick="toggleMobileMenu()" aria-label="Toggle mobile menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <div class="navbar-links">
-      <div class="dropdown">
-        <button class="dropdown-btn navbar-dropdown-btn">📅 Timetable</button>
-        <div class="dropdown-content">
-          <a href="../../timetable/generate.html">🎯 Generate</a>
-          <a href="../../timetable/new.html">📄 New Preset</a>
-          <a href="../../timetable/edit.html">✏️ Edit Preset</a>
-        </div>
-      </div>
-      <div class="dropdown">
-        <button class="dropdown-btn navbar-dropdown-btn">📅 Assessments</button>
-        <div class="dropdown-content">
-          <a href="../overview/generate.html">🎯 Generate</a>
-          <a href="../overview/new.html">📄 New Preset</a>
-          <a href="../overview/edit.html">✏️ Edit Preset</a>
-        </div>
-      </div>
-      <a href="../../overview/new.html" class="navbar-link">📘 Module Overview</a>
-      <a href="../../team/generate.html" class="navbar-link">👥 Module Team</a>
-      <button class="theme-toggle" onclick="toggleTheme()" id="themeToggle">🌙</button>
-    </div>
-  </nav>
-  <div class="container">
-    <h1><i class="fa-solid fa-vr-cardboard"></i> Edit Individual Assessment</h1>
-    <div class="import-section">
-      <h2 onclick="toggleImportSection()" style="cursor: pointer; user-select: none;">
-        📥 Import JSON Preset <span id="importToggleIcon">▼</span>
-      </h2>
-      <div id="importContent" style="display:none;">
-        <p>Paste a JSON snippet or upload a JSON file to load an existing assessment for editing.</p>
-        <div class="import-methods">
-          <div class="import-method">
-            <h3>📋 Paste JSON</h3>
-            <textarea id="jsonTextarea" class="json-textarea" placeholder="Paste your JSON preset here..." oninput="updateTextButtons()"></textarea>
-            <button id="importFromText" class="import-btn" onclick="importFromText()" disabled>Import from Text</button>
-            <button id="clearTextBtn" class="clear-btn" onclick="clearTextarea()" disabled>Clear</button>
-          </div>
-          <div class="import-method">
-            <h3>📁 Upload File</h3>
-            <div class="file-input-wrapper">
-              <input type="file" id="jsonFileInput" class="file-input" accept=".json" onchange="handleFileSelect(event)">
-              <label for="jsonFileInput" class="file-input-label">Choose JSON File</label>
-            </div>
-            <p style="font-size: 0.9rem; color: var(--text-secondary);">Select a .json file to import</p>
-            <button id="importFromFile" class="import-btn" onclick="importFromFile()" disabled>Import from File</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <form id="editForm" style="display:none;">
+  <!-- Loading Overlay (injected before any content for instant feedback) -->
+  <script>
+    // Inject loading overlay container synchronously for instant feedback
+    (function() {
+      var loadingOverlay = document.createElement('div');
+      loadingOverlay.id = 'loadingOverlay';
+      loadingOverlay.innerHTML = '<div class="loader"></div>';
+      document.body.insertBefore(loadingOverlay, document.body.firstChild);
+    })();
+  </script>
+  <script src="../../../scripts/components/loadingOverlay.js"></script>
+
+  <!-- Hide loading overlay after DOM is ready -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      if (typeof window.hideLoadingOverlay === 'function') window.hideLoadingOverlay();
+    });
+  </script>
+
+  <!-- Skip to main content link for accessibility -->
+  <a href="#mainContentContainer" class="skip-link">Skip to main content</a>
+
+  <!-- Navbar will be loaded here -->
+  <div id="navbar-container"></div>
+
+  <!-- Preset Buttons -->
+  <div id="presetButtonsContainer"></div>
+
+  <!-- JSON Import Section -->
+  <div id="importJsonContainer"></div>
+
+  <!-- Toast Component -->
+  <div id="toastContainer"></div>
+  <script type="module">
+    import { loadToast } from '../../../scripts/components/toast.js';
+    loadToast();
+    // Add global toast for preset selection
+    window.addEventListener('presetSelected', function(e) {
+      if (window.showToast) window.showToast('Preset selected: ' + (e.detail && e.detail.moduleCode ? e.detail.moduleCode : ''), 'success');
+    });
+    // Add global toast for assessment loaded
+    window.addEventListener('assessmentLoaded', function(e) {
+      if (window.showToast) window.showToast('Assessment loaded: ' + (e.detail && e.detail.assessmentTitle ? e.detail.assessmentTitle : 'Assessment'), 'success');
+    });
+    // Add global toast for reset
+    window.addEventListener('assessmentReset', function() {
+      if (window.showToast) window.showToast('Form reset', 'info');
+    });
+  </script>
+  
+  <!-- Page Tools Component -->
+  <div id="pageToolsContainer"></div>
+  <script type="module">
+    import { loadPageTools } from '../../../scripts/components/pageTools.js';
+    loadPageTools();
+  </script>
+  <!-- Main Content Container -->
+  <div class="container" id="mainContentContainer" role="main">
+    <h1><i class="fa-solid fa-vr-cardboard"></i> Edit Assessment Brief</h1>
+    <form id="editForm">
       <div class="form-section">
-        <label><strong>Assessment Title</strong></label>
+        <label><strong>Assessment Title <span class="required-asterisk">*</span></strong></label>
         <input type="text" id="assessmentTitle" placeholder="Assessment 1: Immersive Simulation Event" />
       </div>
       <div class="form-section">
-        <h2>🗓 Submission Details</h2>
+        <h2>📝 Submission Details</h2>
         <div class="form-row">
           <div>
-            <label><strong>Format</strong></label>
+            <label><strong>Format <span class="required-asterisk">*</span></strong></label>
             <input type="text" id="format" placeholder="30-minute immersive simulation event (Practical)" />
           </div>
           <div>
-            <label><strong>Weighting</strong></label>
+            <label><strong>Weighting <span class="required-asterisk">*</span></strong></label>
             <input type="text" id="weighting" placeholder="60%" />
           </div>
           <div>
-            <label><strong>Submission Method</strong></label>
+            <label><strong>Submission Method <span class="required-asterisk">*</span></strong></label>
             <input type="text" id="submissionMethod" placeholder="In-Person" />
           </div>
         </div>
       </div>
       <div class="form-section">
-        <label><strong>Overview</strong></label>
-        <textarea id="overview" rows="3" style="width:100%;border-radius:8px;padding:10px;" placeholder="Design and deliver a 30-minute immersive simulation-based learning event using one or more digital technologies (e.g. VR, 360° video, interactive branching platforms, or AI). This can be done individually or in a small group. Your event should have a clear learning objective, structured interaction, and demonstrate purposeful, creative use of technology."></textarea>
+        <label><strong>Overview <span class="required-asterisk">*</span></strong></label>
+        <textarea id="overview" rows="3" placeholder="Design and deliver a 30-minute immersive simulation-based learning event using one or more digital technologies (e.g. VR, 360° video, interactive branching platforms, or AI). This can be done individually or in a small group. Your event should have a clear learning objective, structured interaction, and demonstrate purposeful, creative use of technology."></textarea>
       </div>
       <div class="form-section">
-        <label><strong>Requirements</strong></label>
+        <label><strong>Requirements <span class="required-asterisk">*</span></strong></label>
         <div id="requirementsList" class="multi-row-list"></div>
         <button type="button" onclick="addListItem('requirementsList')">Add Requirement</button>
       </div>
       <div class="form-section">
-        <label><strong>Assessment Criteria (Linked to Learning Outcomes)</strong></label>
+        <label><strong>Assessment Criteria (Linked to Learning Outcomes) <span class="required-asterisk">*</span></strong></label>
         <div id="criteriaList" class="multi-row-list"></div>
         <button type="button" onclick="addListItem('criteriaList')">Add Criteria</button>
       </div>
       <div class="form-section">
-        <label><strong>Example Tools You Can Use</strong></label>
+        <label><strong>Example Tools You Can Use <span class="required-asterisk">*</span></strong></label>
         <div id="toolsList" class="multi-row-list"></div>
         <button type="button" onclick="addListItem('toolsList')">Add Tool</button>
       </div>
       <div class="form-section">
-        <label><strong>How to Prepare</strong></label>
+        <label><strong>How to Prepare <span class="required-asterisk">*</span></strong></label>
         <div id="prepareList" class="multi-row-list"></div>
         <button type="button" onclick="addListItem('prepareList')">Add Preparation Step</button>
       </div>
       <div class="form-section">
-        <label><strong>Important Note</strong></label>
-        <textarea id="importantNote" rows="2" style="width:100%;border-radius:8px;padding:10px;" placeholder="The emphasis is on educational value, learner engagement, and inclusive design — not technical perfection. You are encouraged to creatively adapt tools to fit your context."></textarea>
+        <label><strong>Important Note <span class="required-asterisk">*</span></strong></label>
+        <textarea id="importantNote" rows="2" placeholder="The emphasis is on educational value, learner engagement, and inclusive design — not technical perfection. You are encouraged to creatively adapt tools to fit your context."></textarea>
       </div>
     </form>
   </div>
-  <div class="sticky-footer" id="footer" style="display:none;">
-    <button onclick="copyJSON()">📋 Copy JSON</button>
-    <button onclick="downloadJSON()">💾 Download JSON</button>
-    <button onclick="confirmReset()" class="reset-btn">🔄 Reset</button>
-  </div>
-  <!-- Modal for Reset Confirmation -->
-  <div id="resetModal" class="modal-overlay">
-    <div class="modal-box">
-      <h3>Are you sure?</h3>
-      <p>This will clear all assessment details. This action cannot be undone.</p>
-      <div class="modal-actions">
-        <button onclick="closeModal()" class="cancel-btn">Cancel</button>
-        <button onclick="performReset()" class="confirm-btn">Yes, Reset</button>
-      </div>
-    </div>
-  </div>
+
+  <!-- iFrame Preview -->
+  <iframe id="previewFrame" style="display:none;"></iframe>
+
+  <!-- Config, Auth, and App Scripts (defer for performance) -->
+  <script src="../../../scripts/config/index.js" defer></script>
+  <script src="../../../scripts/auth/index.js" defer></script>
+  <script src="../../../scripts/components/componentLoader.js" defer></script>
   <script>
-    // Navbar theme and mobile menu
-    function toggleTheme() {
-      const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', newTheme);
-      localStorage.setItem('theme', newTheme);
-      updateThemeIcon(newTheme);
-    }
-    function updateThemeIcon(theme) {
-      const themeToggle = document.getElementById('themeToggle');
-      if (themeToggle) {
-        themeToggle.textContent = theme === 'light' ? '🌙' : '☀️';
-      }
-    }
-    function initTheme() {
-      const savedTheme = localStorage.getItem('theme') || 'light';
-      document.documentElement.setAttribute('data-theme', savedTheme);
-      updateThemeIcon(savedTheme);
-    }
-    function toggleMobileMenu() {
-      const hamburger = document.querySelector('.hamburger-menu');
-      const navbarLinks = document.querySelector('.navbar-links');
-      hamburger.classList.toggle('active');
-      navbarLinks.classList.toggle('active');
-    }
-    document.addEventListener('click', function(event) {
-      const hamburger = document.querySelector('.hamburger-menu');
-      const navbarLinks = document.querySelector('.navbar-links');
-      if (!hamburger.contains(event.target) && !navbarLinks.contains(event.target)) {
-        hamburger.classList.remove('active');
-        navbarLinks.classList.remove('active');
-      }
-    });
-    initTheme();
-    // Collapsible import section
-    function toggleImportSection() {
-      const content = document.getElementById('importContent');
-      const icon = document.getElementById('importToggleIcon');
-      if (content.style.display === 'none' || content.style.display === '') {
-        content.style.display = 'block';
-        icon.textContent = '▲';
-      } else {
-        content.style.display = 'none';
-        icon.textContent = '▼';
-      }
-    }
-    // Multi-row input logic (first row can't be deleted)
-    function addListItem(listId, value = '') {
-      const list = document.getElementById(listId);
-      const div = document.createElement('div');
-      div.style.display = 'flex';
-      div.style.alignItems = 'center';
-      let placeholder = '';
-      if (listId === 'requirementsList') placeholder = 'e.g. A defined learner profile and scenario context';
-      if (listId === 'criteriaList') placeholder = 'e.g. LO1: Apply simulation technologies to enhance learning';
-      if (listId === 'toolsList') placeholder = 'e.g. Bodyswaps, SimVox';
-      if (listId === 'prepareList') placeholder = 'e.g. Engage fully in weekly Apply sessions and Investigate tasks';
-      const isFirstRow = list.children.length === 0;
-      div.innerHTML = `<input type="text" value="${value ? value.replace(/"/g, '&quot;') : ''}" placeholder="${placeholder}" />${isFirstRow ? '' : ' <button type="button" onclick="this.parentNode.remove(); saveData();">❌</button>'}`;
-      list.appendChild(div);
-      div.querySelector('input').addEventListener('input', saveData);
-      saveData();
-    }
-    function getListValues(listId) {
-      return Array.from(document.getElementById(listId).querySelectorAll('input')).map(i => i.value).filter(Boolean);
-    }
-    function setListValues(listId, arr) {
-      const list = document.getElementById(listId);
-      list.innerHTML = '';
-      if (!arr || arr.length === 0 || arr.every(val => !val || val.trim() === '')) {
-        addListItem(listId, '');
-      } else {
-        arr.forEach(val => addListItem(listId, val));
-      }
-    }
-    // Persistence
-    function saveData() {
-      const data = {
-        assessmentTitle: document.getElementById('assessmentTitle').value,
-        format: document.getElementById('format').value,
-        weighting: document.getElementById('weighting').value,
-        submissionMethod: document.getElementById('submissionMethod').value,
-        overview: document.getElementById('overview').value,
-        requirements: getListValues('requirementsList'),
-        criteria: getListValues('criteriaList'),
-        tools: getListValues('toolsList'),
-        prepare: getListValues('prepareList'),
-        importantNote: document.getElementById('importantNote').value
-      };
-      localStorage.setItem('individualAssessmentEdit', JSON.stringify(data));
-    }
-    function loadData(data) {
-      document.getElementById('assessmentTitle').value = data.assessmentTitle || '';
-      document.getElementById('format').value = data.format || '';
-      document.getElementById('weighting').value = data.weighting || '';
-      document.getElementById('submissionMethod').value = data.submissionMethod || '';
-      document.getElementById('overview').value = data.overview || '';
-      setListValues('requirementsList', data.requirements);
-      setListValues('criteriaList', data.criteria);
-      setListValues('toolsList', data.tools);
-      setListValues('prepareList', data.prepare);
-      document.getElementById('importantNote').value = data.importantNote || '';
-    }
-    function resetForm() {
-      localStorage.removeItem('individualAssessmentEdit');
-      document.getElementById('assessmentTitle').value = '';
-      document.getElementById('format').value = '';
-      document.getElementById('weighting').value = '';
-      document.getElementById('submissionMethod').value = '';
-      document.getElementById('overview').value = '';
-      setListValues('requirementsList', ['']);
-      setListValues('criteriaList', ['']);
-      setListValues('toolsList', ['']);
-      setListValues('prepareList', ['']);
-      document.getElementById('importantNote').value = '';
-    }
-    function copyJSON() {
-      const data = {
-        assessmentTitle: document.getElementById('assessmentTitle').value,
-        format: document.getElementById('format').value,
-        weighting: document.getElementById('weighting').value,
-        submissionMethod: document.getElementById('submissionMethod').value,
-        overview: document.getElementById('overview').value,
-        requirements: getListValues('requirementsList'),
-        criteria: getListValues('criteriaList'),
-        tools: getListValues('toolsList'),
-        prepare: getListValues('prepareList'),
-        importantNote: document.getElementById('importantNote').value
-      };
-      navigator.clipboard.writeText(JSON.stringify(data, null, 2));
-      alert('JSON copied to clipboard!');
-    }
-    function downloadJSON() {
-      const data = {
-        assessmentTitle: document.getElementById('assessmentTitle').value,
-        format: document.getElementById('format').value,
-        weighting: document.getElementById('weighting').value,
-        submissionMethod: document.getElementById('submissionMethod').value,
-        overview: document.getElementById('overview').value,
-        requirements: getListValues('requirementsList'),
-        criteria: getListValues('criteriaList'),
-        tools: getListValues('toolsList'),
-        prepare: getListValues('prepareList'),
-        importantNote: document.getElementById('importantNote').value
-      };
-      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.download = 'individual-assessment.json';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    }
-    function importFromText() {
-      const text = document.getElementById('jsonTextarea').value;
-      try {
-        const data = JSON.parse(text);
-        loadData(data);
-        document.getElementById('editForm').style.display = '';
-        document.getElementById('footer').style.display = 'flex';
-        document.getElementById('importContent').style.display = 'none';
-        document.getElementById('importToggleIcon').textContent = '▼';
-      } catch (e) { alert('Invalid JSON'); }
-    }
-    function importFromFile() {
-      const fileInput = document.getElementById('jsonFileInput');
-      if (fileInput.files.length === 0) { alert('No file selected'); return; }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const data = JSON.parse(e.target.result);
-          loadData(data);
-          document.getElementById('editForm').style.display = '';
-          document.getElementById('footer').style.display = 'flex';
-          document.getElementById('importContent').style.display = 'none';
-          document.getElementById('importToggleIcon').textContent = '▼';
-        } catch (err) { alert('Invalid JSON in file'); }
-      };
-      reader.readAsText(fileInput.files[0]);
-    }
-    function clearImport() {
-      document.getElementById('jsonTextarea').value = '';
-      document.getElementById('jsonFileInput').value = '';
-      document.getElementById('editForm').style.display = 'none';
-      document.getElementById('footer').style.display = 'none';
-      resetForm();
-    }
-    // Always show at least one row for each multi-row input
-    function setListValues(listId, arr) {
-      const list = document.getElementById(listId);
-      list.innerHTML = '';
-      if (!arr || arr.length === 0 || arr.every(val => !val || val.trim() === '')) {
-        addListItem(listId, '');
-      } else {
-        arr.forEach(val => addListItem(listId, val));
-      }
-    }
-    // Reset modal logic
-    function confirmReset() {
-      document.getElementById('resetModal').style.display = 'flex';
-    }
-    function closeModal() {
-      document.getElementById('resetModal').style.display = 'none';
-    }
-    function performReset() {
-      resetForm();
-      closeModal();
-    }
-    // Auto-save on input
     document.addEventListener('DOMContentLoaded', function() {
-      document.querySelectorAll('input, textarea').forEach(el => el.addEventListener('input', saveData));
-    });
-    // Add JS for enabling/disabling import buttons and clearing textarea
-    let selectedFile = null;
-    function updateTextButtons() {
-      const textarea = document.getElementById('jsonTextarea');
-      const importBtn = document.getElementById('importFromText');
-      const clearBtn = document.getElementById('clearTextBtn');
-      const hasContent = textarea.value.trim().length > 0;
-      importBtn.disabled = !hasContent;
-      clearBtn.disabled = !hasContent;
-    }
-    function clearTextarea() {
-      document.getElementById('jsonTextarea').value = '';
-      updateTextButtons();
-    }
-    function handleFileSelect(event) {
-      const file = event.target.files[0];
-      selectedFile = file;
-      document.getElementById('importFromFile').disabled = !file;
-    }
+      // Initialize theme for accessibility
+      if (typeof window.initTheme === 'function') window.initTheme();
+      // Load components
+      if (typeof loadToast === 'function') loadToast();
+      if (typeof loadNavbar === 'function') loadNavbar();
+      if (typeof loadFooter === 'function') loadFooter();
+          });
   </script>
+
+  <div id="footer-container"></div>
+  
+  <!-- Dynamically load the ImportJSON.html component and script -->
+  <script type="module">
+    import { loadImportJSON } from '../../../scripts/components/importJSON.js';
+    loadImportJSON();
+    // After loading, collapse the import section if data is present
+    setTimeout(() => {
+      let data = null;
+      try {
+        const draft = localStorage.getItem('individualAssessmentDraft');
+        if (draft) data = JSON.parse(draft);
+      } catch (e) {}
+      if (data && (data.assessmentTitle || data.assessmentKey)) {
+        const content = document.getElementById('jsonImportContent');
+        const toggleIcon = document.querySelector('.json-import-section .toggle-icon');
+        if (content && toggleIcon) {
+          content.classList.add('collapsed');
+          toggleIcon.textContent = '\u25b6';
+          toggleIcon.style.transform = 'rotate(-90deg)';
+        }
+      }
+    }, 300);
+  </script>
+  <!-- Dynamically load the PresetButtons.html component and script -->
+  <script type="module">
+    import { loadPresetButtons } from '../../../scripts/components/presetButtons.js';
+    loadPresetButtons(undefined, function(moduleCode, data) {
+      const modulePresets = data[moduleCode];
+      if (!modulePresets || typeof modulePresets !== 'object') {
+        if (typeof showToast === 'function') showToast('No preset found for this module', 'error');
+        return;
+      }
+      // If modulePresets is a single assessment, wrap it in an object
+      const isSingleAssessment = !Object.values(modulePresets).some(v => typeof v === 'object');
+      const modalData = isSingleAssessment ? { [moduleCode]: modulePresets } : modulePresets;
+      if (typeof showAssessmentSelectModal === 'function') {
+        showAssessmentSelectModal(modalData);
+      }
+    });
+  </script>
+  <!-- Dynamically load the AssessmentSelectModal.html component -->
+  <script type="module">
+    import { loadAssessmentSelectModal } from '../../../scripts/components/assessmentSelectModal.js';
+    loadAssessmentSelectModal();
+  </script>
+  <!-- Dynamically load the ResetModal.html component -->
+  <script type="module">
+    import { loadResetModal } from '../../../scripts/components/resetModal.js';
+    loadResetModal();
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Hide the main content container if no data is imported
+      let data = null;
+      try {
+        const draft = localStorage.getItem('individualAssessmentDraft');
+        if (draft) data = JSON.parse(draft);
+      } catch (e) {}
+      const container = document.getElementById('mainContentContainer');
+      if (!data || Object.keys(data).length === 0) {
+        if (container) container.style.display = 'none';
+      } else {
+        if (container) container.style.display = '';
+      }
+    });
+  </script>
+  <script type="module" src="../../../scripts/pages/assessment-brief-edit.js"></script>
 </body>
+<!-- Bootstrap 5 JS Bundle (with Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 </html> 

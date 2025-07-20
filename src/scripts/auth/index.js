@@ -68,6 +68,7 @@ function showLoginScreen() {
   document.getElementById('password').focus();
   // Only hide overlay after login screen is visible
   if (typeof window.hideLoadingOverlay === 'function') window.hideLoadingOverlay();
+  // Do NOT load footer here
 }
 
 // Show main application (for login page only)
@@ -96,6 +97,12 @@ async function authenticate(event) {
   const password = document.getElementById('password').value;
   const errorDiv = document.getElementById('loginError');
   try {
+    if (!password) {
+      errorDiv.textContent = '❌ Incorrect password. Please try again.';
+      errorDiv.style.display = 'block';
+      document.getElementById('password').focus();
+      return;
+    }
     const passwordHash = await sha256(password);
     if (passwordHash === (typeof CONFIG !== 'undefined' ? CONFIG.PASSWORD_HASH : CORRECT_PASSWORD_HASH)) {
       localStorage.setItem('authenticated', 'true');
@@ -103,12 +110,14 @@ async function authenticate(event) {
       errorDiv.style.display = 'none';
       document.getElementById('password').value = '';
     } else {
+      errorDiv.textContent = '❌ Incorrect password. Please try again.';
       errorDiv.style.display = 'block';
       document.getElementById('password').value = '';
       document.getElementById('password').focus();
     }
   } catch (error) {
     console.error('Authentication error:', error);
+    errorDiv.textContent = '❌ Incorrect password. Please try again.';
     errorDiv.style.display = 'block';
     document.getElementById('password').value = '';
     document.getElementById('password').focus();

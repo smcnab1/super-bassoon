@@ -68,14 +68,14 @@ function showToast(message, type = 'info') {
   toast.classList.add('show', `toast-${type}`);
   toast.textContent = message;
   
-  // Auto-hide after 3 seconds
+  // Auto-hide after 5 seconds (was 3 seconds)
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => {
       toast.style.display = 'none';
       toast.className = 'toast-notification';
     }, 500);
-  }, 3000);
+  }, 5000);
   
   toast.style.display = 'block';
 }
@@ -94,14 +94,14 @@ function createToastInBody(message, type) {
   toast.classList.add('show', `toast-${type}`);
   toast.textContent = message;
   
-  // Auto-hide after 3 seconds
+  // Auto-hide after 5 seconds (was 3 seconds)
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => {
       toast.style.display = 'none';
       toast.className = 'toast-notification';
     }, 500);
-  }, 3000);
+  }, 5000);
   
   toast.style.display = 'block';
 }
@@ -147,4 +147,13 @@ if (typeof module !== 'undefined' && module.exports) {
     showWarningToast,
     showInfoToast
   };
+} 
+
+// Attach toast functions to window for global use
+if (typeof window !== 'undefined') {
+  window.showToast = showToast;
+  window.showSuccessToast = showSuccessToast;
+  window.showErrorToast = showErrorToast;
+  window.showWarningToast = showWarningToast;
+  window.showInfoToast = showInfoToast;
 } 

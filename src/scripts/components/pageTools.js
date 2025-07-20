@@ -14,6 +14,18 @@ function getPageContext() {
   // Check for different page types
   if (pathSegments.includes('assessments')) {
     if (pathSegments.includes('brief')) {
+      // Only show limited buttons on preset-edit.html
+      if (currentPath.endsWith('preset-edit.html')) {
+        return {
+          type: 'assessment-brief',
+          page: 'preset-edit',
+          buttons: [
+            { id: 'copyJsonBtn', text: '📋 Copy JSON', onclick: 'copyJson()', ariaLabel: 'Copy JSON preset' },
+            { id: 'downloadJsonBtn', text: '💾 Download JSON', onclick: 'downloadJson()', ariaLabel: 'Download JSON preset' },
+            { id: 'resetBtn', text: '🔄 Reset', onclick: 'showResetModal()', ariaLabel: 'Reset all changes', className: 'btn-secondary' }
+          ]
+        };
+      }
       return {
         type: 'assessment-brief',
         page: 'generate',
@@ -248,6 +260,43 @@ function validateRequiredFields() {
   
   // For assessment brief page, check submission date
   if (pageContext.type === 'assessment-brief') {
+    // Only require submissionDate on generate.html, not preset-edit.html
+    if (window.location.pathname.endsWith('preset-edit.html')) {
+      // Only check for assessment data, skip submissionDate
+      let hasAssessmentData = false;
+      // Check window.assessmentData
+      if (typeof window.assessmentData !== 'undefined' && window.assessmentData) {
+        hasAssessmentData = true;
+        console.log('PageTools: Found window.assessmentData');
+      }
+      // Check localStorage for assessment data
+      const draft = localStorage.getItem('individualAssessmentDraft');
+      const edit = localStorage.getItem('individualAssessmentEdit');
+      if (draft) {
+        try {
+          const parsed = JSON.parse(draft);
+          if (parsed && (parsed.assessmentTitle || parsed.assessmentKey)) {
+            hasAssessmentData = true;
+            console.log('PageTools: Found assessment data in localStorage draft');
+          }
+        } catch (e) {}
+      }
+      if (edit) {
+        try {
+          const parsed = JSON.parse(edit);
+          if (parsed && (parsed.assessmentTitle || parsed.assessmentKey)) {
+            hasAssessmentData = true;
+            console.log('PageTools: Found assessment data in localStorage edit');
+          }
+        } catch (e) {}
+      }
+      if (!hasAssessmentData) {
+        console.log('PageTools: No assessment data found');
+        return false;
+      }
+      console.log('PageTools: Validation passed - assessment data found (no submission date required on preset-edit.html)');
+      return true;
+    }
     const submissionDateInput = document.getElementById('submissionDate');
     if (!submissionDateInput) {
       console.log('PageTools: submissionDateInput not found');
@@ -312,34 +361,37 @@ function validateRequiredFields() {
  */
 function updateButtonStates() {
   const pageContext = getPageContext();
-  const isValid = validateRequiredFields();
-  
-  console.log('PageTools: updateButtonStates called, isValid:', isValid);
-  
-  // Buttons that should be disabled when validation fails
-  const buttonsToDisable = ['previewBtn', 'openTabBtn', 'copyBtn'];
-  
-  buttonsToDisable.forEach(buttonId => {
-    const button = document.getElementById(buttonId);
-    if (button) {
-      setPageToolButtonState(buttonId, isValid);
-      console.log(`PageTools: Button ${buttonId} set to ${isValid ? 'enabled' : 'disabled'}`);
-    } else {
-      console.log(`PageTools: Button ${buttonId} not found`);
-    }
-  });
-  
-  // Add tooltip for disabled buttons
-  buttonsToDisable.forEach(buttonId => {
-    const button = document.getElementById(buttonId);
-    if (button) {
-      if (!isValid) {
-        button.title = 'Please fill in all required fields before using this feature';
+  let isValid = true;
+
+  // Always use window.isPageValid if available
+  if (typeof window.isPageValid === 'function') {
+    isValid = window.isPageValid();
+  } else {
+    // Fallback to internal validation if not provided by page
+    isValid = validateRequiredFields();
+  }
+
+  // Find all page tool buttons
+  const pageTools = document.getElementById('pageTools');
+  if (pageTools) {
+    const buttons = pageTools.querySelectorAll('button');
+    buttons.forEach(button => {
+      // Only enable Reset button regardless of validity
+      const isReset = button.id && button.id.toLowerCase().includes('reset');
+      if (!isReset) {
+        setPageToolButtonState(button.id, isValid);
+        // Tooltip for disabled state
+        if (!isValid) {
+          button.title = 'Please fill in all required fields before using this feature';
+        } else {
+          button.title = '';
+        }
       } else {
+        setPageToolButtonState(button.id, true); // Always enable Reset
         button.title = '';
       }
-    }
-  });
+    });
+  }
 }
 
 /**

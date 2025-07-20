@@ -1,6 +1,4 @@
-/* PageTools Component Styles */
-
-/* Modern Page Tools Component */
+/* Main/original PageTools Component Styles (default) */
 .page-tools {
   display: flex;
   justify-content: center;
@@ -20,7 +18,7 @@
 
 .page-tools.sticky {
   position: fixed;
-  bottom: 40px; /* Even closer to footer */
+  bottom: 40px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 999;
@@ -43,13 +41,11 @@
 
 .page-tools button {
   padding: 6px 16px;
-  border: none;
   border-radius: 8px;
   background: var(--button-primary);
   color: white;
   font-size: 0.875rem;
   font-weight: 500;
-  cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   white-space: nowrap;
   min-height: 32px;
@@ -60,6 +56,10 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   flex: 1;
   min-width: 120px;
+  border: none;
+  margin: 6px 6px 6px 0;
+  cursor: pointer;
+  outline: none;
 }
 
 .page-tools button:hover {
@@ -109,14 +109,12 @@
   border-color: var(--border-color, #444);
   opacity: 0.8;
 }
-
 [data-theme="dark"] .page-tools button:disabled:hover,
 [data-theme="dark"] .page-tools button.disabled:hover {
   background: var(--bg-primary, #1a1a1a);
   color: var(--text-muted, #adb5bd);
   border-color: var(--border-color, #444);
 }
-
 [data-theme="dark"] .page-tools button:disabled:active,
 [data-theme="dark"] .page-tools button.disabled:active {
   background: var(--bg-primary, #1a1a1a);
@@ -125,7 +123,6 @@
 .page-tools .btn-secondary {
   background: var(--button-secondary);
 }
-
 .page-tools .btn-secondary:hover {
   background: var(--button-secondary-hover);
 }
@@ -138,7 +135,6 @@
     border-radius: 10px;
     min-width: 280px;
   }
-  
   .page-tools.sticky {
     bottom: 30px;
     left: 16px;
@@ -148,17 +144,40 @@
     max-width: none;
   }
 }
-
 @media (max-width: 480px) {
   .page-tools {
     padding: 4px 8px;
     gap: 4px;
     min-width: 260px;
   }
-  
   .page-tools.sticky {
     bottom: 20px;
     left: 8px;
     right: 8px;
+  }
+}
+
+/*
+  Optional: Dynamic equal-width PageTools buttons.
+  To enable, add the class .dynamic-width to .page-tools in your HTML.
+  If it causes layout issues, simply remove the class.
+*/
+.page-tools.dynamic-width {
+  gap: 12px;
+}
+.page-tools.dynamic-width button {
+  flex: 1 1 0;
+  width: auto;
+  min-width: 0;
+  text-align: center;
+  white-space: nowrap;
+}
+@media (min-width: 900px) {
+  .page-tools.dynamic-width button {
+    font-size: 1.15rem;
+    padding: 12px 28px;
+    height: 48px;
+    min-width: 48px;
+    border-radius: 8px;
   }
 } 

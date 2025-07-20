@@ -82,6 +82,7 @@ function renderPresetButtons(loadPresetOverride) {
           btn.onclick = () => {
             if (typeof loadPresetOverride === 'function') {
               loadPresetOverride(mod.code, data);
+              showPresetSelectedToast(mod.code);
             } else {
               alert('loadPreset not implemented for this page.');
             }
@@ -133,6 +134,7 @@ function showAssessmentSelectModal(modulePresets) {
       if (typeof closeJsonImport === 'function') closeJsonImport();
       if (typeof loadData === 'function') loadData();
       if (typeof generateHtml === 'function') generateHtml();
+      showAssessmentLoadedToast(preset.assessmentTitle);
       if (typeof showToast === 'function') showToast('✅ Preset loaded!', 'success');
       console.log('About to close modal...');
       closeAssessmentSelectModal();
@@ -153,6 +155,37 @@ function closeAssessmentSelectModal() {
   } else {
     console.error('Modal element not found!');
   }
+}
+
+// Show toast when a preset is selected
+// Try to import showToast, fallback to window.showToast if not available
+let showToastFn = null;
+try {
+  // Try relative import for ESM
+  // This path may need to be adjusted depending on build setup
+  // For now, try importing from the same directory
+  // import { showToast } from './toast.js';
+  // showToastFn = showToast;
+  // Instead, use window.showToast if available
+  if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+    showToastFn = window.showToast;
+  }
+} catch (e) {
+  if (typeof window !== 'undefined' && typeof window.showToast === 'function') {
+    showToastFn = window.showToast;
+  }
+}
+
+function showPresetSelectedToast(moduleCode) {
+  if (showToastFn) showToastFn('Preset selected: ' + moduleCode, 'success');
+}
+// Show toast when an assessment is loaded
+function showAssessmentLoadedToast(assessmentTitle) {
+  if (showToastFn) showToastFn('Assessment loaded: ' + (assessmentTitle || 'Assessment'), 'success');
+}
+// Show toast when form is reset
+function showAssessmentResetToast() {
+  if (showToastFn) showToastFn('Form reset', 'info');
 }
 
 // Make functions globally available

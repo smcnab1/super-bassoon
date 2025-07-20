@@ -43,12 +43,12 @@ function loadData() {
     html += `<div class='review-card'>`;
     const prefix = data.assessmentKey ? `${escapeHtml(data.assessmentKey)}: ` : '';
     html += `<div class='review-title'>${prefix}${escapeHtml(data.assessmentTitle)}</div>`;
-    html += renderCollapsible('Overview', escapeHtml(data.overview));
-    html += renderCollapsible('Requirements', `<ul class='review-list'>${(data.requirements||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-    html += renderCollapsible('Assessment Criteria', `<ul class='review-list'>${(data.criteria||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-    html += renderCollapsible('Example Tools', `<ul class='review-list'>${(data.tools||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-    html += renderCollapsible('How to Prepare', `<ul class='review-list'>${(data.prepare||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
-    html += renderCollapsible('Important Note', escapeHtml(data.importantNote));
+    html += renderCollapsible('🎯 Overview', escapeHtml(data.overview));
+    html += renderCollapsible('📋 Requirements', `<ul class='review-list'>${(data.requirements||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
+    html += renderCollapsible('📌 Assessment Criteria', `<ul class='review-list'>${(data.criteria||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
+    html += renderCollapsible('🧪 Example Tools', `<ul class='review-list'>${(data.tools||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
+    html += renderCollapsible('✅ How to Prepare', `<ul class='review-list'>${(data.prepare||[]).map(x=>`<li>${escapeHtml(x)}</li>`).join('')}</ul>`);
+    html += renderCollapsible('⚠️ Important Note', escapeHtml(data.importantNote));
     html += `</div>`;
     document.getElementById('review').innerHTML = html;
     // Attach collapsible logic

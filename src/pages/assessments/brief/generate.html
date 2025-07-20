@@ -53,14 +53,6 @@
       loadingOverlay.innerHTML = '<div class="loader"></div>';
       document.body.insertBefore(loadingOverlay, document.body.firstChild);
     })();
-    // Remove overlay when DOM is interactive
-    // document.addEventListener('DOMContentLoaded', function() {
-    //   var overlay = document.getElementById('loadingOverlay');
-    //   if (overlay) {
-    //     overlay.classList.add('fade-out');
-    //     setTimeout(function() { overlay.remove(); }, 600);
-    //   }
-    // });
   </script>
   <script src="../../../scripts/components/loadingOverlay.js"></script>
 
@@ -71,7 +63,6 @@
     });
   </script>
 
-  <!-- Skip to main content link for accessibility -->
   <a href="#mainContentContainer" class="skip-link">Skip to main content</a>
   <!-- Navbar will be loaded here -->
   <div id="navbar-container"></div>
@@ -83,6 +74,7 @@
   <div id="importJsonContainer"></div>
 
   <!-- Toast Component -->
+  <div id="toastContainer"></div>
   <script type="module">
     import { loadToast } from '../../../scripts/components/toast.js';
     loadToast();
@@ -98,7 +90,7 @@
   <div class="container" id="mainContentContainer" role="main">
     <h1><i class="fa-solid fa-vr-cardboard"></i> Generate Assessment Brief</h1>
     <div class="review-section">
-      <label class="review-label required">Submission Date:</label>
+      <label class="review-label required">🗓️ Submission Date:</label>
       <input type="datetime-local" id="submissionDate" required />
     </div>
     <div id="review"></div>
