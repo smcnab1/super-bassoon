@@ -1,0 +1,30 @@
+{
+  "name": "super-bassoon",
+  "version": "1.0.0",
+  "description": "<!-- TOP ROW OF BADGES -->",
+  "main": "auth.js",
+  "dependencies": {
+    "fsevents": "^2.3.2",
+    "playwright": "^1.54.1",
+    "playwright-core": "^1.54.1"
+  },
+  "devDependencies": {
+    "eslint": "^9.31.0",
+    "prettier": "^3.6.2"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/smcnab1/super-bassoon.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/smcnab1/super-bassoon/issues"
+  },
+  "homepage": "https://github.com/smcnab1/super-bassoon#readme"
+}
