@@ -29,6 +29,10 @@ jobs:
       - name: Run tests (non-blocking)
         run: npm test || echo "No tests defined"
 
+      - name: Disable GitHub Jekyll Processing
+        run: touch temp-deploy/.nojekyll
+
+
   deploy:
     needs: lint-and-test
     runs-on: ubuntu-latest
