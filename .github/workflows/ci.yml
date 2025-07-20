@@ -38,14 +38,13 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Create temp-deploy and copy site
+      - name: Create deploy directory and copy files
         run: |
           mkdir temp-deploy
-          shopt -s dotglob
-          cp -r ./* temp-deploy/
+          rsync -av --exclude='temp-deploy' --exclude='.git' ./ temp-deploy/
           cp -r docs temp-deploy/docs/
 
-      - name: Disable GitHub Jekyll processing
+      - name: Add .nojekyll
         run: touch temp-deploy/.nojekyll
 
       - name: Deploy to GitHub Pages
@@ -54,4 +53,3 @@ jobs:
           github_token: ${{ secrets.GH_RELEASE_TOKEN }}
           publish_dir: ./temp-deploy
           enable_jekyll: true
-
